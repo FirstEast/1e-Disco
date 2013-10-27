@@ -4,26 +4,21 @@ from twisted.web.static import File
 
 from autobahn.websocket import WebSocketServerFactory, listenWS
 
-from handlers.RegistrationFactory import *
-from handlers.DiscoProtocol import *
+from sockets.GoodaleArduino import *
+from sockets.DiscoControl import *
+
+from model.Model import *
 
 if __name__ == '__main__':
-  # TODO: This protocol class creation and factory instantiation
-  # should be in a meta class
-  userMap = {}
-
-  # Dynamically generated subclass, to get the same userMap in the protocols
-  class MappedDiscoProtocol(DiscoProtocol):
-    def getUserMap(self):
-      return userMap
+  testModel = Model({})
 
   # Setup websocket protocol for disco commands
-  factory = WebSocketServerFactory("ws://localhost:9000", debug = False)
-  factory.protocol = MappedDiscoProtocol
+  factory = DiscoControlSocketFactory("ws://localhost:9000", testModel, debug = False)
+  factory.protocol = DiscoControlProtocol
   listenWS(factory)
 
   # Setup socket registration for disco devices
-  reactor.listenTCP(8123, RegistrationFactory(userMap))
+  reactor.listenTCP(8123, GoodaleArduinoSocketFactory(testModel))
 
   # Setup static html serving
   resource = File('../interface')
