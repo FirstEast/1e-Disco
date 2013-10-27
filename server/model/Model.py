@@ -6,9 +6,14 @@ class Model():
   def set(self, attr, value):
     if self.attributes[attr] != value:
       self.attributes[attr] = value
+      self.trigger("change", attr)
 
   def get(self, attr):
     return self.attributes[attr]
+
+  def reset(self, data):
+    self.attributes = data
+    self.trigger("reset", data)
 
   def trigger(self, event, data):
     if event in self.listeners:

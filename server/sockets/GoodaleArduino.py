@@ -6,17 +6,13 @@ class GoodaleArduinoReceiver(LineReceiver):
     self.discoSession = discoSession
     self.ready = False
 
-    self.discoSession.on("message", self.sendMessage)
-
     # TODO: bind listeners to goodale arduino light model changes
 
   def connectionMade(self):
-    # TODO: update session with goodale arduino connection
-    pass
+    self.discoSession.deviceModel.set("goodale_arduino", True)
 
   def connectionLost(self, reason):
-    # TODO: update session with lost goodale arduino connection
-    pass
+    self.discoSession.deviceModel.set("goodale_arduino", False)
 
   def lineReceived(self, line):
     # TODO: update ready state to True based on line
