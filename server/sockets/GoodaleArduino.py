@@ -6,7 +6,10 @@ class GoodaleArduinoReceiver(LineReceiver):
     self.discoSession = discoSession
     self.ready = False
 
-    # TODO: bind listeners to goodale arduino light model changes
+    self.discoSession.goodaleArduinoModel.on("change", self.updateState)
+
+  def updateState(self, model, attr):
+    self.sendMessage(self.discoSession.goodaleArduinoModel.get(attr));
 
   def connectionMade(self):
     self.discoSession.deviceModel.set("goodale_arduino", True)
@@ -18,13 +21,13 @@ class GoodaleArduinoReceiver(LineReceiver):
     # TODO: update ready state to True based on line
     pass
 
-  def sendMessage(self, model, message):
+  def sendMessage(self, message):
     self.transport.write(message + '\n')
 
 
 class GoodaleArduinoSocketFactory(Factory):
   def __init__(self, discoSession):
-    self.discoSession = discoSession # maps user names to Chat instances
+    self.discoSession = discoSession
 
   def buildProtocol(self, addr):
     return GoodaleArduinoReceiver(self.discoSession)
