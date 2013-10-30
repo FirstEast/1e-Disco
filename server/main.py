@@ -2,7 +2,7 @@ from twisted.internet import reactor
 from twisted.web.server import Site
 from twisted.web.static import File
 
-from autobahn.websocket import WebSocketServerFactory, listenWS
+from autobahn.websocket import listenWS
 
 from sockets.GoodaleArduino import *
 from sockets.DiscoControl import *
