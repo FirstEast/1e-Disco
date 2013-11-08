@@ -1,7 +1,8 @@
 import RPi.GPIO as GPIO
 import time
 
-start = [255, 255, 0]
+red = [255, 0, 0]
+blue = [0, 0, 255] 
 
 # Boilerplate junk
 dev = "/dev/spidev0.0"
@@ -29,14 +30,15 @@ def filter_pixel(input_pixel, brightness):
     output_pixel[2] = gamma[input_pixel[2]]
     return output_pixel
 
-color = start
+color = red
 while True:
     for led in range(num_leds):
         output[led * pixel_size:] = filter_pixel(color, 1)
-    color[0] = (color[0] - 1) % 256
-    if color[0] == 0:
-        color[2] = (color[2] + 1) % 256
+    if color == red:
+        color = blue
+    else:
+        color = red
     spidev.write(output)
     spidev.flush()
-    time.sleep(0.001)
+    #time.sleep(0.1)
 
