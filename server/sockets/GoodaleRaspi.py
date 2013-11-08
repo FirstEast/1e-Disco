@@ -1,7 +1,7 @@
 from twisted.internet.protocol import Factory
 from twisted.protocols.basic import LineReceiver
 
-class GoodaleArduinoReceiver(LineReceiver):
+class GoodaleRaspiReceiver(LineReceiver):
   def __init__(self, discoSession):
     self.discoSession = discoSession
     self.ready = False
@@ -25,9 +25,9 @@ class GoodaleArduinoReceiver(LineReceiver):
     self.transport.write(message + '\n')
 
 
-class GoodaleArduinoSocketFactory(Factory):
+class GoodaleRaspiSocketFactory(Factory):
   def __init__(self, discoSession):
     self.discoSession = discoSession
 
   def buildProtocol(self, addr):
-    return GoodaleArduinoReceiver(self.discoSession)
+    return GoodaleRaspiReceiver(self.discoSession)
