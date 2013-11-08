@@ -14,7 +14,7 @@ DISCO_SERVER_PORT = 8123
 WEB_SOCKET_PORT = 1111
 
 INTERFACE_DIR = "interface"
-INTERFACE_PORT = 80
+INTERFACE_PORT = 90
 
 if __name__ == '__main__':
   # Setup web visual socket
@@ -25,7 +25,6 @@ if __name__ == '__main__':
   # Setup render socket
   point = TCP4ClientEndpoint(reactor, DISCO_SERVER_HOST, DISCO_SERVER_PORT)
   d = point.connect(RenderSocketFactory(visualizeFactory))
-  reactor.run()
 
   # Setup static html serving
   resource = File(INTERFACE_DIR)
