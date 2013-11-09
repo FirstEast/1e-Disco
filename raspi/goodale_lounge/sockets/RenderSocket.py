@@ -1,6 +1,5 @@
 from twisted.internet.protocol import Protocol, ReconnectingClientFactory
 
-import cPickle as pickle
 import cjson as json
 import time
 
