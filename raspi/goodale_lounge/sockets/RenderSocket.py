@@ -2,6 +2,7 @@ from twisted.internet.protocol import Protocol, ReconnectingClientFactory
 
 import cPickle as pickle
 import json
+import time
 
 try:
   import RPi.GPIO as GPIO
@@ -12,15 +13,24 @@ except ImportError:
   raspi = False
 
 class RenderSocket(Protocol):
+  def __init__(self, visualizeFactory):
+    self.visualizeFactory = visualizeFactory
+    self.frame = 0
+
   def connectionMade(self):
     print "connected successfully to central server"
+
+    time.sleep(1)
 
     # Signal for the next frame
     self.sendMessage("OK")
 
   def dataReceived(self, line):
     # Parse what we got to the int array
-    output = pickle.loads(line)
+    try:
+      output = json.loads(line)
+    except ValueError:
+      return
 
     # If we're running on a raspi, render the stuff we got,
     # otherwise send it to the web visualizer as json
@@ -42,7 +52,7 @@ class RenderSocketFactory(ReconnectingClientFactory):
 
   def buildProtocol(self, addr):
     self.resetDelay()
-    return RenderSocket()
+    return RenderSocket(self.visualizeFactory)
 
   def clientConnectionLost(self, connector, reason):
     ReconnectingClientFactory.clientConnectionLost(self, connector, reason)

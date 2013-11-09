@@ -1,15 +1,30 @@
 from twisted.internet.protocol import Factory
 from twisted.protocols.basic import LineReceiver
 
+import cPickle as pickle
+import json
+import time
+
+RED = [255, 0, 0]
+BLUE = [0, 0, 255]
+
 class GoodaleRaspiReceiver(LineReceiver):
   def __init__(self, discoSession):
     self.discoSession = discoSession
-    self.ready = False
+
+    self.color = RED
 
     self.discoSession.goodaleArduinoModel.on("change", self.updateState)
 
   def updateState(self, model, attr):
     self.sendMessage(self.discoSession.goodaleArduinoModel.get(attr));
+
+  def sendNextFrame(self):
+    self.sendMessage(json.dumps(self.color * 1185).replace(" ", ""))
+    if self.color == RED:
+      self.color = BLUE
+    else:
+      self.color = RED
 
   def connectionMade(self):
     self.discoSession.deviceModel.set("goodale_arduino", True)
@@ -17,9 +32,10 @@ class GoodaleRaspiReceiver(LineReceiver):
   def connectionLost(self, reason):
     self.discoSession.deviceModel.set("goodale_arduino", False)
 
-  def lineReceived(self, line):
-    # TODO: update ready state to True based on line
-    pass
+  def dataReceived(self, line):
+    if line.strip().find("OK") > -1:
+      time.sleep(0.04)
+      self.sendNextFrame()
 
   def sendMessage(self, message):
     self.transport.write(message + '\n')
