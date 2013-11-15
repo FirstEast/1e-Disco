@@ -8,7 +8,7 @@ from autobahn.websocket import listenWS
 from sockets.RenderSocket import *
 from sockets.VisualizeWebSocket import *
 
-DISCO_SERVER_HOST = "18.238.5.45"
+DISCO_SERVER_HOST = "localhost"
 DISCO_SERVER_PORT = 8123
 
 WEB_SOCKET_PORT = 1111

@@ -1,8 +1,9 @@
 from twisted.internet.protocol import Factory
 from twisted.protocols.basic import LineReceiver
 
-import cjson as json
+import json
 import time
+import struct
 
 RED = [255, 0, 0]
 GREEN = [0, 255, 0]
@@ -24,7 +25,7 @@ class GoodaleRaspiReceiver(LineReceiver):
     output[self.frame * 3] = RED[0]
     output[self.frame * 3 + 1] = RED[1]
     output[self.frame * 3 + 2] = RED[2]
-    self.sendMessage(json.encode(output).replace(" ", ""))
+    self.sendMessage(struct.pack('B'*395*3, *output))
     
     self.frame += 1
     self.frame = self.frame % 395

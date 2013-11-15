@@ -26,7 +26,7 @@ window.onload = function () {
 
   // Receive data from the server
   socket.onmessage = function (evt) {
-    colorCanvas(JSON.parse(JSON.parse(evt.data)));
+    colorCanvas(JSON.parse(evt.data));
     socket.send("OK");
   };
 };

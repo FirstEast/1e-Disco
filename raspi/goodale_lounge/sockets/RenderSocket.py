@@ -1,7 +1,8 @@
 from twisted.internet.protocol import Protocol, ReconnectingClientFactory
 
-import cjson as json
+import json
 import time
+import struct
 
 try:
   import RPi.GPIO as GPIO
@@ -29,9 +30,15 @@ class RenderSocket(Protocol):
   def dataReceived(self, line):
     line = self.lastData + line.strip()
     # Parse what we got to the int array
+
+    output = []
     try:
-      output = json.decode(line.strip())
-    except json.DecodeError:
+      output = struct.unpack('B'*395*3, line)
+    except ValueError:
+      self.lastData = line.strip()
+      return
+
+    if len(output) != 395*3:
       self.lastData = line.strip()
       return
 
@@ -41,7 +48,8 @@ class RenderSocket(Protocol):
       spidev.write(bytearray(output))
       spidev.flush()
     else:
-      self.visualizeFactory.broadcast(line)
+      self.visualizeFactory.broadcast(json.dumps(output))
+      time.sleep(0.01)
 
     # Signal for the next frame
     self.lastData = ""
