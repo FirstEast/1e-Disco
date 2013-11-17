@@ -4,15 +4,8 @@ import json
 import time
 import struct
 
-try:
-  import RPi.GPIO as GPIO
-  raspi = True
-  dev = "/dev/spidev0.0"
-  spidev = file(dev, "wb")
-except ImportError:
-  raspi = False
-
-LENGTH = 395
+WIDTH = 48
+HEIGHT = 24
 
 class RenderSocket(Protocol):
   def __init__(self, visualizeFactory):
@@ -31,30 +24,24 @@ class RenderSocket(Protocol):
 
   def dataReceived(self, line):
     line = self.lastData + line.strip()
-    # Parse what we got to the int array
 
+    # Parse what we got to the int array
     output = []
     try:
-      output = struct.unpack('B'*LENGTH*3, line)
+      output = struct.unpack('B' * WIDTH * HEIGHT * 3, line)
     except ValueError:
       self.lastData = line.strip()
       return
 
-    if len(output) != LENGTH*3:
+    if len(output) != WIDTH*HEIGHT*3:
       self.lastData = line.strip()
       return
 
-    # If we're running on a raspi, render the stuff we got,
-    # otherwise send it to the web visualizer as json
-    if raspi:
-      spidev.write(bytearray(output))
-      spidev.flush()
-    else:
-      self.visualizeFactory.broadcast(json.dumps(output))
-      time.sleep(0.03)
+    self.visualizeFactory.broadcast(json.dumps(output))
+    time.sleep(0.03)
 
     # Signal for the next frame
-    self.lastData = ""
+    self.lastData = ''
     self.sendMessage("OK")
 
   def sendMessage(self, message):

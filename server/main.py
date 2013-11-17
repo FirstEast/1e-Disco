@@ -4,10 +4,12 @@ from twisted.web.static import File
 
 from autobahn.websocket import listenWS
 
-from sockets.GoodaleRaspi import *
-from sockets.DiscoControl import *
+from sockets.devices import GoodaleRaspiSocketFactory, DDFPixelPusherSocketFactory
+from sockets.control import DiscoControlSocketFactory, DiscoControlProtocol
 
 from model.DiscoSession import *
+
+from pattern import *
 
 if __name__ == '__main__':
   # Create the disco session
@@ -20,6 +22,7 @@ if __name__ == '__main__':
 
   # Setup socket registration for disco devices
   reactor.listenTCP(8123, GoodaleRaspiSocketFactory(session))
+  reactor.listenTCP(8124, DDFPixelPusherSocketFactory(session))
 
   # Setup static html serving
   resource = File('../control_interface')

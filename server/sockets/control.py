@@ -7,7 +7,7 @@ class DiscoControlProtocol(WebSocketServerProtocol):
     # TODO: send initial state message
 
   def onMessage(self, msg, binary):
-    self.factory.discoSession.goodaleArduinoModel.set("state", msg);
+    # TODO: control protocols!
     self.sendMessage("OK", binary)
 
   def connectionLost(self, reason):

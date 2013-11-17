@@ -9,9 +9,9 @@ from sockets.RenderSocket import *
 from sockets.VisualizeWebSocket import *
 
 DISCO_SERVER_HOST = "localhost"
-DISCO_SERVER_PORT = 8123
+DISCO_SERVER_PORT = 8124
 
-WEB_SOCKET_PORT = 1111
+WEB_SOCKET_PORT = 2222
 
 if __name__ == '__main__':
   # Setup web visual socket
