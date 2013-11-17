@@ -13,10 +13,10 @@ class GoodaleRaspiReceiver(LineReceiver):
     self.sendMessage(struct.pack('B' * Pattern.GOODALE_WIDTH * 3, *output))
 
   def connectionMade(self):
-    self.discoSession.deviceModel.set("goodale", True)
+    self.discoSession.deviceModel["goodale"] = True
 
   def connectionLost(self, reason):
-    self.discoSession.deviceModel.set("goodale", False)
+    self.discoSession.deviceModel["goodale"] = False
 
   def dataReceived(self, line):
     if line.strip().find("OK") > -1:
@@ -43,10 +43,10 @@ class DDFPixelPusherReceiver(LineReceiver):
     self.sendMessage(struct.pack('B' * Pattern.DDF_WIDTH * Pattern.DDF_HEIGHT * 3, *output))
 
   def connectionMade(self):
-    self.discoSession.deviceModel.set("ddf", True)
+    self.discoSession.deviceModel["ddf"] = True
 
   def connectionLost(self, reason):
-    self.discoSession.deviceModel.set("ddf", False)
+    self.discoSession.deviceModel["ddf"] = False
 
   def dataReceived(self, line):
     if line.strip().find("OK") > -1:

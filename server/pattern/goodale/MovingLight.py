@@ -1,4 +1,4 @@
-from pattern.Color import *
+from pattern.color import *
 from pattern.Pattern import *
 from pattern.ParameterTypes import *
 
@@ -17,7 +17,7 @@ class MovingLightPattern(Pattern):
 
   def getNextFrame(self):
     frame = [0, 0, 0] * self.frameCount
-    frame = frame + self.params['color'].getRGBValues
+    frame = frame + self.params['color'].getRGBValues()
     frame = frame + [0, 0, 0] * (Pattern.GOODALE_WIDTH - 1 - self.frameCount)
     self.frameCount += 1
     self.frameCount = self.frameCount % Pattern.GOODALE_WIDTH

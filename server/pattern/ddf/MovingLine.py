@@ -1,4 +1,4 @@
-from pattern.Color import *
+from pattern.color import *
 from pattern.Pattern import *
 from pattern.ParameterTypes import *
 

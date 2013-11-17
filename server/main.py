@@ -1,13 +1,11 @@
 from twisted.internet import reactor
 from twisted.web.server import Site
 from twisted.web.static import File
-
 from autobahn.websocket import listenWS
 
 from sockets.devices import GoodaleRaspiSocketFactory, DDFPixelPusherSocketFactory
 from sockets.control import DiscoControlSocketFactory, DiscoControlProtocol
-
-from model.DiscoSession import *
+from model.session import DiscoSession
 
 from pattern import *
 

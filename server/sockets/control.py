@@ -21,11 +21,6 @@ class DiscoControlSocketFactory(WebSocketServerFactory):
     self.clients = []
     self.discoSession = discoSession
 
-    self.discoSession.deviceModel.on("change", self.deviceChange)
-
-  def deviceChange(self, model, attr):
-    self.broadcast(attr + ": " + str(model.get(attr)))
-
   def register(self, client):
     if not client in self.clients:
       self.clients.append(client)
