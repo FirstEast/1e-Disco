@@ -7,5 +7,6 @@ ParameterTypes = enum(
   NUMBER = 'number',
   BOOL = 'bool',
   IMAGE = 'image',
-  GIF = 'gif'
+  GIF = 'gif',
+  BEAT = 'beat'
 )

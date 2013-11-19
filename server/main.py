@@ -5,6 +5,7 @@ from autobahn.websocket import listenWS
 
 from sockets.devices import GoodaleRaspiSocketFactory, DDFPixelPusherSocketFactory
 from sockets.control import DiscoControlSocketFactory, DiscoControlProtocol
+from sockets.inputs import BeatServerReceiverFactory
 from model.session import DiscoSession
 
 from pattern import *
@@ -21,6 +22,9 @@ if __name__ == '__main__':
   # Setup socket registration for disco devices
   reactor.listenTCP(8123, GoodaleRaspiSocketFactory(session))
   reactor.listenTCP(8124, DDFPixelPusherSocketFactory(session))
+
+  # Setup socket registration for input devices
+  reactor.listenTCP(8347, BeatServerReceiverFactory(session))
 
   # Setup static html serving
   resource = File('../control_interface')
