@@ -19,14 +19,14 @@ class BeatTestPattern(Pattern):
 
   def getNextFrame(self):
     if self.params['beat'] == None:
-      return [0, 0, 0] * Pattern.GOODALE_WIDTH
+      return [[0, 0, 0]] * Pattern.GOODALE_WIDTH
 
     leftVol = self.params['beat'].leftVolumes[0]
     rightVol = self.params['beat'].rightVolumes[0]
 
     leftPulse = int(leftVol * 100)
     rightPulse = int(rightVol * 100)
-    leftFrame = self.params['color'].getRGBValues() * leftPulse
-    rightFrame = self.params['color'].getRGBValues() * rightPulse
-    midFrame = [0, 0, 0] * (Pattern.GOODALE_WIDTH - leftPulse - rightPulse)
+    leftFrame = [self.params['color'].getRGBValues()] * leftPulse
+    rightFrame = [self.params['color'].getRGBValues()] * rightPulse
+    midFrame = [[0, 0, 0]] * (Pattern.GOODALE_WIDTH - leftPulse - rightPulse)
     return leftFrame + midFrame + rightFrame

@@ -18,7 +18,8 @@ class DiscoSession():
     self.beatModel = BeatModel(BUCKET_SIZE, BUFFER_SIZE)
 
     # Starting patterns for each device
-    self.goodalePattern = BeatTestPattern({'beat': self.beatModel})
+    #self.goodalePattern = BeatTestPattern({'beat': self.beatModel})
+    self.goodalePattern = MovingLightPattern({})
     self.ddfPattern = MovingLinePattern({})
 
 # This is kind of stupid
