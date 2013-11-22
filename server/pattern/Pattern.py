@@ -10,6 +10,10 @@ class Pattern():
   DDF_HEIGHT = 24
   DDF_FORMAT = 'RGB'
 
+  BEMIS_WIDTH = 200
+  BEMIS_HEIGHT = 1
+  BEMIS_FORMAT = 'RGB'
+
   def getNextFrame(self):
     '''
     Returns the next frame in the pattern

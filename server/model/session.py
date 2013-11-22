@@ -1,5 +1,6 @@
 from pattern.goodale.MovingLight import *
 from pattern.goodale.BeatTest import *
+from pattern.bemis.BemisMovingLight import *
 from pattern.ddf.MovingLine import *
 
 BUCKET_SIZE = 10
@@ -11,6 +12,7 @@ class DiscoSession():
     self.deviceModel = {
       "goodale": False,
       "ddf": False,
+      "bemis": False,
       "beat": False
     }
 
@@ -21,6 +23,7 @@ class DiscoSession():
     #self.goodalePattern = BeatTestPattern({'beat': self.beatModel})
     self.goodalePattern = MovingLightPattern({})
     self.ddfPattern = MovingLinePattern({})
+    self.bemisPattern = BemisMovingLightPattern({})
 
 # This is kind of stupid
 class BeatModel():

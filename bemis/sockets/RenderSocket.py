@@ -48,6 +48,7 @@ class RenderSocket(Protocol):
     # otherwise send it to the web visualizer as json
     if raspi:
       # TODO: Proper rendering from Raspi -> Bemis lights
+      pass
     else:
       self.visualizeFactory.broadcast(json.dumps(output))
       time.sleep(0.03)
