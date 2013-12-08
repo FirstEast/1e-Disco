@@ -20,8 +20,8 @@ class DiscoSession():
     self.beatModel = BeatModel(BUCKET_SIZE, BUFFER_SIZE)
 
     # Starting patterns for each device
-    #self.goodalePattern = BeatTestPattern({'beat': self.beatModel})
-    self.goodalePattern = MovingLightPattern({})
+    self.goodalePattern = BeatTestPattern({'beat': self.beatModel})
+    #self.goodalePattern = MovingLightPattern({})
     self.ddfPattern = MovingLinePattern({})
     self.bemisPattern = BemisMovingLightPattern({})
 
@@ -38,6 +38,26 @@ class BeatModel():
     self.rightCentroids = [0] * buffer_size
     self.rightVolumes = [0] * buffer_size
     self.rightFrequencies = [[0] * bucket_size] * buffer_size
+
+  def getNormalizedCentroids(self, index):
+    leftMin = min(self.leftCentroids)
+    leftMax = max(self.leftCentroids)
+    leftCent = self.leftCentroids[index]
+
+    rightMin = min(self.rightCentroids)
+    rightMax = max(self.rightCentroids)
+    rightCent = self.rightCentroids[index]
+
+    if (rightMax - rightMin) == 0:
+      normRightCent = 0
+    else:
+      normRightCent = (rightCent - rightMin) / (rightMax - rightMin)
+
+    if (leftMax - leftMin) == 0:
+      normLeftCent = 0
+    else:
+      normLeftCent = (leftCent - leftMin) / (leftMax - leftMin)
+    return [normLeftCent, normRightCent]
 
   def updateData(self, leftCentroid, leftVolume, leftFrequencies,\
                   rightCentroid, rightVolume, rightFrequencies):
