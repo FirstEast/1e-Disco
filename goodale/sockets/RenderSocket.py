@@ -36,7 +36,7 @@ class RenderSocket(Protocol):
     output = []
     try:
       output = struct.unpack('B'*LENGTH*3, line)
-    except ValueError:
+    except struct.error:
       self.lastData = line.strip()
       return
 

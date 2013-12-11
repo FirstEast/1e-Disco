@@ -5,11 +5,13 @@ from pattern.ParameterTypes import *
 class BeatTestPattern(Pattern):
   def __init__(self, params):
     self.expectedParams = {
-      'color': ParameterTypes.COLOR,
+      'color1': ParameterTypes.COLOR,
+      'color2': ParameterTypes.COLOR,
       'beat': ParameterTypes.BEAT
     }
     self.defaultParams = {
-      'color': Color([255, 0, 255]),
+      'color1': Color([1, 0, 0]),
+      'color2': Color([0, 0, 255]),
       'beat': None
     }
     self.params = self.defaultParams
@@ -24,9 +26,12 @@ class BeatTestPattern(Pattern):
     leftVol = self.params['beat'].leftVolumes[0]
     rightVol = self.params['beat'].rightVolumes[0]
 
+    centroid = (self.params['beat'].leftCentroids[0] + self.params['beat'].rightCentroids[0]) / 2.0
+    centroidColor = getWeightedColorSum(self.params['color1'], self.params['color2'], centroid)
+
     leftPulse = int(leftVol * 100)
     rightPulse = int(rightVol * 100)
-    leftFrame = [self.params['color'].getRGBValues()] * leftPulse
-    rightFrame = [self.params['color'].getRGBValues()] * rightPulse
+    leftFrame = [centroidColor.getRGBValues()] * leftPulse
+    rightFrame = [centroidColor.getRGBValues()] * rightPulse
     midFrame = [[0, 0, 0]] * (Pattern.GOODALE_WIDTH - leftPulse - rightPulse)
     return leftFrame + midFrame + rightFrame
