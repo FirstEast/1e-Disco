@@ -1,24 +1,22 @@
+from pattern.pattern import *
 from pattern.color import *
-from pattern.Pattern import *
-from pattern.ParameterTypes import *
 
 class BemisMovingLightPattern(Pattern):
-  def __init__(self, params):
-    self.expectedParams = {
-      'color': ParameterTypes.COLOR
-    }
-    self.defaultParams = {
-      'color': Color([255, 0, 255])
-    }
-    self.params = self.defaultParams
+
+  DEFAULT_PARAMS = {
+    'color': Color([255, 0, 255])
+  }
+
+  def __init__(self, beat, params):
+    self.params = self.DEFAULT_PARAMS
     self.params.update(params)
 
     self.frameCount = 0
 
-  def getNextFrame(self):
+  def render(self, device):
     frame = [[0, 0, 0]] * self.frameCount
     frame = frame + [self.params['color'].getRGBValues()]
-    frame = frame + [[0, 0, 0]] * (Pattern.BEMIS_WIDTH - 1 - self.frameCount)
+    frame = frame + [[0, 0, 0]] * (BEMIS_WIDTH - 1 - self.frameCount)
     self.frameCount += 1
-    self.frameCount = self.frameCount % Pattern.BEMIS_WIDTH
-    return frame
+    self.frameCount = self.frameCount % BEMIS_WIDTH
+    return [frame]

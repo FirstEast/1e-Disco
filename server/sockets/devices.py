@@ -1,19 +1,18 @@
 from twisted.internet.protocol import Factory
 from twisted.protocols.basic import LineReceiver
-from pattern.Pattern import *
+from pattern.pattern import *
 
 import struct
 
 class DiscoDeviceReceiver(LineReceiver):
-  def __init__(self, discoSession, deviceName, devicePattern, dimensions):
+  def __init__(self, discoSession, deviceName, devicePattern):
     self.discoSession = discoSession
     self.deviceName = deviceName
     self.devicePattern = devicePattern
-    self.dimensions = dimensions
 
   def sendNextFrame(self):
-    output = self.devicePattern.getNextFrame()
-    for i in range(0, self.dimensions):
+    output = self.devicePattern.render(self)
+    for i in range(0, 2):
       output = [value for sublist in output for value in sublist]
     self.sendMessage(struct.pack('B' * len(output), *output))
 
@@ -31,11 +30,10 @@ class DiscoDeviceReceiver(LineReceiver):
     self.transport.write(message + '\n')
 
 class DiscoDeviceSocketFactory(Factory):
-  def __init__(self, discoSession, deviceName, devicePattern, dimensions):
+  def __init__(self, discoSession, deviceName, devicePattern):
     self.discoSession = discoSession
     self.deviceName = deviceName
     self.devicePattern = devicePattern
-    self.dimensions = dimensions
 
   def buildProtocol(self, addr):
-    return DiscoDeviceReceiver(self.discoSession, self.deviceName, self.devicePattern, self.dimensions)
+    return DiscoDeviceReceiver(self.discoSession, self.deviceName, self.devicePattern)

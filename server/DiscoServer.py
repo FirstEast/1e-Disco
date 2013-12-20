@@ -20,9 +20,9 @@ if __name__ == '__main__':
   listenWS(factory)
 
   # Setup socket registration for disco devices
-  reactor.listenTCP(8123, DiscoDeviceSocketFactory(session, "goodale", session.goodalePattern, 1))
-  reactor.listenTCP(8124, DiscoDeviceSocketFactory(session, "ddf", session.ddfPattern, 2))
-  reactor.listenTCP(8125, DiscoDeviceSocketFactory(session, "bemis", session.bemisPattern, 1))
+  reactor.listenTCP(8123, DiscoDeviceSocketFactory(session, "goodale", session.goodalePattern))
+  reactor.listenTCP(8124, DiscoDeviceSocketFactory(session, "ddf", session.ddfPattern))
+  reactor.listenTCP(8125, DiscoDeviceSocketFactory(session, "bemis", session.bemisPattern))
 
   # Setup socket registration for input devices
   reactor.listenTCP(8347, BeatServerReceiverFactory(session))

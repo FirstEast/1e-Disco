@@ -1,25 +1,23 @@
 from pattern.color import *
-from pattern.Pattern import *
-from pattern.ParameterTypes import *
+from pattern.pattern import *
 
 class MovingLinePattern(Pattern):
-  def __init__(self, params):
-    self.expectedParams = {
-      'color': ParameterTypes.COLOR
-    }
-    self.defaultParams = {
-      'color': Color([255, 0, 0])
-    }
-    self.params = self.defaultParams
+
+  DEFAULT_PARAMS = {
+    'color': Color([255, 0, 0])
+  }
+
+  def __init__(self, beat, params):
+    self.params = self.DEFAULT_PARAMS
     self.params.update(params)
 
     self.frameCount = 0
 
-  def getNextFrame(self):
-    frame = [[[0, 0, 0]] * Pattern.DDF_WIDTH] * Pattern.DDF_HEIGHT
-    for i in range(0, Pattern.DDF_HEIGHT - 1):
+  def render(self, device):
+    frame = [[[0, 0, 0]] * DDF_WIDTH] * DDF_HEIGHT
+    for i in range(0, DDF_HEIGHT - 1):
       frame[i][self.frameCount] = self.params['color'].getRGBValues()
 
     self.frameCount += 1
-    self.frameCount = self.frameCount % Pattern.DDF_WIDTH
+    self.frameCount = self.frameCount % DDF_WIDTH
     return frame
