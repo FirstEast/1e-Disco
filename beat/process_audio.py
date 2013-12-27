@@ -6,8 +6,8 @@ import wave
 
 CHUNK = 1024
 FORMAT = pyaudio.paInt16
-FMT = "%ih" % CHUNK * CHANNELS
 CHANNELS = 1
+FMT = "%ih" % CHUNK * CHANNELS
 RATE = 44100
 
 FFT_SIZE = 2048
