@@ -4,7 +4,7 @@ from pattern.pattern import *
 class BeatTestPattern(Pattern):
 
   DEFAULT_PARAMS = {
-    'color1': Color([1, 0, 0]),
+    'color1': Color([255, 0, 0]),
     'color2': Color([0, 0, 255]),
   }
 
@@ -16,8 +16,8 @@ class BeatTestPattern(Pattern):
     self.beat = beat
 
   def render(self, device):
-    leftVol = self.beat.leftVolumes[0]
-    rightVol = self.beat.rightVolumes[0]
+    leftVol = min(self.beat.leftVolumes[0], 1.5)
+    rightVol = min(self.beat.rightVolumes[0], 1.5)
 
     centroid = (self.beat.leftCentroids[0] + self.beat.rightCentroids[0]) / 2.0
     centroidColor = getWeightedColorSum(self.params['color1'], self.params['color2'], centroid)

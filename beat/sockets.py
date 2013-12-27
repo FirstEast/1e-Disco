@@ -18,7 +18,7 @@ class AudioWebSocketFactory(WebSocketServerFactory):
     WebSocketServerFactory.__init__(self, url, debug = debug, debugCodePaths = debugCodePaths)
     self.clients = []
     self.beatData = beatData
-    task.LoopingCall(self.sendData).start(0.01)
+    task.LoopingCall(self.sendData).start(0.05)
 
   def sendData(self):
     self.broadcast(json.dumps(self.beatData.__dict__))
