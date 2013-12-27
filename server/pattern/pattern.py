@@ -20,7 +20,11 @@ class Pattern():
     # Note: do not set default parameters to None
   }
 
-  USE_BEAT = False    # Override if you're using beat data
+  # Override if you're using beat data
+  USE_BEAT = False
+
+  # Override to assign which devices this pattern is for
+  DEVICES = ["goodale", "bemis", "ddf"]
 
   def render(self, device):
     '''
