@@ -9,5 +9,23 @@ html, body {
 
 div {
   float: left;
-  background-color: #BBB;
+}
+
+.volume {
+  background-color: blue;
+  width: 10%;
+}
+
+.centroid {
+  background-color: green;
+  width: 10%;
+}
+
+.bar-container {
+  width: 80%;
+  height: 100%;
+}
+
+.bar {
+  background-color: red;
 }

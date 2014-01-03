@@ -4,25 +4,34 @@ import math, sys
 import numpy
 import wave
 
-CHUNK = 1024
+from pylab import *
+
+CHUNK = 2048
 FORMAT = pyaudio.paInt16
 CHANNELS = 1
 FMT = "%ih" % CHUNK * CHANNELS
 RATE = 44100
 
-FFT_SIZE = 2048
+FFT_SIZE = 4096
 RECORD_SECONDS = 0.05
-TOTAL_RECORD = 0.5
+TOTAL_RECORD = 1.0
 NUM_SAMPLES = int(RATE / CHUNK * RECORD_SECONDS)
 SNIPS = int((TOTAL_RECORD / RECORD_SECONDS) * NUM_SAMPLES)
 
 LAST_FRAMES = [0] * CHUNK * SNIPS
 
-BUCKET_SIZE = 10
+BUCKET_SIZE = 20
+
+# ion()
+# x = arange(0,20481,1)            # x-array
+# line, = plot(x, sin(x))
+# ylim([0,1])
 
 P = pyaudio.PyAudio()
 
 clip = lambda val, low, high: min(high, max(low, val))
+
+# count = 0
 
 # Shared beat data object to share between sockets
 class BeatData():
@@ -56,13 +65,27 @@ def processChunk(stream, beatData):
   (centroid, shortSpectrum) = spectral_centroid(shortData)
   volume = numpy.sqrt(numpy.mean((shortData-numpy.mean(shortData))**2)) / 2000
 
+  freqs = []
+  step = math.floor(spectrum.size / BUCKET_SIZE)
+  for i in range(0, BUCKET_SIZE):
+    freqs.append(numpy.sum(spectrum[i * step: (i+1) * step]))
+
+  # global count
+  # count += 1
+
+  # if count > 20:
+  #   line.set_xdata(arange(0, spectrum.size, 1))
+  #   line.set_ydata(spectrum)  # update the data
+  #   draw()                         # redraw the canvas
+  #   count = 0
+
   beatData.leftCentroid = centroid
   beatData.leftVolume = volume
-  beatData.leftFrequencies = [0] * BUCKET_SIZE
+  beatData.leftFrequencies = freqs
 
   beatData.rightCentroid = centroid
   beatData.rightVolume = volume
-  beatData.rightFrequencies = [0] * BUCKET_SIZE
+  beatData.rightFrequencies = freqs
 
   LAST_FRAMES = frames
 
@@ -82,7 +105,7 @@ def spectral_centroid(samples, spec_range=120.0):
   """ starting at seek_point read fft_size samples, and calculate the spectral centroid """
   
   fft = numpy.fft.fft(samples)
-  spectrum = numpy.abs(fft[:fft.shape[0] / 2 + 1]) / float(FFT_SIZE) # normalized abs(FFT) between 0 and 1
+  spectrum = numpy.abs(fft[:fft.shape[0] / 2 + 1]) / (float(FFT_SIZE)*1000) # normalized abs(FFT) between 0 and 1
   length = numpy.float64(spectrum.shape[0])
 
   # scale the db spectrum from [- spec_range db ... 0 db] > [0..1]
@@ -99,6 +122,6 @@ def spectral_centroid(samples, spec_range=120.0):
     spectral_centroid = (spectrum * spectrum_range).sum() / (energy * (length - 1)) * RATE * 0.5
 
     # clip > log10 > scale between 0 and 1
-    spectral_centroid = (math.log10(clip(spectral_centroid, 100, 22050)) - math.log10(100)) / (math.log10(22050) - math.log10(100))
+    spectral_centroid = (math.log10(clip(spectral_centroid, 20, 22050)) - math.log10(20)) / (math.log10(22050) - math.log10(20))
 
   return (spectral_centroid, db_spectrum)
