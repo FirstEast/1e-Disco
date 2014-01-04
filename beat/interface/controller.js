@@ -43,6 +43,6 @@ buildBars = function(freqs) {
 updateBars = function(freqs) {
   $bars = $('.bar');
   for (var i = 0; i < freqs.length; i++) {
-    $($bars[i]).css('height', (freqs[i]/2) + 'px'); 
+    $($bars[i]).css('height', (Math.max(freqs[i],1)) + 'px'); 
   }
 }
