@@ -20,11 +20,20 @@ class Pattern():
     # Note: do not set default parameters to None
   }
 
-  # Override if you're using beat data
+  # Set if you're using beat data
   USE_BEAT = False
 
-  # Override to assign which devices this pattern is for
+  # Set to assign which devices this pattern is for
   DEVICES = ["goodale", "bemis", "ddf"]
+
+  def __init__(self, beat, params):
+    '''
+    Assign params to self.params. Make sure to call this in your subclass constructor!
+    Also assigns beat to self.beat, in case your pattern uses it.
+    '''
+    self.params = self.DEFAULT_PARAMS
+    self.params.update(params)
+    self.beat = beat
 
   def render(self, device):
     '''

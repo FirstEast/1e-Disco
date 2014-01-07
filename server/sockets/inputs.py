@@ -9,11 +9,11 @@ class BeatServerReceiver(LineReceiver):
     self.beatModel = self.discoSession.beatModel
 
   def connectionMade(self):
-    self.discoSession.deviceModel["beat"] = True
+    self.discoSession.inputDeviceModel["beat"] = True
     self.sendMessage("OK")
 
   def connectionLost(self, reason):
-    self.discoSession.deviceModel["beat"] = False
+    self.discoSession.inputDeviceModel["beat"] = False
 
   def dataReceived(self, line):
     data = json.loads(line.strip())

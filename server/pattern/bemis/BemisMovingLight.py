@@ -7,6 +7,8 @@ class BemisMovingLightPattern(Pattern):
     'color': Color([255, 0, 255])
   }
 
+  DEVICES = ['bemis']
+
   def __init__(self, beat, params):
     self.params = self.DEFAULT_PARAMS
     self.params.update(params)

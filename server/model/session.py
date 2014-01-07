@@ -3,40 +3,48 @@ from pattern.goodale.BeatTest import *
 from pattern.bemis.BemisMovingLight import *
 from pattern.ddf.MovingLine import *
 
-BUCKET_SIZE = 10
+import pattern
+import json
+import Image
+
 BUFFER_SIZE = 10
+NUM_BANDS = 25
 
 class DiscoSession():
   def __init__(self):
     # Map of devices to online status
-    self.deviceModel = {
+    self.outputDeviceModel = {
       "goodale": False,
       "ddf": False,
-      "bemis": False,
+      "bemis": False
+    }
+
+    self.inputDeviceModel = {
       "beat": False
     }
 
     # Initialize the beat model
-    self.beatModel = BeatModel(BUCKET_SIZE, BUFFER_SIZE)
+    self.beatModel = BeatModel(BUFFER_SIZE, NUM_BANDS)
 
-    # Starting patterns for each device
-    self.goodalePattern = BeatTestPattern(self.beatModel, {})
-    self.ddfPattern = MovingLinePattern(self.beatModel, {})
-    self.bemisPattern = BemisMovingLightPattern(self.beatModel, {})
+    self.patternModel = {
+      "goodale": MovingLightPattern(self.beatModel, {}),
+      "ddf": MovingLinePattern(self.beatModel, {}),
+      "bemis": BemisMovingLightPattern(self.beatModel, {})
+    }
 
 # This is kind of stupid
 class BeatModel():
-  def __init__(self, buffer_size, bucket_size):
+  def __init__(self, buffer_size, num_bands):
     self.buffer_size = buffer_size
-    self.bucket_size = bucket_size
+    self.num_bands = num_bands
 
     self.leftCentroids = [0] * buffer_size
     self.leftVolumes = [0] * buffer_size
-    self.leftFrequencies = [[0] * bucket_size] * buffer_size
+    self.leftFrequencies = [[0] * num_bands] * buffer_size
 
     self.rightCentroids = [0] * buffer_size
     self.rightVolumes = [0] * buffer_size
-    self.rightFrequencies = [[0] * bucket_size] * buffer_size
+    self.rightFrequencies = [[0] * num_bands] * buffer_size
 
   def getNormalizedCentroids(self, index):
     leftMin = min(self.leftCentroids)

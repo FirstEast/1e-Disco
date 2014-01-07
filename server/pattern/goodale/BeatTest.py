@@ -10,6 +10,8 @@ class BeatTestPattern(Pattern):
 
   USE_BEAT = True
 
+  DEVICES = ['goodale']
+
   def __init__(self, beat, params):
     self.params = self.DEFAULT_PARAMS
     self.params.update(params)

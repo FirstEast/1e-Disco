@@ -1,10 +1,16 @@
 from autobahn.websocket import WebSocketServerProtocol, \
                                 WebSocketServerFactory
 
+from pattern.pattern_list import *
+
 class DiscoControlProtocol(WebSocketServerProtocol):
   def onOpen(self):
     self.factory.register(self)
-    # TODO: send initial state message
+    self.sendMessage(getPatternMapJson())
+
+    # Starting mock patterns, to demo in the viewer prior to swaps
+    # Need one set per client
+    self.mockPatternModel = self.factory.discoSession.patternModel
 
   def onMessage(self, msg, binary):
     # TODO: control protocols!
@@ -13,6 +19,21 @@ class DiscoControlProtocol(WebSocketServerProtocol):
   def connectionLost(self, reason):
     WebSocketServerProtocol.connectionLost(self, reason)
     self.factory.unregister(self)
+
+  def performSwap(self, deviceName):
+    self.factory.discoSession.patternModel[deviceName] = self.mockPatternModel[deviceName]
+
+  def getRenderFrames(self):
+    frames = {
+      "mock": {},
+      "real": {}
+    }
+
+    # Assume same number of devices in both models
+    for key in self.factory.discoSession.patternModel:
+      frames[mock][key] = self.mockPatternModel[key].render()
+      frames[real][key] = self.factory.discoSession.patternModel[key].render()
+    return frames
 
 
 class DiscoControlSocketFactory(WebSocketServerFactory):

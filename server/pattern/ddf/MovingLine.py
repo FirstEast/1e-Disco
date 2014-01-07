@@ -7,6 +7,8 @@ class MovingLinePattern(Pattern):
     'color': Color([255, 0, 0])
   }
 
+  DEVICES = ['ddf']
+
   def __init__(self, beat, params):
     self.params = self.DEFAULT_PARAMS
     self.params.update(params)

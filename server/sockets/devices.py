@@ -17,10 +17,10 @@ class DiscoDeviceReceiver(LineReceiver):
     self.sendMessage(struct.pack('B' * len(output), *output))
 
   def connectionMade(self):
-    self.discoSession.deviceModel[self.deviceName] = True
+    self.discoSession.outputDeviceModel[self.deviceName] = True
 
   def connectionLost(self, reason):
-    self.discoSession.deviceModel[self.deviceName] = False
+    self.discoSession.outputDeviceModel[self.deviceName] = False
 
   def dataReceived(self, line):
     if line.strip().find("OK") > -1:
@@ -30,10 +30,10 @@ class DiscoDeviceReceiver(LineReceiver):
     self.transport.write(message + '\n')
 
 class DiscoDeviceSocketFactory(Factory):
-  def __init__(self, discoSession, deviceName, devicePattern):
+  def __init__(self, discoSession, deviceName):
     self.discoSession = discoSession
     self.deviceName = deviceName
-    self.devicePattern = devicePattern
+    self.devicePattern = discoSession.patternModel[deviceName]
 
   def buildProtocol(self, addr):
     return DiscoDeviceReceiver(self.discoSession, self.deviceName, self.devicePattern)
