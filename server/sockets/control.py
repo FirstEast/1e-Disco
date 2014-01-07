@@ -1,7 +1,7 @@
 from autobahn.websocket import WebSocketServerProtocol, \
                                 WebSocketServerFactory
 
-from pattern.pattern_list import *
+from pattern.config import *
 
 class DiscoControlProtocol(WebSocketServerProtocol):
   def onOpen(self):

@@ -1,7 +1,4 @@
-from pattern.goodale.MovingLight import *
-from pattern.goodale.BeatTest import *
-from pattern.bemis.BemisMovingLight import *
-from pattern.ddf.MovingLine import *
+from pattern.config import *
 
 import pattern
 import json
@@ -26,10 +23,12 @@ class DiscoSession():
     # Initialize the beat model
     self.beatModel = BeatModel(BUFFER_SIZE, NUM_BANDS)
 
+    # Get the default patterns
+    defaultPatterns = getDefaultPatterns()
     self.patternModel = {
-      "goodale": MovingLightPattern(self.beatModel, {}),
-      "ddf": MovingLinePattern(self.beatModel, {}),
-      "bemis": BemisMovingLightPattern(self.beatModel, {})
+      "goodale": defaultPatterns["goodale"](self.beatModel, {}),
+      "ddf": defaultPatterns["ddf"](self.beatModel, {}),
+      "bemis": defaultPatterns["bemis"](self.beatModel, {})
     }
 
 # This is kind of stupid

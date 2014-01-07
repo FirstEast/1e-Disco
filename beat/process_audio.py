@@ -14,11 +14,12 @@ RATE = 44100
 
 LAST_FRAMES = [0] * CHUNK * 2
 
-BUCKET_SIZE = 25
+BUCKET_SIZE = 48
 
 FR = 1 / float(CHUNK*2.0/RATE)
 LOW = 64
 HIGH = 16384
+SCALE = (HIGH/LOW)**(1.0/BUCKET_SIZE)
 
 P = pyaudio.PyAudio()
 
@@ -50,7 +51,7 @@ def processChunk(stream, beatData):
   unpacked = unpack_audio_data(data)[0]
   frames = LAST_FRAMES[CHUNK:] + unpacked
 
-  volume = numpy.sqrt(numpy.mean((frames-numpy.mean(frames))**2)) / 2000
+  volume = numpy.sqrt(numpy.mean((frames-numpy.mean(frames))**2)) / (2**13)
 
   if volume == 0:
     centroid = 0
@@ -61,9 +62,10 @@ def processChunk(stream, beatData):
     freqs = []
     current = LOW
     while current < HIGH:
-      total = numpy.sum(spectrum[int(current/FR):int(current*1.26/FR)])
-      freqs.append((total*1000 / (int(current*1.26/FR) - int(current/FR))) - 500)
-      current = int(current * 1.26)
+      total = numpy.sum(spectrum[int(current/FR):int(current*SCALE/FR)])
+      freqs.append((total*1000 / (int(current*SCALE/FR) - int(current/FR))) - 500)
+      current = int(current * SCALE)
+    freqs = freqs[:-1]
 
   beatData.leftCentroid = centroid
   beatData.leftVolume = volume

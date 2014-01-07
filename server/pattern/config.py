@@ -4,6 +4,28 @@ import json
 
 import pattern
 
+# Map of device names to default pattern modules
+DEFAULT_PATTERNS = {
+  "goodale": "pattern.1d.MovingLight",
+  "bemis": "pattern.1d.MovingLight",
+  "ddf": "pattern.2d.MovingLine"
+}
+
+# Loads the first pattern class from a module path
+def loadPatternFromModuleName(name):
+  module = deepImport(name)
+  for name, obj in inspect.getmembers(module):
+    if inspect.isclass(obj) and issubclass(obj, pattern.Pattern) and obj.__name__ != 'Pattern':
+      return obj
+
+# Returns a map of all the devices to their default pattern classes
+def getDefaultPatterns():
+  patterns = {}
+  for key in DEFAULT_PATTERNS:
+    patterns[key] = loadPatternFromModuleName(DEFAULT_PATTERNS[key])
+  return patterns
+
+# Loads the map of all the pattern classes, mapped to the class names
 def getPatternMap():
   all_modules = []
 
@@ -25,6 +47,7 @@ def getPatternMap():
 
   return pattern_classes
 
+# Loads the pattenr map 
 def getPatternMapJson():
   return json.dumps(getPatternMap(), default=(lambda x: x.__dict__))
 
