@@ -40,6 +40,6 @@ Currently all the network configurations (where to find the disco server, which 
 
 To view the simulations, enter the directory with the main Python script, then open `interface/index.html` in your browser.  This will establish a websocket connection to the simulation device running on your computer.
 
-Running Code on the Device Controllers
+Running Code on the Controllers
 ======================================
 This section will be completed later.
