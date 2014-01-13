@@ -21,7 +21,7 @@ class BeatTestPattern(Pattern):
 
     leftPulse = int(leftVol * 100)
     rightPulse = int(rightVol * 100)
-    leftFrame = [centroidColor.getRGBValues()] * leftPulse
-    rightFrame = [centroidColor.getRGBValues()] * rightPulse
+    leftFrame = [centroidColor] * leftPulse
+    rightFrame = [centroidColor] * rightPulse
     midFrame = [[0, 0, 0]] * (GOODALE_WIDTH - leftPulse - rightPulse)
     return [leftFrame + midFrame + rightFrame]
