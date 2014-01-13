@@ -4,15 +4,26 @@
 import colorsys
 
 def interpolateColors(color1, color2):
-  pass
+  diffs = []
+  for i in range(len(color1.getRGBValues())):
+    diffs.append(color2[i] - color1[i])
+  max_diff = max([abs(i) for i in diffs])
+
+  result = []
+  for i in range(max_diff):
+    scale = float(i) / max_diff
+    next = Color([color1[0] + diffs[0]*scale, color1[1] + diffs[1]*scale, color1[2] + diffs[2]*scale])
+    result.append(next)
+  result.append(color2)
+  return result
 
 def getWeightedColorSum(color1, color2, split):
   return color1 * split + color2 * (1-split)
 
 def clampRGB(RGBValues):
-  red = min(max(0, RGBValues[0]), 255)
-  green = min(max(0, RGBValues[1]), 255)
-  blue = min(max(0, RGBValues[2]), 255)
+  red = int(min(max(0, RGBValues[0]), 255))
+  green = int(min(max(0, RGBValues[1]), 255))
+  blue = int(min(max(0, RGBValues[2]), 255))
   return (red, green, blue)
 
 class Color():
