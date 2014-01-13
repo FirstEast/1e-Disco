@@ -7,10 +7,7 @@ def interpolateColors(color1, color2):
   pass
 
 def getWeightedColorSum(color1, color2, split):
-  red = split * color1.red + (1-split) * color2.red
-  green = split * color1.green + (1-split) * color2.green
-  blue = split * color1.blue + (1-split) * color2.blue
-  return Color([red, green, blue])
+  return color1 * split + color2 * (1-split)
 
 def clampRGB(RGBValues):
   red = min(max(0, RGBValues[0]), 255)
@@ -19,11 +16,13 @@ def clampRGB(RGBValues):
   return [red, green, blue]
 
 class Color():
+  """
+  Color class. Contains operator and other utilities for manipulating colors in patterns.
+
+  Contains a list of 3 values (red, green, and blue)
+  """
   def __init__(self, RGBValues):
     self.RGBValues = clampRGB(RGBValues)
-    self.red = self.RGBValues[0]
-    self.green = self.RGBValues[1]
-    self.blue = self.RGBValues[2]
 
   def getRGBValues(self):
     return self.RGBValues
@@ -32,20 +31,35 @@ class Color():
     self.RGBValues = RGBValues
 
   def getComplimentaryColor(self):
-    pass
+    """
+    Returns color with opposite RGB.  For example, if RGB is (12,13,14), 
+    then this returns (243, 242, 241)
+    """
+    red = 255 - self.RGBValues[0]
+    green = 255 - self.RGBValues[1]
+    blue = 255 - self.RGBValues[2]
+    return clampRGB([red, green, blue])
 
   def darken(self, percent):
-    pass
+    """
+    Darkens color by scaling down magnitudes.
+    """
+    scalar = 1.0 - percent
+    self = self * scalar
 
   def lighten(self, percent):
-    pass
+    """
+    Lightens color by scaling up magnitudes.
+    """
+    scalar = 1.0 + percent
+    self = self * scalar
 
   def saturate(self, percent):
     rgb = [val/255.0 for val in self.RGBValues]
     hsv = colorsys.rgb_to_hsv(*rgb)
     hsv = [hsv[0], hsv[1] + percent*hsv[1], hsv[2]]
     rgb = colorsys.hsv_to_rgb(*hsv)
-    return clamp([int(val*255) for val in rgb])
+    return clampRGB([int(val*255) for val in rgb])
 
   def desaturate(self, percent):
     rgb = [val/255.0 for val in self.RGBValues]
@@ -54,14 +68,41 @@ class Color():
     rgb = colorsys.hsv_to_rgb(*hsv)
     return clampRGB([int(val*255) for val in rgb])
 
-  def addColor(self, color):
-    red = self.RGBValues[0] + color[0]
-    green = self.RGBValues[1] + color[1]
-    blue = self.RGBValues[2] + color[2]
-    return clampRGB([red, green, blue])
+  def __add__(self, color):
+    if isinstance(color, Color):
+      red = self.RGBValues[0] + color.getRGBValues()[0]
+      green = self.RGBValues[1] + color.getRGBValues()[1]
+      blue = self.RGBValues[2] + color.getRGBValues()[2]
+      return Color(clampRGB([red, green, blue]))
+    else:
+      raise TypeError
 
-  def subtractColor(self, color):
-    red = self.RGBValues[0] - color[0]
-    green = self.RGBValues[1] - color[1]
-    blue = self.RGBValues[2] - color[2]
-    return clampRGB([red, green, blue])
+  def __sub__(self, color):
+    if isinstance(color, Color):
+      red = self.RGBValues[0] - color.getRGBValues()[0]
+      green = self.RGBValues[1] - color.getRGBValues()[1]
+      blue = self.RGBValues[2] - color.getRGBValues()[2]
+      return Color(clampRGB([red, green, blue]))
+    else:
+      raise TypeError
+
+  def __mul__(self, scalar):
+    if type(scalar) is int or type(scalar) is float:
+      red = self.RGBValues[0] * scalar
+      green = self.RGBValues[1] * scalar
+      blue = self.RGBValues[2] * scalar
+      return Color(clampRGB([red, green, blue]))
+    else:
+      raise TypeError
+
+  def __div__(self, scalar):
+    if type(scalar) is int or type(scalar) is float:
+      red = self.RGBValues[0] / float(scalar)
+      green = self.RGBValues[1] / float(scalar)
+      blue = self.RGBValues[2] / float(scalar)
+      return Color(clampRGB([red, green, blue]))
+    else:
+      raise TypeError
+
+  def __str__(self):
+    return 'RGB Values: ' + str(self.RGBValues)
