@@ -6,8 +6,8 @@ import pattern
 
 # Map of device names to default pattern modules
 DEFAULT_PATTERNS = {
-  "goodale": "pattern.1d.MovingLight",
-  "bemis": "pattern.1d.MovingLight",
+  "goodale": "pattern.combo.Interpolation",
+  "bemis": "pattern.combo.Interpolation",
   "ddf": "pattern.2d.MovingLine"
 }
 

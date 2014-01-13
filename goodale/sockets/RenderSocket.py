@@ -37,11 +37,8 @@ class RenderSocket(Protocol):
     try:
       output = struct.unpack('B'*LENGTH*3, line)
     except struct.error:
-      self.lastData = line.strip()
-      return
-
-    if len(output) != LENGTH*3:
-      self.lastData = line.strip()
+      #self.lastData = line.strip()
+      self.sendMessage("OK")
       return
 
     # If we're running on a raspi, render the stuff we got,
