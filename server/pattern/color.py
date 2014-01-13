@@ -13,7 +13,7 @@ def clampRGB(RGBValues):
   red = min(max(0, RGBValues[0]), 255)
   green = min(max(0, RGBValues[1]), 255)
   blue = min(max(0, RGBValues[2]), 255)
-  return [red, green, blue]
+  return (red, green, blue)
 
 class Color():
   """
@@ -103,6 +103,9 @@ class Color():
       return Color(clampRGB([red, green, blue]))
     else:
       raise TypeError
+
+  def __getitem__(self, k):
+    return self.RGBValues[k]
 
   def __str__(self):
     return 'RGB Values: ' + str(self.RGBValues)
