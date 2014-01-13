@@ -1,6 +1,5 @@
 from pattern.color import *
 from pattern.pattern import *
-
 import time
 
 class MovingLightPattern(Pattern):
@@ -13,8 +12,8 @@ class MovingLightPattern(Pattern):
   DEVICES = ['goodale', 'bemis']
 
   def __init__(self, beat, params):
-    Pattern.__init__(self, beat, params);
-    self.startTime = time.time() * 1000;
+    Pattern.__init__(self, beat, params)
+    self.startTime = time.time() * 1000
 
   def render(self, device):
     if device.deviceName == 'goodale':

@@ -12,11 +12,6 @@ class BeatTestPattern(Pattern):
 
   DEVICES = ['goodale']
 
-  def __init__(self, beat, params):
-    self.params = self.DEFAULT_PARAMS
-    self.params.update(params)
-    self.beat = beat
-
   def render(self, device):
     leftVol = min(self.beat.leftVolumes[0], 1.5)
     rightVol = min(self.beat.rightVolumes[0], 1.5)

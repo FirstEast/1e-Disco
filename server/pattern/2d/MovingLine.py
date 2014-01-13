@@ -1,25 +1,23 @@
 from pattern.color import *
 from pattern.pattern import *
+import time
 
 class MovingLinePattern(Pattern):
 
   DEFAULT_PARAMS = {
-    'color': Color([255, 0, 0])
+    'color': Color([255, 0, 0]),
+    'rate': 60
   }
 
   DEVICES = ['ddf']
 
   def __init__(self, beat, params):
-    self.params = self.DEFAULT_PARAMS
-    self.params.update(params)
-
-    self.frameCount = 0
+    Pattern.__init__(self, beat, params)
+    self.startTime = time.time() * 1000
 
   def render(self, device):
+    frameCount = int((time.time() * 1000 - self.startTime) / float(1000 / self.params['rate'])) % DDF_WIDTH
     frame = [[[0, 0, 0]] * DDF_WIDTH] * DDF_HEIGHT
     for i in range(0, DDF_HEIGHT - 1):
-      frame[i][self.frameCount] = self.params['color'].getRGBValues()
-
-    self.frameCount += 1
-    self.frameCount = self.frameCount % DDF_WIDTH
+      frame[i][frameCount] = self.params['color'].getRGBValues()
     return frame
