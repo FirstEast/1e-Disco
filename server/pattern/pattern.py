@@ -1,16 +1,3 @@
-# Constants for convenient use.
-GOODALE_WIDTH = 395
-GOODALE_HEIGHT = 1
-GOODALE_FORMAT = 'BGR'
-
-DDF_WIDTH = 48
-DDF_HEIGHT = 24
-DDF_FORMAT = 'RGB'
-
-BEMIS_WIDTH = 200
-BEMIS_HEIGHT = 1
-BEMIS_FORMAT = 'RGB'
-
 class Pattern():
 
   DEFAULT_PARAMS = {
@@ -58,3 +45,6 @@ class Pattern():
     Sets parameter 'name' to value 'val'
     '''
     self.params[name] = val
+
+class Frame():
+  pass

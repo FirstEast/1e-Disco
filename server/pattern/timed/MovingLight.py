@@ -16,12 +16,8 @@ class MovingLightPattern(Pattern):
     self.startTime = time.time() * 1000
 
   def render(self, device):
-    if device.deviceName == 'goodale':
-      limiter = GOODALE_WIDTH
-    elif device.deviceName == 'bemis':
-      limiter = BEMIS_WIDTH
-    frameCount = int((time.time() * 1000 - self.startTime) / float(1000 / self.params['rate'])) % limiter
+    frameCount = int((time.time() * 1000 - self.startTime) / float(1000 / self.params['rate'])) % device.width
     frame = [[0, 0, 0]] * frameCount
     frame = frame + [self.params['color']]
-    frame = frame + [[0, 0, 0]] * (limiter - 1 - frameCount)
+    frame = frame + [[0, 0, 0]] * (device.width - 1 - frameCount)
     return [frame]

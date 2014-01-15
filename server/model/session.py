@@ -1,4 +1,4 @@
-from pattern.config import *
+from pattern.importer import *
 
 import pattern
 import json
@@ -30,6 +30,9 @@ class DiscoSession():
       "ddf": defaultPatterns["ddf"](self.beatModel, {}),
       "bemis": defaultPatterns["bemis"](self.beatModel, {})
     }
+
+  def getPattern(self, deviceName):
+    return self.patternModel[deviceName]
 
 # This is kind of stupid
 class BeatModel():

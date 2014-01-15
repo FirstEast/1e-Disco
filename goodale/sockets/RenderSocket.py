@@ -30,14 +30,12 @@ class RenderSocket(Protocol):
     self.sendMessage("OK")
 
   def dataReceived(self, line):
-    line = self.lastData + line.strip()
     # Parse what we got to the int array
-
+    line = line.strip()
     output = []
     try:
       output = struct.unpack('B'*LENGTH*3, line)
     except struct.error:
-      #self.lastData = line.strip()
       self.sendMessage("OK")
       return
 

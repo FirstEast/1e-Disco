@@ -23,5 +23,5 @@ class BeatTestPattern(Pattern):
     rightPulse = int(rightVol * 100)
     leftFrame = [centroidColor] * leftPulse
     rightFrame = [centroidColor] * rightPulse
-    midFrame = [[0, 0, 0]] * (GOODALE_WIDTH - leftPulse - rightPulse)
+    midFrame = [[0, 0, 0]] * (device.width - leftPulse - rightPulse)
     return [leftFrame + midFrame + rightFrame]
