@@ -1,24 +1,20 @@
 from pattern.color import *
 from pattern.pattern import *
 
-# IMPORTANT
-# Static patterns should render ONCE then cache their answer.
-# There's no point in recalculating unless your parameters change.
-
-class Circle(Pattern):
+class Circle(StaticPattern):
   pass
 
-class Rectangle(Pattern):
+class Rectangle(StaticPattern):
   pass
 
-class Line(Pattern):
+class Line(StaticPattern):
   pass
 
-class Star(Pattern):
+class Star(StaticPattern):
   pass
 
-class Heart(Pattern):
+class Heart(StaticPattern):
   pass
 
-class RegularNgon(Pattern):
+class RegularNgon(StaticPattern):
   pass

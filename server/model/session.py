@@ -9,13 +9,14 @@ NUM_BANDS = 25
 
 class DiscoSession():
   def __init__(self):
-    # Map of devices to online status
+    # Map of output devices to online status
     self.outputDeviceModel = {
       "goodale": False,
       "ddf": False,
       "bemis": False
     }
 
+    # Map of input devices to online status
     self.inputDeviceModel = {
       "beat": False
     }
@@ -33,6 +34,9 @@ class DiscoSession():
 
   def getPattern(self, deviceName):
     return self.patternModel[deviceName]
+
+  def setPattern(self, deviceName, pattern):
+    self.patternModel[deviceName] = pattern
 
 # This is kind of stupid
 class BeatModel():

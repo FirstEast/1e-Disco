@@ -6,9 +6,9 @@ import pattern
 
 # Map of device names to default pattern modules
 DEFAULT_PATTERNS = {
-  "goodale": "pattern.combo.Interpolation",
-  "bemis": "pattern.combo.Interpolation",
-  "ddf": "pattern.2d.MovingLine"
+  "goodale": "pattern.timed.Interpolation",
+  "bemis": "pattern.timed.Interpolation",
+  "ddf": "pattern.timed.MovingLine"
 }
 
 # Loads the first pattern class from a module path
@@ -42,7 +42,7 @@ def getPatternMap():
     module = deepImport(module_name)
 
     for name, obj in inspect.getmembers(module):
-      if inspect.isclass(obj) and issubclass(obj, pattern.Pattern) and obj.__name__ != 'Pattern':
+      if inspect.isclass(obj) and issubclass(obj, pattern.Pattern) and len(obj.DEFAULT_PARAMS) > 0:
         pattern_classes[obj.__name__] = obj
 
   return pattern_classes
