@@ -144,6 +144,15 @@ class Frame():
           newFrame[i][j] = self.colorArray[i][j]
     return Frame(newFrame)
 
+  def transpose(self):
+    newFrame = []
+    for i in range(self.width):
+      newRow = []
+      for j in range(self.height):
+        newRow.append(self.colorArray[j][i])
+      newFrame.append(newRow)
+    return Frame(newFrame)
+
   def __add__(self, frame):
     if isinstance(frame, Frame):
       if len(frame) != self.height or len(frame[0]) != self.width:

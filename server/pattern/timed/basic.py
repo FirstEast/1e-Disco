@@ -1,5 +1,6 @@
 from pattern.color import *
 from pattern.pattern import *
+from pattern.util import *
 
 class Interpolation(TimedPattern):
 

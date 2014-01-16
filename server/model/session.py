@@ -3,9 +3,10 @@ from pattern.importer import *
 import pattern
 import json
 import Image
+import numpy
 
-BUFFER_SIZE = 10
-NUM_BANDS = 25
+BUFFER_SIZE = 4
+NUM_BANDS = 48
 
 class DiscoSession():
   def __init__(self):
@@ -44,46 +45,29 @@ class BeatModel():
     self.buffer_size = buffer_size
     self.num_bands = num_bands
 
-    self.leftCentroids = [0] * buffer_size
-    self.leftVolumes = [0] * buffer_size
-    self.leftFrequencies = [[0] * num_bands] * buffer_size
-
-    self.rightCentroids = [0] * buffer_size
-    self.rightVolumes = [0] * buffer_size
-    self.rightFrequencies = [[0] * num_bands] * buffer_size
+    self.centroids = [0] * buffer_size
+    self.volumes = [0] * buffer_size
+    self.frequencies = [[0] * num_bands] * buffer_size
 
   def getNormalizedCentroids(self, index):
-    leftMin = min(self.leftCentroids)
-    leftMax = max(self.leftCentroids)
-    leftCent = self.leftCentroids[index]
+    cMin = min(self.centroids)
+    cMax = max(self.centroids)
+    cCent = self.centroids[index]
 
-    rightMin = min(self.rightCentroids)
-    rightMax = max(self.rightCentroids)
-    rightCent = self.rightCentroids[index]
-
-    if (rightMax - rightMin) == 0:
-      normRightCent = 0
+    if (cMax - cMin) == 0:
+      normCent = 0
     else:
-      normRightCent = (rightCent - rightMin) / (rightMax - rightMin)
+      normCent = (cCent - cMin) / (cMax - cMin)
+    return normCent
 
-    if (leftMax - leftMin) == 0:
-      normLeftCent = 0
-    else:
-      normLeftCent = (leftCent - leftMin) / (leftMax - leftMin)
-    return [normLeftCent, normRightCent]
+  def updateData(self, centroid, volume, frequencies):
+    self.centroids.pop()
+    self.volumes.pop()
+    self.frequencies.pop()
 
-  def updateData(self, leftCentroid, leftVolume, leftFrequencies,\
-                  rightCentroid, rightVolume, rightFrequencies):
-    self.leftCentroids.pop()
-    self.leftVolumes.pop()
-    self.leftFrequencies.pop()
-    self.rightCentroids.pop()
-    self.rightVolumes.pop()
-    self.rightFrequencies.pop()
+    self.centroids.insert(0, centroid)
+    self.volumes.insert(0, volume)
+    self.frequencies.insert(0, frequencies)
 
-    self.leftCentroids.insert(0, leftCentroid)
-    self.leftVolumes.insert(0, leftVolume)
-    self.leftFrequencies.insert(0, leftFrequencies)
-    self.rightCentroids.insert(0, rightCentroid)
-    self.rightVolumes.insert(0, rightVolume)
-    self.rightFrequencies.insert(0, rightFrequencies)
+    self.volumes[0] = float(numpy.mean(self.volumes))
+    self.centroids[0] = float(numpy.mean(self.centroids))

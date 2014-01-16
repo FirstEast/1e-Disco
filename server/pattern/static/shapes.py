@@ -55,6 +55,3 @@ class Heart(StaticPattern):
     'Color': RED
   }
   pass
-
-class RegularNgon(StaticPattern):
-  pass

@@ -6,9 +6,9 @@ import pattern
 
 # Map of device names to default pattern modules
 DEFAULT_PATTERNS = {
-  "goodale": "pattern.test.mixing_Adding",
+  "goodale": "pattern.beat.goodale_BeatTest",
   "bemis": "pattern.timed.basic_Interpolation",
-  "ddf": "pattern.test.mixing_Subtracting"
+  "ddf": "pattern.beat.multidevice_HorizontalVis"
 }
 
 # Returns a pattern class from a name formatted as "module.path_className"

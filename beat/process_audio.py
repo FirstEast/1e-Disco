@@ -63,17 +63,13 @@ def processChunk(stream, beatData):
     current = LOW
     while current < HIGH:
       total = numpy.sum(spectrum[int(current/FR):int(current*SCALE/FR)])
-      freqs.append((total*1000 / (int(current*SCALE/FR) - int(current/FR))) - 500)
+      freqs.append((total / (int(current*SCALE/FR) - int(current/FR))))
       current = int(current * SCALE)
     freqs = freqs[:-1]
 
-  beatData.leftCentroid = centroid
-  beatData.leftVolume = volume
-  beatData.leftFrequencies = freqs
-
-  beatData.rightCentroid = centroid
-  beatData.rightVolume = volume
-  beatData.rightFrequencies = freqs
+  beatData.centroid= centroid
+  beatData.volume = volume
+  beatData.frequencies = freqs
 
   LAST_FRAMES = frames
 

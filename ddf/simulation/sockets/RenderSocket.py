@@ -10,9 +10,6 @@ HEIGHT = 24
 class RenderSocket(Protocol):
   def __init__(self, visualizeFactory):
     self.visualizeFactory = visualizeFactory
-    self.frame = 0
-
-    self.lastData = ''
 
   def connectionMade(self):
     print "connected successfully to central server"
@@ -23,25 +20,20 @@ class RenderSocket(Protocol):
     self.sendMessage("OK")
 
   def dataReceived(self, line):
-    line = self.lastData + line.strip()
+    line = line.strip()
 
     # Parse what we got to the int array
     output = []
     try:
       output = struct.unpack('B' * WIDTH * HEIGHT * 3, line)
-    except ValueError:
-      self.lastData = line.strip()
-      return
-
-    if len(output) != WIDTH*HEIGHT*3:
-      self.lastData = line.strip()
+    except struct.error:
+      self.sendMessage("OK")
       return
 
     self.visualizeFactory.broadcast(json.dumps(output))
     time.sleep(0.03)
 
     # Signal for the next frame
-    self.lastData = ''
     self.sendMessage("OK")
 
   def sendMessage(self, message):
