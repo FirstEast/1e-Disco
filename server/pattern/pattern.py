@@ -1,3 +1,5 @@
+from color import *
+
 DEFAULT_RATE = 30 #FPS
 
 class Pattern():
@@ -11,6 +13,9 @@ class Pattern():
     # 
     # If this dict is empty, your Pattern will not appear in the web UI.
     #
+    # If a param is a list of some sort, then don't mutate the list in your
+    # own params dict. Assign a new one. Copying objects is not easy children.
+    # 
     # Note: do not set default parameters to None
   }
 
@@ -25,7 +30,8 @@ class Pattern():
     Assign params to self.params. Make sure to call this in your subclass constructor!
     Also assigns beat to self.beat, in case your pattern uses it.
     '''
-    self.params = self.DEFAULT_PARAMS
+    self.params = {}
+    self.params.update(self.DEFAULT_PARAMS)
     self.params.update(params)
     self.beat = beat
 
@@ -66,7 +72,7 @@ class StaticPattern(Pattern):
 
   def render(self, device):
     if self.newParams:
-      self.frame = self.renderNew(device)
+      self.frame = self.renderFrame(device)
       self.newParams = False
     return self.frame
 
@@ -74,7 +80,7 @@ class StaticPattern(Pattern):
     self.params[name] = val
     self.newParams = True
 
-  def renderNew(self, device):
+  def renderFrame(self, device):
     '''
     Returns frame based on the set parameters. Only called when params change.
     '''
@@ -118,4 +124,72 @@ class TimedPattern(Pattern):
     pass
 
 class Frame():
-  pass
+  def __init__(self, colorArray):
+    self.colorArray = colorArray
+    self.height = len(colorArray)
+    self.width = len(colorArray[0])
+
+  def maskFrame(self, mask):
+    if len(mask) != self.height or len(mask[0]) != self.width:
+      raise TypeError
+
+    newFrame = [[BLACK] * self.width] * self.height
+    for i in range(self.height):
+      for j in range(self.width):
+        if mask[i][j] == BLACK:
+          newFrame[i][j] = BLACK
+        else:
+          newFrame[i][j] = self.colorArray[i][j]
+    return Frame(newFrame)
+
+  def __add__(self, frame):
+    if isinstance(frame, Frame):
+      if len(frame) != self.height or len(frame[0]) != self.width:
+        raise TypeError
+
+      newFrame = [[BLACK] * self.width] * self.height
+      for i in range(self.height):
+        for j in range(self.width):
+          newFrame[i][j] = self.colorArray[i][j] + frame[i][j]
+      return Frame(newFrame)
+    else:
+      raise TypeError
+
+  def __sub__(self, frame):
+    if isinstance(frame, Frame):
+      if len(frame) != self.height or len(frame[0]) != self.width:
+        raise TypeError
+
+      newFrame = [[BLACK] * self.width] * self.height
+      for i in range(self.height):
+        for j in range(self.width):
+          newFrame[i][j] = self.colorArray[i][j] - frame[i][j]
+      return Frame(newFrame)
+    else:
+      raise TypeError
+
+  def __mul__(self, scalar):
+    if type(scalar) is int or type(scalar) is float:
+      newFrame = [[BLACK] * self.width] * self.height
+      for i in range(self.height):
+        for j in range(self.width):
+          newFrame[i][j] = self.colorArray[i][j] * scalar
+      return Frame(newFrame)
+    else:
+      raise TypeError
+
+  def __div__(self, scalar):
+    if type(scalar) is int or type(scalar) is float:
+      newFrame = [[BLACK] * self.width] * self.height
+      for i in range(self.height):
+        for j in range(self.width):
+          newFrame[i][j] = self.colorArray[i][j] / scalar
+      return Frame(newFrame)
+    else:
+      raise TypeError
+
+  def __len__(self):
+    return len(self.colorArray)
+
+  def __getitem__(self, index):
+    return self.colorArray[index]

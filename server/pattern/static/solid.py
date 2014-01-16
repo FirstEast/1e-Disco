@@ -2,7 +2,12 @@ from pattern.color import *
 from pattern.pattern import *
 
 class SolidColor(StaticPattern):
-  pass
+  DEFAULT_PARAMS = {
+    'Color': BLUE
+  }
+  
+  def renderFrame(self, device):
+    return Frame([[self.params['Color']] * device.width] * device.height)
 
 class Gradient(StaticPattern):
   # Radial, linear, multicolor.
