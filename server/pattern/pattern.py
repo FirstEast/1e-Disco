@@ -1,4 +1,5 @@
 from color import *
+import time
 
 DEFAULT_RATE = 30 #FPS
 
@@ -8,7 +9,7 @@ class Pattern():
   '''
 
   DEFAULT_PARAMS = {
-    # Your default parameter, such as:
+    # Your default parameters, such as:
     # 'Main Color': Color([255,0,0])
     # 
     # If this dict is empty, your Pattern will not appear in the web UI.
@@ -97,39 +98,31 @@ class StaticPattern(Pattern):
 
 class TimedPattern(Pattern):
   '''
-  Timed Pattern class. Handles frame counting based on real world time and
-  caching of each frame, so as to prevent avoidable computation. Used for
-  time variant looping patterns.
+  Timed Pattern class. Handles frame counting based on real world time. 
+  Used for time variant looping patterns.
 
   Children of this class must implement the renderFrame function, which will
-  be called with a frame number argument if no data for that frame number is
-  found in the cache. The cache is cleared whenever the parameters for this
-  pattern change.
-
-  Children of this class are also expected to set an instance variable
-  'duration', which is the total number of frames in a single iteration of
-  the pattern. This is likely dependent upon which device is being rendered,
-  the parameters, etc. Update this variable accordingly using the setDuration
-  function, as this will also clear the cache for you (if the new duration is
-  different from the old duration).
-
-  When determining the frame, this class will attempt to reference a 'Rate'
-  parameter within the self.params dictionary. If no such parameter is found,
-  the pattern will display at the framerate specified by DEFAULT_RATE (above).
+  be called with a frame number argument and the device.
   '''
+
+  DEFAULT_PARAMS = {
+    'Rate': DEFAULT_RATE
+  }
 
   def __init__(self, beat, params):
     Pattern.__init__(self, beat, params)
-    #TODO
+    self.startTime = time.time() * 1000
 
   def render(self, device):
-    pass
+    return self.renderFrame(device, self.getFrameCount())
 
-  def setParam(self, name, val):
-    self.params[name] = val
-    #TODO
+  def resetTimer(self):
+    self.startTime = time.time() * 1000
 
-  def renderFrame(self, device, frame):
+  def getFrameCount(self):
+    return int((time.time() * 1000 - self.startTime) / float(1000 / self.params['Rate']))
+
+  def renderFrame(self, device, frameCount):
     pass
 
 class Frame():

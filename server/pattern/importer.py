@@ -7,7 +7,7 @@ import pattern
 # Map of device names to default pattern modules
 DEFAULT_PATTERNS = {
   "goodale": "pattern.test.mixing_Adding",
-  "bemis": "pattern.timed.Interpolation_Interpolation",
+  "bemis": "pattern.timed.basic_Interpolation",
   "ddf": "pattern.test.mixing_Subtracting"
 }
 
@@ -48,7 +48,7 @@ def getPatternMap():
 
   return pattern_classes
 
-# Loads the pattenr map 
+# Loads the pattern map 
 def getPatternMapJson():
   return json.dumps(getPatternMap(), default=(lambda x: x.__dict__))
 
