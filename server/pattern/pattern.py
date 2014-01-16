@@ -34,10 +34,18 @@ class Pattern():
     self.params.update(self.DEFAULT_PARAMS)
     self.params.update(params)
     self.beat = beat
+    self.paramUpdate()
 
   def render(self, device):
     '''
     Returns the next frame in the pattern for the given device
+    '''
+    pass
+
+  def paramUpdate(self):
+    '''
+    Do any stuff that needs to be calculated from the params.
+    Called when the params change.
     '''
     pass
 
@@ -58,6 +66,7 @@ class Pattern():
     Sets parameter 'name' to value 'val'
     '''
     self.params[name] = val
+    self.paramUpdate()
 
 class StaticPattern(Pattern):
   '''
