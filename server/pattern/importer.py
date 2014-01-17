@@ -8,7 +8,7 @@ import pattern
 DEFAULT_PATTERNS = {
   "goodale": "pattern.beat.goodale_BeatTest",
   "bemis": "pattern.timed.basic_Interpolation",
-  "ddf": "pattern.static.shapes_Circle"
+  "ddf": "pattern.mixer.layer_MaskPattern"
 }
 
 # Returns a pattern class from a name formatted as "module.path_className"

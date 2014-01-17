@@ -4,7 +4,7 @@ from PIL import Image, ImageDraw
 
 class Circle(StaticPattern):
   DEFAULT_PARAMS = {
-    'Center X': 12,
+    'Center X': 24,
     'Center Y': 12,
     'Radius': 10,
     'Fill': True,
