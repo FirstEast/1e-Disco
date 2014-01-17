@@ -1,40 +1,30 @@
 from pattern.color import *
 from pattern.pattern import *
+from PIL import Image, ImageDraw
 
 class Circle(StaticPattern):
   DEFAULT_PARAMS = {
-    'Center X': 0,
-    'Center Y': 0,
+    'Center X': 12,
+    'Center Y': 12,
     'Radius': 10,
-    'Fill': False,
-    'Thickness': 1,
-    'Color': BLUE
+    'Fill': True,
+    'Color': BLUE.getRGBValues()
   }
 
   def renderFrame(self, device):
     x0 = self.params['Center X']
     y0 = self.params['Center Y']
-    x = self.params['Radius']
-    y = 0
-    radiusError = 1 - x;
+    r = self.params['Radius']
+    
+    im = Image.new('RGB', (device.width, device.height))
+    draw = ImageDraw.Draw(im)
    
-    frame = Frame([[BLACK] * device.width] * device.height)
-    while x >= y:
-      frame.drawPixel(x + x0, y + y0, self.params['Color'])
-      frame.drawPixel(y + x0, x + y0, self.params['Color'])
-      frame.drawPixel(-x + x0, y + y0, self.params['Color'])
-      frame.drawPixel(-y + x0, x + y0, self.params['Color'])
-      frame.drawPixel(-x + x0, -y + y0, self.params['Color'])
-      frame.drawPixel(-y + x0, -x + y0, self.params['Color'])
-      frame.drawPixel(x + x0, -y + y0, self.params['Color'])
-      frame.drawPixel(y + x0, -x + y0, self.params['Color'])
-      y += 1
-      if radiusError < 0:
-        radiusError+=2*y+1;
-      else:
-        x -= 1
-        radiusError+=2*(y-x+1)
-    return frame
+    if self.params['Fill']:
+      draw.ellipse((x0 - r, y0 - r, x0 + r, y0 + r), outline=self.params['Color'], fill=self.params['Color'])    
+    else:
+      draw.ellipse((x0 - r, y0 - r, x0 + r, y0 + r), outline=self.params['Color'])    
+
+    return im
 
 class Rectangle(StaticPattern):
   DEFAULT_PARAMS = {

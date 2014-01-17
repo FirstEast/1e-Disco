@@ -23,4 +23,4 @@ class BeatTest(Pattern):
     pulse = int(vol * FLAT_GOODALE_LENGTH/2.0)
     sideFrame = [centroidColor] * pulse
     midFrame = [emptyColor] * (FLAT_GOODALE_LENGTH - pulse * 2)
-    return unflattenGoodaleFrame(Frame([sideFrame + midFrame + sideFrame]))
+    return unflattenGoodaleArray([sideFrame + midFrame + sideFrame])

@@ -1,6 +1,7 @@
 from pattern.color import *
 from pattern.pattern import *
 from pattern.static.solid import *
+from PIL import ImageChops
 
 class Adding(Pattern):
   def __init__(self, beat, params):
@@ -9,7 +10,7 @@ class Adding(Pattern):
     self.p2 = SolidColor(beat, {'Color': GREEN})
   
   def render(self, device):
-    return self.p1.render(device) + self.p2.render(device)
+    return ImageChops.add(self.p1.render(device), self.p2.render(device))
 
 class Subtracting(Pattern):
   def __init__(self, beat, params):
@@ -18,4 +19,4 @@ class Subtracting(Pattern):
     self.p2 = SolidColor(beat, {'Color': GREEN})
   
   def render(self, device):
-    return self.p1.render(device) - self.p2.render(device)
+    return ImageChops.subtract(self.p1.render(device), self.p2.render(device))

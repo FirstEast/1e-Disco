@@ -18,8 +18,10 @@ class Interpolation(TimedPattern):
 
   def renderFrame(self, device, frameCount):
     count = frameCount % len(self.loop)
-    frame = [[self.loop[count]] * device.width] * device.height
-    return Frame(frame)
+    frame = [self.loop[count]] * (device.width * device.height)
+    im = Image.new('RGB', (device.width, device.height))
+    im.putdata(frame)
+    return im
 
 class MovingLight(TimedPattern):
 
@@ -36,7 +38,9 @@ class MovingLight(TimedPattern):
     frame = [[0, 0, 0]] * count
     frame = frame + [self.params['color']]
     frame = frame + [[0, 0, 0]] * (device.width - 1 - count)
-    return Frame([frame])
+    im = Image.new('RGB', (device.width, 1))
+    im.putdata(frame)
+    return im
 
 class MovingLine(TimedPattern):
 
@@ -50,7 +54,7 @@ class MovingLine(TimedPattern):
 
   def renderFrame(self, device, frameCount):
     count = frameCount % device.width
-    frame = [[[0, 0, 0]] * device.width] * device.height
-    for i in range(0, device.height - 1):
-      frame[i][count] = self.params['color']
-    return Frame(frame)
+    oneline = [[0, 0, 0]] * (count) + [self.params['color'].getRGBValues()] + [[0, 0, 0]] * (device.width - count - 1)
+    im = Image.new('RGB', (device.width, device.height))
+    im.putdata(oneline * device.height)
+    return im

@@ -32,16 +32,16 @@ class VerticalVis(Pattern):
       val = scaleToBucket(max((((freqs[2*i] + freqs[2*i + 1]) / 2.0) - 0.66) * 3, 0), 0, device.width)
       smashed.append(val)
 
-    frame = []
-    for i in range(len(smashed)):
-      row = []
-      for j in range(device.width - smashed[i]):
-        row.append(BLACK)
-      for j in range(smashed[i]):
-        row.append(self.params['Vis Color'])
-      frame.append(row)
+    frame = Image.new('RGB', (device.width, len(smashed)))
+    data = []
 
-    return Frame(frame)
+    for i in range(len(smashed)):
+      data += [BLACK.getRGBValues()] * (device.width - smashed[i])
+      data += [self.params['Vis Color'].getRGBValues()] * smashed[i]
+
+    frame.putdata(data)
+
+    return frame
 
 class HorizontalVis(Pattern):
 
@@ -77,6 +77,9 @@ class HorizontalVis(Pattern):
         row.append(BLACK)
       for j in range(newFreqs[i]):
         row.append(self.params['Vis Color'])
-      frame.append(row)
+      frame += row
+    im = Image.new('RGB', (device.height, len(freqs)))
+    im.putdata(frame)
+    return im.transpose(ROTATE_270).transpose(FLIP_LEFT_RIGHT)
 
-    return Frame(frame).transpose()
+

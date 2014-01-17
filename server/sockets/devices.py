@@ -14,9 +14,7 @@ class DiscoDeviceReceiver(LineReceiver):
     self.pattern = discoSession.getPattern(name)
 
   def sendNextFrame(self):
-    output = self.pattern.render(self)
-    for i in range(0, 2):
-      output = [value for sublist in output for value in sublist]
+    output = [value for color in self.pattern.render(self).getdata() for value in color]
     self.sendMessage(struct.pack('B' * len(output), *output))
 
   def connectionMade(self):

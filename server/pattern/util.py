@@ -1,10 +1,11 @@
 from pattern import *
+from PIL import Image
 
 import math
 
 FLAT_GOODALE_LENGTH = 159 + 97 + 160
 
-def unflattenGoodaleFrame(frame):
+def unflattenGoodaleArray(frame):
   newFrame = []
   for i in range(len(frame[0])):
     if i > 161 and i < 208:
@@ -17,8 +18,9 @@ def unflattenGoodaleFrame(frame):
         newFrame.append(frame[0][i])
     else:
       newFrame.append(frame[0][i])
-
-  return Frame([newFrame])
+  im = Image.new('RGB', (len(newFrame), 1))
+  im.putdata(newFrame)
+  return im
 
 def scaleToBucket(value, minVal, maxVal):
   v = (maxVal - minVal) * value + minVal
