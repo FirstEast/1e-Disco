@@ -1,7 +1,7 @@
 from twisted.internet import reactor
 from twisted.web.server import Site
 from twisted.web.static import File
-from autobahn.websocket import listenWS
+from autobahn.twisted.websocket import listenWS
 
 from sockets.devices import DiscoDeviceSocketFactory
 from sockets.control import DiscoControlSocketFactory, DiscoControlProtocol
