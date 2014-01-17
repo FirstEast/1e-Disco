@@ -1,6 +1,6 @@
 from twisted.internet import task
 from twisted.internet.protocol import Protocol, ReconnectingClientFactory
-from autobahn.websocket import WebSocketServerProtocol, \
+from autobahn.twisted.websocket import WebSocketServerProtocol, \
                                 WebSocketServerFactory
 
 import json

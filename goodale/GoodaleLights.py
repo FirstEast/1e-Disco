@@ -3,7 +3,7 @@ from twisted.internet.endpoints import TCP4ClientEndpoint
 from twisted.web.server import Site
 from twisted.web.static import File
 
-from autobahn.websocket import listenWS
+from autobahn.twisted.websocket import listenWS
 
 from sockets.RenderSocket import *
 from sockets.VisualizeWebSocket import *

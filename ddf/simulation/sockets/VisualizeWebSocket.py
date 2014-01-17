@@ -1,4 +1,4 @@
-from autobahn.websocket import WebSocketServerProtocol, \
+from autobahn.twisted.websocket import WebSocketServerProtocol, \
                                 WebSocketServerFactory
 
 class VisualizeWebSocket(WebSocketServerProtocol):

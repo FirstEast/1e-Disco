@@ -1,6 +1,6 @@
 from twisted.internet import reactor, task
 from twisted.internet.endpoints import TCP4ClientEndpoint
-from autobahn.websocket import listenWS
+from autobahn.twisted.websocket import listenWS
 from sockets import AudioWebSocketFactory, AudioWebSocket, AudioSocketFactory
 
 import process_audio
