@@ -7,7 +7,7 @@ DDF_WIDTH = 48
 DDF_HEIGHT = 24
 DDF_FORMAT = 'RGB'
 
-BEMIS_WIDTH = 200
+BEMIS_WIDTH = 264
 BEMIS_HEIGHT = 1
 BEMIS_FORMAT = 'RGB'
 
@@ -16,7 +16,7 @@ class Pattern():
   DEFAULT_PARAMS = {
     # Your default parameter, such as:
     # 'Main Color': Color([255,0,0])
-    # 
+    #
     # Note: do not set default parameters to None
   }
 
@@ -41,7 +41,7 @@ class Pattern():
     '''
     pass
 
-  def getDefaultParams(self): 
+  def getDefaultParams(self):
     '''
     Returns the map of param names to types
     '''

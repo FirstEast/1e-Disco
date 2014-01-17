@@ -3,7 +3,7 @@
 var SERVER_HOST = "localhost";
 var SERVER_PORT = 3333;
 
-var LENGTH = 200
+var LENGTH = 264;
 
 var squarePx;
 
