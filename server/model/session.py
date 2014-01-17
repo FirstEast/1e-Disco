@@ -2,7 +2,6 @@ from pattern.importer import *
 
 import pattern
 import json
-import Image
 import numpy
 
 BUFFER_SIZE = 4
