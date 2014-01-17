@@ -49,6 +49,7 @@ class BeatModel():
 
     self.avgVolume = 0
     self.avgCentroid = 0
+    self.avgFreqs = [0] * num_bands
 
   def getNormalizedCentroids(self, index):
     cMin = min(self.centroids)
@@ -72,3 +73,11 @@ class BeatModel():
 
     self.avgVolume = float(numpy.mean(self.volumes))
     self.avgCentroid = float(numpy.mean(self.centroids))
+    newAvgFreq = []
+    for i in range(self.num_bands):
+      total = 0
+      for j in range(self.buffer_size):
+        total += self.frequencies[j][i]
+      newAvgFreq.append(total / self.buffer_size)
+    self.avgFreqs = newAvgFreq
+

@@ -55,7 +55,7 @@ class Color():
     red = 255 - self.RGBValues[0]
     green = 255 - self.RGBValues[1]
     blue = 255 - self.RGBValues[2]
-    return clampRGB([red, green, blue])
+    return Color(clampRGB([red, green, blue]))
 
   def darken(self, percent):
     """

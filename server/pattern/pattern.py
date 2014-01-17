@@ -11,6 +11,20 @@ BEMIS_FORMAT = 'RGB'
 
 DEFAULT_RATE = 30 #FPS
 
+def maskPatterns(mask, patternImg):
+  maskData = mask.convert('L').getdata()
+  patternData = patternImg.getdata()
+
+  newData = []
+  for i in range(len(maskData)):
+    if maskData[i] > 0:
+      newData.append(patternData[i])
+    else:
+      newData.append((0, 0, 0))
+
+  patternImg.putdata(newData)
+  return patternImg
+
 class Pattern():
   '''
   Top level pattern class. Defines basic parameter setting and render function.

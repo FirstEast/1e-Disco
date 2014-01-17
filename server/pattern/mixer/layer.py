@@ -19,6 +19,7 @@ class MaskPattern(Pattern):
 
   def __init__(self, beat, params):
     Pattern.__init__(self, beat, params)
+    self.maskPattern = None
 
     if inspect.isclass(self.params['Mask']):
       self.params['Mask'] = self.params['Mask'](beat, {})
@@ -26,18 +27,10 @@ class MaskPattern(Pattern):
     if inspect.isclass(self.params['Pattern']):
       self.params['Pattern'] = self.params['Pattern'](beat, {})
 
+  def setNextMaskPattern(self, maskPattern):
+    self.maskPattern = maskPattern
+
   def render(self, device):
     mask = self.params['Mask'].render(device)
-    maskData = mask.convert('L').getdata()
     patternImg = self.params['Pattern'].render(device)
-    patternData = patternImg.getdata()
-
-    newData = []
-    for i in range(len(maskData)):
-      if maskData[i] > 0:
-        newData.append(patternData[i])
-      else:
-        newData.append((0, 0, 0))
-
-    patternImg.putdata(newData)
-    return patternImg
+    return maskPatterns(mask, patternImg)

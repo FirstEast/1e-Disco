@@ -18,7 +18,8 @@ class BeatTest(Pattern):
 
     centroid = self.beat.avgCentroid
     centroidColor = getWeightedColorSum(self.params['color1'], self.params['color2'], centroid)
-    emptyColor = centroidColor.getComplimentaryColor()
+    emptyColor = centroidColor.getComplimentaryColor().getRGBValues()
+    centroidColor = centroidColor.getRGBValues()
 
     pulse = int(vol * FLAT_GOODALE_LENGTH/2.0)
     sideFrame = [centroidColor] * pulse
