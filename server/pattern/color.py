@@ -32,6 +32,7 @@ class Color():
 
   Contains a list of 3 values (red, green, and blue)
   """
+
   def __init__(self, RGBValues):
     self.RGBValues = clampRGB(RGBValues)
 
@@ -118,5 +119,17 @@ class Color():
   def __getitem__(self, k):
     return self.RGBValues[k]
 
+  def __eq__(self, other):
+    if type(other) is type(self):
+      return self.__dict__ == other.__dict__
+    return False
+
   def __str__(self):
     return 'RGB Values: ' + str(self.RGBValues)
+
+# Color constants
+BLACK = Color([0,0,0])
+WHITE = Color([255,255,255])
+RED = Color([255,0,0])
+GREEN = Color([0,255,0])
+BLUE = Color([0,0,255])

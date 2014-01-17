@@ -1,7 +1,5 @@
-# Constants for convenient use.
-GOODALE_WIDTH = 395
-GOODALE_HEIGHT = 1
-GOODALE_FORMAT = 'BGR'
+from color import *
+import time
 
 DDF_WIDTH = 48
 DDF_HEIGHT = 24
@@ -11,11 +9,21 @@ BEMIS_WIDTH = 264
 BEMIS_HEIGHT = 1
 BEMIS_FORMAT = 'RGB'
 
+DEFAULT_RATE = 30 #FPS
+
 class Pattern():
+  '''
+  Top level pattern class. Defines basic parameter setting and render function.
+  '''
 
   DEFAULT_PARAMS = {
-    # Your default parameter, such as:
+    # Your default parameters, such as:
     # 'Main Color': Color([255,0,0])
+    #
+    # If this dict is empty, your Pattern will not appear in the web UI.
+    #
+    # If a param is a list of some sort, then don't mutate the list in your
+    # own params dict. Assign a new one. Copying objects is not easy children.
     #
     # Note: do not set default parameters to None
   }
@@ -31,13 +39,22 @@ class Pattern():
     Assign params to self.params. Make sure to call this in your subclass constructor!
     Also assigns beat to self.beat, in case your pattern uses it.
     '''
-    self.params = self.DEFAULT_PARAMS
+    self.params = {}
+    self.params.update(self.DEFAULT_PARAMS)
     self.params.update(params)
     self.beat = beat
+    self.paramUpdate()
 
   def render(self, device):
     '''
     Returns the next frame in the pattern for the given device
+    '''
+    pass
+
+  def paramUpdate(self):
+    '''
+    Do any stuff that needs to be calculated from the params.
+    Called when the params change.
     '''
     pass
 
@@ -58,3 +75,144 @@ class Pattern():
     Sets parameter 'name' to value 'val'
     '''
     self.params[name] = val
+    self.paramUpdate()
+
+class StaticPattern(Pattern):
+  '''
+  Static Pattern class. Handles caching of frames for static patterns.
+  Children must implement renderNew.
+  '''
+
+  def __init__(self, beat, params):
+    Pattern.__init__(self, beat, params)
+    self.newParams = True
+    self.frame = None
+
+  def render(self, device):
+    if self.newParams:
+      self.frame = self.renderFrame(device)
+      self.newParams = False
+    return self.frame
+
+  def setParam(self, name, val):
+    self.params[name] = val
+    self.newParams = True
+
+  def renderFrame(self, device):
+    '''
+    Returns frame based on the set parameters. Only called when params change.
+    '''
+    pass
+
+class TimedPattern(Pattern):
+  '''
+  Timed Pattern class. Handles frame counting based on real world time.
+  Used for time variant looping patterns.
+
+  Children of this class must implement the renderFrame function, which will
+  be called with a frame number argument and the device.
+  '''
+
+  DEFAULT_PARAMS = {
+    'Rate': DEFAULT_RATE
+  }
+
+  def __init__(self, beat, params):
+    Pattern.__init__(self, beat, params)
+    self.startTime = time.time() * 1000
+
+  def render(self, device):
+    return self.renderFrame(device, self.getFrameCount())
+
+  def resetTimer(self):
+    self.startTime = time.time() * 1000
+
+  def getFrameCount(self):
+    return int((time.time() * 1000 - self.startTime) / float(1000 / self.params['Rate']))
+
+  def renderFrame(self, device, frameCount):
+    pass
+
+class Frame():
+  def __init__(self, colorArray):
+    self.colorArray = colorArray
+    self.height = len(colorArray)
+    self.width = len(colorArray[0])
+
+  def drawPixel(self, x, y, color):
+    if x >= 0 and x < self.width and y >= 0 and y < self.height:
+      self.colorArray[y][x] = color
+
+  def maskFrame(self, mask):
+    if len(mask) != self.height or len(mask[0]) != self.width:
+      raise TypeError
+
+    newFrame = [[BLACK] * self.width] * self.height
+    for i in range(self.height):
+      for j in range(self.width):
+        if mask[i][j] == BLACK:
+          newFrame[i][j] = BLACK
+        else:
+          newFrame[i][j] = self.colorArray[i][j]
+    return Frame(newFrame)
+
+  def transpose(self):
+    newFrame = []
+    for i in range(self.width):
+      newRow = []
+      for j in range(self.height):
+        newRow.append(self.colorArray[j][i])
+      newFrame.append(newRow)
+    return Frame(newFrame)
+
+  def __add__(self, frame):
+    if isinstance(frame, Frame):
+      if len(frame) != self.height or len(frame[0]) != self.width:
+        raise TypeError
+
+      newFrame = [[BLACK] * self.width] * self.height
+      for i in range(self.height):
+        for j in range(self.width):
+          newFrame[i][j] = self.colorArray[i][j] + frame[i][j]
+      return Frame(newFrame)
+    else:
+      raise TypeError
+
+  def __sub__(self, frame):
+    if isinstance(frame, Frame):
+      if len(frame) != self.height or len(frame[0]) != self.width:
+        raise TypeError
+
+      newFrame = [[BLACK] * self.width] * self.height
+      for i in range(self.height):
+        for j in range(self.width):
+          newFrame[i][j] = self.colorArray[i][j] - frame[i][j]
+      return Frame(newFrame)
+    else:
+      raise TypeError
+
+  def __mul__(self, scalar):
+    if type(scalar) is int or type(scalar) is float:
+      newFrame = [[BLACK] * self.width] * self.height
+      for i in range(self.height):
+        for j in range(self.width):
+          newFrame[i][j] = self.colorArray[i][j] * scalar
+      return Frame(newFrame)
+    else:
+      raise TypeError
+
+  def __div__(self, scalar):
+    if type(scalar) is int or type(scalar) is float:
+      newFrame = [[BLACK] * self.width] * self.height
+      for i in range(self.height):
+        for j in range(self.width):
+          newFrame[i][j] = self.colorArray[i][j] / scalar
+      return Frame(newFrame)
+    else:
+      raise TypeError
+
+  def __len__(self):
+    return len(self.colorArray)
+
+  def __getitem__(self, index):
+    return self.colorArray[index]

@@ -17,8 +17,7 @@ class BeatServerReceiver(LineReceiver):
 
   def dataReceived(self, line):
     data = json.loads(line.strip())
-    self.beatModel.updateData(data['leftCentroid'], data['leftVolume'], data['leftFrequencies'],\
-                              data['rightCentroid'], data['rightVolume'], data['rightFrequencies'])
+    self.beatModel.updateData(data['centroid'], data['volume'], data['frequencies'])
     self.sendMessage("OK")
 
   def sendMessage(self, message):
