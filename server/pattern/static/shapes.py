@@ -10,7 +10,31 @@ class Circle(StaticPattern):
     'Thickness': 1,
     'Color': BLUE
   }
-  pass
+
+  def renderFrame(self, device):
+    x0 = self.params['Center X']
+    y0 = self.params['Center Y']
+    x = self.params['Radius']
+    y = 0
+    radiusError = 1 - x;
+   
+    frame = Frame([[BLACK] * device.width] * device.height)
+    while x >= y:
+      frame.drawPixel(x + x0, y + y0, self.params['Color'])
+      frame.drawPixel(y + x0, x + y0, self.params['Color'])
+      frame.drawPixel(-x + x0, y + y0, self.params['Color'])
+      frame.drawPixel(-y + x0, x + y0, self.params['Color'])
+      frame.drawPixel(-x + x0, -y + y0, self.params['Color'])
+      frame.drawPixel(-y + x0, -x + y0, self.params['Color'])
+      frame.drawPixel(x + x0, -y + y0, self.params['Color'])
+      frame.drawPixel(y + x0, -x + y0, self.params['Color'])
+      y += 1
+      if radiusError < 0:
+        radiusError+=2*y+1;
+      else:
+        x -= 1
+        radiusError+=2*(y-x+1)
+    return frame
 
 class Rectangle(StaticPattern):
   DEFAULT_PARAMS = {

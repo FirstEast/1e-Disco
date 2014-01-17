@@ -39,7 +39,6 @@ class DiscoSession():
   def setPattern(self, deviceName, pattern):
     self.patternModel[deviceName] = pattern
 
-# This is kind of stupid
 class BeatModel():
   def __init__(self, buffer_size, num_bands):
     self.buffer_size = buffer_size
@@ -48,6 +47,9 @@ class BeatModel():
     self.centroids = [0] * buffer_size
     self.volumes = [0] * buffer_size
     self.frequencies = [[0] * num_bands] * buffer_size
+
+    self.avgVolume = 0
+    self.avgCentroid = 0
 
   def getNormalizedCentroids(self, index):
     cMin = min(self.centroids)
@@ -69,5 +71,5 @@ class BeatModel():
     self.volumes.insert(0, volume)
     self.frequencies.insert(0, frequencies)
 
-    self.volumes[0] = float(numpy.mean(self.volumes))
-    self.centroids[0] = float(numpy.mean(self.centroids))
+    self.avgVolume = float(numpy.mean(self.volumes))
+    self.avgCentroid = float(numpy.mean(self.centroids))

@@ -131,6 +131,10 @@ class Frame():
     self.height = len(colorArray)
     self.width = len(colorArray[0])
 
+  def drawPixel(self, x, y, color):
+    if x >= 0 and x < self.width and y >= 0 and y < self.height:
+      self.colorArray[y][x] = color
+
   def maskFrame(self, mask):
     if len(mask) != self.height or len(mask[0]) != self.width:
       raise TypeError

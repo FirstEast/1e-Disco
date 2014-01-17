@@ -14,13 +14,13 @@ class BeatTest(Pattern):
   DEVICES = ['goodale']
 
   def render(self, device):
-    vol = min(self.beat.volumes[0], 1.5)
+    vol = min(self.beat.avgVolume, 1.0)
 
-    centroid = self.beat.centroids[0]
+    centroid = self.beat.avgCentroid
     centroidColor = getWeightedColorSum(self.params['color1'], self.params['color2'], centroid)
     emptyColor = centroidColor.getComplimentaryColor()
 
-    pulse = int(vol * 100)
+    pulse = int(vol * FLAT_GOODALE_LENGTH/2.0)
     sideFrame = [centroidColor] * pulse
     midFrame = [emptyColor] * (FLAT_GOODALE_LENGTH - pulse * 2)
     return unflattenGoodaleFrame(Frame([sideFrame + midFrame + sideFrame]))

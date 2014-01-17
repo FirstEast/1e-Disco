@@ -8,7 +8,7 @@ import pattern
 DEFAULT_PATTERNS = {
   "goodale": "pattern.beat.goodale_BeatTest",
   "bemis": "pattern.timed.basic_Interpolation",
-  "ddf": "pattern.beat.multidevice_HorizontalVis"
+  "ddf": "pattern.static.shapes_Circle"
 }
 
 # Returns a pattern class from a name formatted as "module.path_className"
