@@ -36,6 +36,11 @@ class Color():
   def __init__(self, RGBValues):
     self.RGBValues = clampRGB(RGBValues)
 
+  def __init__(self, values, isHSV = False):
+    if (isHSV): rgb = colorsys.hsv_to_rgb(*values)
+    else: rgb = values
+    self.RGBValues = clampRGB(rgb)
+
   def getRGBValues(self):
     return self.RGBValues
 
