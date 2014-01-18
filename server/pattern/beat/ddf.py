@@ -8,7 +8,7 @@ from PIL import Image
 
 BASS = (0, 8)
 
-SMOOTHING_ALPHA = 0.7
+SMOOTHING_ALPHA = 0.8
 
 class VerticalVis(Pattern):
 
@@ -87,6 +87,9 @@ class PulsingCircle(Pattern):
   DEFAULT_PARAMS = {
     'Circle Color': BLUE,
     'Circle Fill': True,
+    'Circle Center X': 24,
+    'Circle Center Y': 12,
+    'Max Pulse': 24,
     'Frequency Band Start': BASS[0],
     'Frequency Band End': BASS[1],
   }
@@ -107,10 +110,10 @@ class PulsingCircle(Pattern):
     thisTotal = total * SMOOTHING_ALPHA + self.lastTotal * (1 - SMOOTHING_ALPHA)
     self.lastTotal = total
 
-    val = scaleToBucket(thisTotal / (self.params['Frequency Band End'] - self.params['Frequency Band Start']), 0, device.height)
+    val = scaleToBucket(thisTotal / (self.params['Frequency Band End'] - self.params['Frequency Band Start']), 1, self.params['Max Pulse'])
     circleParams = {
-      'Center X': device.width / 2.0,
-      'Center Y': device.height / 2.0,
+      'Center X': self.params['Circle Center X'],
+      'Center Y': self.params['Circle Center Y'],
       'Color': self.params['Circle Color'].getRGBValues(),
       'Fill': self.params['Circle Fill'],
       'Radius': val

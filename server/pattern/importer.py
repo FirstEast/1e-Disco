@@ -8,7 +8,10 @@ import pattern
 DEFAULT_PATTERNS = {
   "goodale": "pattern.beat.goodale_BeatTest",
   "bemis": "pattern.timed.basic_Interpolation",
-  "ddf": "pattern.static.image_StaticImage"
+  # "ddf": "pattern.static.image_StaticImage"
+  # "ddf": "pattern.beat.ddf_PulsingCircle"
+  # "ddf": "pattern.test.mixing_LotsOfCircles"
+  "ddf": "pattern.static.shapes_Rectangle"
 }
 
 # Returns a pattern class from a name formatted as "module.path_className"

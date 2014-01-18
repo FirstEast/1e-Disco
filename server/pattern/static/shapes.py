@@ -33,7 +33,7 @@ class Rectangle(StaticPattern):
     'Width': 10,
     'Height': 10,
     'Fill': False,
-    'Color': BLUE
+    'Color': BLUE.getRGBValues()
   }
   
   def renderFrame(self, device):
@@ -76,22 +76,3 @@ class Line(StaticPattern):
     draw.line([(x0, y0), (x1, y1)], fill=self.params['Color'].getRGBValues(), width=self.params['Thickness'])
 
     return im
-
-class Star(StaticPattern):
-  DEFAULT_PARAMS = {
-    'Center X': 0,
-    'Center Y': 0,
-    'Radius': 10,
-    'Fill': False,
-    'Color': BLUE
-  }
-  pass
-
-class Heart(StaticPattern):
-  DEFAULT_PARAMS = {
-    'Center X': 0,
-    'Center Y': 0,
-    'Fill': False,
-    'Color': RED
-  }
-  pass
