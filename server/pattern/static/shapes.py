@@ -33,23 +33,49 @@ class Rectangle(StaticPattern):
     'Width': 10,
     'Height': 10,
     'Fill': False,
-    'Thickness': 1,
     'Color': BLUE
   }
-  pass
+  
+  def renderFrame(self, device):
+    x0 = self.params['Origin X']
+    y0 = self.params['Origin Y']
+    x1 = x0 + self.params['Width']
+    y1 = y0 + self.params['Height']
+    
+    im = Image.new('RGB', (device.width, device.height))
+    draw = ImageDraw.Draw(im)
+   
+    if self.params['Fill']:
+      draw.rectangle((x0, y0, x1, y), outline=self.params['Color'], fill=self.params['Color'])    
+    else:
+      draw.rectangle((x0, y0, x1, y1), outline=self.params['Color'])    
+
+    return im
 
 class Line(StaticPattern):
   DEFAULT_PARAMS = {
-    'Point 1 X': 0,
-    'Point 1 Y': 0,
-    'Point 2 X': 0,
-    'Point 2 Y': 0,
+    'Point 1 X': 12,
+    'Point 1 Y': 6,
+    'Point 2 X': 36,
+    'Point 2 Y': 18,
     'Thickness': 1,
     'Fill Above': False,
     'Fill Below': False,
-    'Color': BLUE
+    'Color': RED
   }
-  pass
+  
+  def renderFrame(self, device):
+    x0 = self.params['Point 1 X']
+    y0 = self.params['Point 1 Y']
+    x1 = self.params['Point 2 X']
+    y1 = self.params['Point 2 Y']
+
+    im = Image.new('RGB', (device.width, device.height))
+    draw = ImageDraw.Draw(im)
+
+    draw.line([(x0, y0), (x1, y1)], fill=self.params['Color'].getRGBValues(), width=self.params['Thickness'])
+
+    return im
 
 class Star(StaticPattern):
   DEFAULT_PARAMS = {

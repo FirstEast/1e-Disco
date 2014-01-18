@@ -19,16 +19,12 @@ class MaskPattern(Pattern):
 
   def __init__(self, beat, params):
     Pattern.__init__(self, beat, params)
-    self.maskPattern = None
 
     if inspect.isclass(self.params['Mask']):
       self.params['Mask'] = self.params['Mask'](beat, {})
 
     if inspect.isclass(self.params['Pattern']):
       self.params['Pattern'] = self.params['Pattern'](beat, {})
-
-  def setNextMaskPattern(self, maskPattern):
-    self.maskPattern = maskPattern
 
   def render(self, device):
     mask = self.params['Mask'].render(device)
