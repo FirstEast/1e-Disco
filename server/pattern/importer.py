@@ -14,6 +14,10 @@ DEFAULT_PATTERNS = {
   "ddf": "pattern.static.shapes_Rectangle"
 }
 
+SUPER_PATTERN_CLASSES = {
+  'Pattern', 'StaticPattern', 'TimedPattern'
+}
+
 # Returns a pattern class from a name formatted as "module.path_className"
 def loadPatternFromModuleClassName(name):
   moduleName = name.split('_')[0]
@@ -46,7 +50,7 @@ def getPatternMap():
     module = deepImport(module_name)
 
     for name, obj in inspect.getmembers(module):
-      if inspect.isclass(obj) and issubclass(obj, pattern.Pattern) and len(obj.DEFAULT_PARAMS) > 0:
+      if inspect.isclass(obj) and issubclass(obj, pattern.Pattern) and (obj.__name__ not in SUPER_PATTERN_CLASSES):
         pattern_classes[obj.__name__] = obj
 
   return pattern_classes

@@ -9,8 +9,8 @@ do ->
 
       @outputDeviceModel = new Backbone.Model()
       for device in com.firsteast.OUTPUT_DEVICES
-        @outputDeviceModel[device] = false
+        @outputDeviceModel.set(device, false)
 
       @inputDeviceModel = new Backbone.Model()
       for device in com.firsteast.INPUT_DEVICES
-        @inputDeviceModel[device] = false
+        @inputDeviceModel.set(device, false)

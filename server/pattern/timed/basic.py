@@ -18,7 +18,7 @@ class Interpolation(TimedPattern):
 
   def renderFrame(self, device, frameCount):
     count = frameCount % len(self.loop)
-    frame = [self.loop[count]] * (device.width * device.height)
+    frame = [self.loop[count].getRGBValues()] * (device.width * device.height)
     im = Image.new('RGB', (device.width, device.height))
     im.putdata(frame)
     return im

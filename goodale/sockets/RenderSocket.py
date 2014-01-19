@@ -1,6 +1,5 @@
 from twisted.internet.protocol import Protocol, ReconnectingClientFactory
 
-import json
 import time
 import struct
 
@@ -15,12 +14,6 @@ except ImportError:
 LENGTH = 395
 
 class RenderSocket(Protocol):
-  def __init__(self, visualizeFactory):
-    self.visualizeFactory = visualizeFactory
-    self.frame = 0
-
-    self.lastData = ''
-
   def connectionMade(self):
     print "connected successfully to central server"
 
@@ -44,24 +37,17 @@ class RenderSocket(Protocol):
     if raspi:
       spidev.write(bytearray(output))
       spidev.flush()
-    else:
-      self.visualizeFactory.broadcast(json.dumps(output))
-      time.sleep(0.03)
 
     # Signal for the next frame
-    self.lastData = ""
     self.sendMessage("OK")
 
   def sendMessage(self, message):
     self.transport.write(message + '\n')
 
 class RenderSocketFactory(ReconnectingClientFactory):
-  def __init__(self, visualizeFactory):
-    self.visualizeFactory = visualizeFactory
-
   def buildProtocol(self, addr):
     self.resetDelay()
-    return RenderSocket(self.visualizeFactory)
+    return RenderSocket()
 
   def clientConnectionLost(self, connector, reason):
     ReconnectingClientFactory.clientConnectionLost(self, connector, reason)

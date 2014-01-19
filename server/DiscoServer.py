@@ -9,6 +9,7 @@ from sockets.inputs import BeatServerReceiverFactory
 from model.session import DiscoSession
 
 from pattern import *
+from pattern.util import *
 
 # Web UI config
 CONTROL_WS_PORT = 9000
@@ -21,23 +22,12 @@ DDF_PORT = 8124
 BEMIS_PORT = 8125
 BEAT_PORT = 8347
 
-# Device constants
-GOODALE_WIDTH = 395
-GOODALE_HEIGHT = 1
-GOODALE_FORMAT = 'BGR'
-
-DDF_WIDTH = 48
-DDF_HEIGHT = 24
-
-BEMIS_WIDTH = 200
-BEMIS_HEIGHT = 1
-
 if __name__ == '__main__':
   # Create the disco session
   session = DiscoSession()
 
   # Setup websocket protocol for disco commands
-  factory = DiscoControlSocketFactory("ws://localhost:" + str(CONTROL_WS_PORT), session, debug = False)
+  factory = DiscoControlSocketFactory("ws://localhost:" + str(CONTROL_WS_PORT), session, debug = True)
   factory.protocol = DiscoControlProtocol
   listenWS(factory)
 

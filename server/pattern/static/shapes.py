@@ -30,8 +30,8 @@ class Rectangle(StaticPattern):
   DEFAULT_PARAMS = {
     'Origin X': 0,
     'Origin Y': 0,
-    'Width': 10,
-    'Height': 10,
+    'Width': 47,
+    'Height': 23,
     'Fill': False,
     'Color': BLUE.getRGBValues()
   }

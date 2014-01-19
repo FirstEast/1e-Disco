@@ -12,13 +12,13 @@
         _ref = com.firsteast.OUTPUT_DEVICES;
         for (_i = 0, _len = _ref.length; _i < _len; _i++) {
           device = _ref[_i];
-          this.outputDeviceModel[device] = false;
+          this.outputDeviceModel.set(device, false);
         }
         this.inputDeviceModel = new Backbone.Model();
         _ref1 = com.firsteast.INPUT_DEVICES;
         for (_j = 0, _len1 = _ref1.length; _j < _len1; _j++) {
           device = _ref1[_j];
-          this.inputDeviceModel[device] = false;
+          this.inputDeviceModel.set(device, false);
         }
       }
 

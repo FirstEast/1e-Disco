@@ -17,10 +17,11 @@
       PatternModel.prototype.defaults = function() {
         return {
           __module__: null,
+          name: null,
           USE_BEAT: false,
-          DEVICES: [],
-          DEFAULT_PARAMS: [],
-          params: []
+          DEVICES: com.firsteast.OUTPUT_DEVICES,
+          DEFAULT_PARAMS: {},
+          params: {}
         };
       };
 

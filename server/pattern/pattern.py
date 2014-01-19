@@ -1,14 +1,6 @@
 from color import *
 import time
 
-DDF_WIDTH = 48
-DDF_HEIGHT = 24
-DDF_FORMAT = 'RGB'
-
-BEMIS_WIDTH = 264
-BEMIS_HEIGHT = 1
-BEMIS_FORMAT = 'RGB'
-
 DEFAULT_RATE = 30 #FPS
 
 def maskPatterns(mask, patternImg):
@@ -90,6 +82,9 @@ class Pattern():
     '''
     self.params[name] = val
     self.paramUpdate()
+
+  def getClass(self):
+    return self.__class__
 
 class StaticPattern(Pattern):
   '''

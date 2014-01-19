@@ -2,21 +2,37 @@ from autobahn.twisted.websocket import WebSocketServerProtocol, \
                                 WebSocketServerFactory
 
 from pattern.importer import *
+from pattern.util import *
 
 import json
-import copy
 
-# Don't deep copy without copying the same BeatModel over from the session.
-# Otherwise, bad times will happen.
+# Oh lawd I apologize
+class MockDevice():
+  def __init__(self, name, width, height, format='RGB'):
+    self.name = name
+    self.width = width
+    self.height = height
+    self.format = format
+
+MOCK_DEVICES = {
+  'ddf': MockDevice('ddf', DDF_WIDTH, DDF_HEIGHT),
+  'goodale': MockDevice('goodale', GOODALE_WIDTH, GOODALE_HEIGHT),
+  'bemis': MockDevice('bemis', BEMIS_WIDTH, BEMIS_HEIGHT)
+}
 
 class DiscoControlProtocol(WebSocketServerProtocol):
   def onOpen(self):
     self.factory.register(self)
-    self.sendMessage(getPatternMapJson())
 
+    self.mockPatternModel = {}
+    beat = self.factory.discoSession.beatModel
     for key in self.factory.discoSession.patternModel:
-      self.mockPatternModel[key] = copy.deepcopy(self.factory.discoSession.patternModel[key])
-      self.mockPatternModel[key].beat = self.factory.discoSession.beatModel
+      params = self.factory.discoSession.patternModel[key].params
+      self.mockPatternModel[key] = self.factory.discoSession.patternModel[key].__class__(beat, params)
+
+    self.sendInitMessage()
+    self.sendDevicesMessage()
+    self.sendPatternMessage()
 
   def onMessage(self, msg, binary):
     data = json.loads(msg.strip())
@@ -31,20 +47,19 @@ class DiscoControlProtocol(WebSocketServerProtocol):
     elif msgType == 'swapPattern':
       self.performSwap(data['deviceName'])
     elif msgType == 'render':
-      self.sendMessage(json.dumps(self.getRenderFrames()), binary)
+      self.sendRenderMessage(binary)
     else:
       self.sendMessage('Unrecognized message type', binary)
       return
-
-    self.sendMessage('OK', binary)
 
   def connectionLost(self, reason):
     WebSocketServerProtocol.connectionLost(self, reason)
     self.factory.unregister(self)
 
   def performSwap(self, deviceName):
-    self.factory.discoSession.patternModel[deviceName] = copy.deepcopy(self.mockPatternModel[deviceName])
-    self.factory.discoSession.patternModel[deviceName].beat = self.factory.discoSession.beatModel
+    params = self.mockPatternModel[deviceName].params
+    beat = self.factory.discoSession.beatModel
+    self.factory.discoSession.patternModel[deviceName] = self.mockPatternModel[deviceName].__class__(beat, params)
 
   def setMockPattern(self, deviceName, patternData):
     self.setPattern(deviceName, patternData, self.mockPatternModel)
@@ -60,16 +75,62 @@ class DiscoControlProtocol(WebSocketServerProtocol):
       pattern = patternClass(self.factory.discoSession.beatModel, patternData['params'])
     patternModel[deviceName] = pattern
 
-  def getRenderFrames(self):
-    frames = {
-      'mock': {},
-      'real': {}
+  def getCurrentDeviceData(self):
+    data = {
+      'outputDeviceModel': self.factory.discoSession.outputDeviceModel,
+      'inputDeviceModel': self.factory.discoSession.inputDeviceModel
     }
+    return data
 
+  def getCurrentPatternData(self):
+    realPatternClasses = {}
+    realPatternParams = {}
+    for key in self.mockPatternModel:
+      realPatternClasses[key] = self.factory.discoSession.patternModel[key].__class__
+      realPatternParams[key] = self.factory.discoSession.patternModel[key].params
+
+    data = {
+      'realPatternParams': realPatternParams,
+      'realPatternClasses': realPatternClasses
+    }
+    return data
+
+  def getRenderFrames(self):
+    frames = {'mock': {}, 'real': {}}
     for key in self.factory.discoSession.patternModel:
-      frames['mock'][key] = self.mockPatternModel[key].render()
-      frames['real'][key] = self.factory.discoSession.patternModel[key].render()
+      mockFrame = self.mockPatternModel[key].render(MOCK_DEVICES[key])
+      frames['mock'][key] = [value for color in mockFrame.getdata() for value in color]
+      realFrame = self.factory.discoSession.patternModel[key].render(MOCK_DEVICES[key])
+      frames['real'][key] = [value for color in mockFrame.getdata() for value in color]
     return frames
+
+  def sendInitMessage(self):
+    message = {
+      'type': 'init',
+      'patternListData': getPatternMapJson(),
+    }
+    self.sendMessage(json.dumps(message, default=(lambda x: x.__dict__)))
+
+  def sendDevicesMessage(self):
+    message = {
+      'type': 'devices',
+      'deviceData': self.getCurrentDeviceData(),
+    }
+    self.sendMessage(json.dumps(message, default=(lambda x: x.__dict__)))
+
+  def sendPatternMessage(self):
+    message = {
+      'type': 'realPatternData',
+      'patternData': self.getCurrentPatternData(),
+    }
+    self.sendMessage(json.dumps(message, default=(lambda x: x.__dict__)))
+
+  def sendRenderMessage(self, binary):
+    message = {
+      'type': 'render',
+      'renderData': self.getRenderFrames(),
+    }
+    self.sendMessage(json.dumps(message, default=(lambda x: x.__dict__)), binary)
 
 
 class DiscoControlSocketFactory(WebSocketServerFactory):

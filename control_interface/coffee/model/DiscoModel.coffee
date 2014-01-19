@@ -6,7 +6,7 @@ do ->
         patterns: {}
 
       # Frame and pattern for each device
-      for device in com.firsteast.ALL_DEVICES
+      for device in com.firsteast.OUTPUT_DEVICES
         attrs.frames[device] = []
         attrs.patterns[device] = null
 

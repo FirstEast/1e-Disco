@@ -3,6 +3,17 @@ from PIL import Image
 
 import math
 
+# Device constants
+GOODALE_WIDTH = 395
+GOODALE_HEIGHT = 1
+GOODALE_FORMAT = 'BGR'
+
+DDF_WIDTH = 48
+DDF_HEIGHT = 24
+
+BEMIS_WIDTH = 261
+BEMIS_HEIGHT = 1
+
 FLAT_GOODALE_LENGTH = 159 + 97 + 160
 
 def unflattenGoodaleArray(frame):
