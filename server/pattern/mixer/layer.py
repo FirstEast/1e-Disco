@@ -8,6 +8,23 @@ from PIL import Image, ImageChops
 
 import inspect
 
+def layerPatterns(top, bottom):
+    return ImageChops.add(top, maskPatterns(top, bottom, True))
+
+def maskPatterns(mask, patternImg, flip = False):
+  maskData = mask.convert('L').getdata()
+  patternData = patternImg.getdata()
+  
+  newData = []
+  for i in range(len(maskData)):
+    if (maskData[i] > 0) != flip:
+      newData.append(patternData[i])
+    else:
+      newData.append((0, 0, 0))
+
+  patternImg.putdata(newData)
+  return patternImg
+
 class LayerPattern(Pattern):
   DEFAULT_PARAMS = {
     'LayerClasses': (Circle, LinearRainbow),
@@ -51,3 +68,21 @@ class MaskPattern(Pattern):
     mask = self.params['Mask'].render(device)
     patternImg = self.params['Pattern'].render(device)
     return maskPatterns(mask, patternImg)
+
+class Adding(Pattern):
+  def __init__(self, beat, params):
+    Pattern.__init__(self, beat, params)
+    self.p1 = SolidColor(beat, {})
+    self.p2 = SolidColor(beat, {'Color': GREEN})
+  
+  def render(self, device):
+    return ImageChops.add(self.p1.render(device), self.p2.render(device))
+
+class Subtracting(Pattern):
+  def __init__(self, beat, params):
+    Pattern.__init__(self, beat, params)
+    self.p1 = SolidColor(beat, {'Color': WHITE})
+    self.p2 = SolidColor(beat, {'Color': GREEN})
+  
+  def render(self, device):
+    return ImageChops.subtract(self.p1.render(device), self.p2.render(device))

@@ -1,25 +1,7 @@
 from color import *
-from PIL import ImageChops
 import time
 
 DEFAULT_RATE = 30 #FPS
-
-def layerPatterns(top, bottom):
-    return ImageChops.add(top, maskPatterns(top, bottom, True))
-
-def maskPatterns(mask, patternImg, flip = False):
-  maskData = mask.convert('L').getdata()
-  patternData = patternImg.getdata()
-  
-  newData = []
-  for i in range(len(maskData)):
-    if (maskData[i] > 0) != flip:
-      newData.append(patternData[i])
-    else:
-      newData.append((0, 0, 0))
-
-  patternImg.putdata(newData)
-  return patternImg
 
 class Pattern():
   '''
