@@ -5,6 +5,7 @@
     return com.firsteast.DiscoController = (function() {
       function DiscoController(options) {
         this._sendMessage = __bind(this._sendMessage, this);
+        this._setRealPattern = __bind(this._setRealPattern, this);
         this._handlePatterns = __bind(this._handlePatterns, this);
         this._handleDevices = __bind(this._handleDevices, this);
         this._handleRender = __bind(this._handleRender, this);
@@ -14,6 +15,7 @@
         $.extend(this, Backbone.Events);
         this.session = options.session;
         this._initializeSocket();
+        this.listenTo(this.session.realDiscoModel, 'change:patterns', this._setRealPattern);
       }
 
       DiscoController.prototype._initializeSocket = function() {
@@ -63,20 +65,40 @@
       };
 
       DiscoController.prototype._handlePatterns = function(realPatternData) {
-        var device, mockPatterns, obj, patterns, _ref;
+        var actualPattern, device, mockPatterns, obj, patterns, _ref;
         patterns = {};
         mockPatterns = {};
         _ref = realPatternData.realPatternClasses;
         for (device in _ref) {
           obj = _ref[device];
           obj.params = realPatternData.realPatternParams[device];
-          patterns[device] = new com.firsteast.PatternModel(obj);
-          mockPatterns[device] = new com.firsteast.PatternModel($.extend(true, {}, obj));
+          actualPattern = this.session.patternList.where({
+            name: obj
+          })[0];
+          patterns[device] = new com.firsteast.PatternModel(actualPattern.attributes);
+          mockPatterns[device] = new com.firsteast.PatternModel($.extend(true, {}, actualPattern));
         }
         this.session.realDiscoModel.set('patterns', patterns);
         if (this.session.mockDiscoModel.get('patterns')['ddf'] == null) {
           return this.session.mockDiscoModel.set('patterns', mockPatterns);
         }
+      };
+
+      DiscoController.prototype._setRealPattern = function() {
+        var data, key, val, _ref, _results;
+        _ref = this.session.realDiscoModel.get('patterns');
+        _results = [];
+        for (key in _ref) {
+          val = _ref[key];
+          data = {
+            type: 'setRealPattern',
+            deviceName: key,
+            patternData: val.attributes
+          };
+          console.log(data);
+          _results.push(this._sendMessage(data));
+        }
+        return _results;
       };
 
       DiscoController.prototype._sendMessage = function(data) {

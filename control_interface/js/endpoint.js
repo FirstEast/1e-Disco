@@ -22,7 +22,7 @@
   com.firsteast.GOODALE_WIDTH = 395;
 
   $('document').ready((function() {
-    var bemisPreview, controller, ddfPreview, goodalePreview, session;
+    var bemisPreview, controller, ddfDebug, ddfPreview, goodalePreview, session;
     session = new com.firsteast.DiscoSession();
     controller = new com.firsteast.DiscoController({
       session: session
@@ -45,9 +45,15 @@
       height: 111 * 3
     });
     goodalePreview.render();
+    ddfDebug = new com.firsteast.DdfDebug({
+      realDiscoModel: session.realDiscoModel,
+      patternList: session.patternList
+    });
+    ddfDebug.render();
     $('body').append(ddfPreview.$el);
     $('body').append(bemisPreview.$el);
-    return $('body').append(goodalePreview.$el);
+    $('body').append(goodalePreview.$el);
+    return $('body').append(ddfDebug.$el);
   }));
 
 }).call(this);

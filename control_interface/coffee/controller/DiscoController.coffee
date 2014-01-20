@@ -7,7 +7,7 @@ do ->
 
       @_initializeSocket()
 
-      # TODO: listen to changes in the mock patterns
+      @listenTo @session.realDiscoModel, 'change:patterns', @_setRealPattern
 
     _initializeSocket: =>
       @socket = new WebSocket("ws://#{com.firsteast.WEBSOCKET_URL}:#{com.firsteast.WEBSOCKET_PORT}/")
@@ -46,12 +46,23 @@ do ->
       mockPatterns = {}
       for device, obj of realPatternData.realPatternClasses
         obj.params = realPatternData.realPatternParams[device]
-        patterns[device] = new com.firsteast.PatternModel(obj)
-        mockPatterns[device] = new com.firsteast.PatternModel($.extend(true, {}, obj))
+        actualPattern = @session.patternList.where({name: obj})[0]
+        patterns[device] = new com.firsteast.PatternModel(actualPattern.attributes)
+        mockPatterns[device] = new com.firsteast.PatternModel($.extend(true, {}, actualPattern))
       @session.realDiscoModel.set('patterns', patterns)
 
       if not @session.mockDiscoModel.get('patterns')['ddf']?
         @session.mockDiscoModel.set('patterns', mockPatterns)
+
+    _setRealPattern: =>
+      for key, val of @session.realDiscoModel.get('patterns')
+        data = {
+          type: 'setRealPattern'
+          deviceName: key
+          patternData: val.attributes
+        }
+        console.log data
+        @_sendMessage(data)
 
     _sendMessage: (data) =>
       msg = JSON.stringify(data)

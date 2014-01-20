@@ -21,7 +21,8 @@
           USE_BEAT: false,
           DEVICES: com.firsteast.OUTPUT_DEVICES,
           DEFAULT_PARAMS: {},
-          params: {}
+          params: {},
+          saved: false
         };
       };
 

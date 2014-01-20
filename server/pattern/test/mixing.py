@@ -2,6 +2,7 @@ from pattern.color import *
 from pattern.pattern import *
 from pattern.static.solid import *
 from pattern.beat.ddf import *
+from pattern.mixer.layer import *
 from PIL import Image, ImageChops
 
 class MaskingBeats(Pattern):

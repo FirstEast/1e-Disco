@@ -71,9 +71,10 @@ class DiscoControlProtocol(WebSocketServerProtocol):
     if patternData['saved']:
       pattern = loadSavedPattern(patternData)
     else:
-      patternClass = loadPatternFromModuleClassName(patternData['moduleClassName'])
+      patternClass = loadPatternFromModuleClassName(patternData['__module__'] + '_' + patternData['name'])
       pattern = patternClass(self.factory.discoSession.beatModel, patternData['params'])
     patternModel[deviceName] = pattern
+    print patternModel
 
   def getCurrentDeviceData(self):
     data = {
@@ -86,7 +87,7 @@ class DiscoControlProtocol(WebSocketServerProtocol):
     realPatternClasses = {}
     realPatternParams = {}
     for key in self.mockPatternModel:
-      realPatternClasses[key] = self.factory.discoSession.patternModel[key].__class__
+      realPatternClasses[key] = self.factory.discoSession.patternModel[key].__class__.__name__
       realPatternParams[key] = self.factory.discoSession.patternModel[key].params
 
     data = {
@@ -101,7 +102,7 @@ class DiscoControlProtocol(WebSocketServerProtocol):
       mockFrame = self.mockPatternModel[key].render(MOCK_DEVICES[key])
       frames['mock'][key] = [value for color in mockFrame.getdata() for value in color]
       realFrame = self.factory.discoSession.patternModel[key].render(MOCK_DEVICES[key])
-      frames['real'][key] = [value for color in mockFrame.getdata() for value in color]
+      frames['real'][key] = [value for color in realFrame.getdata() for value in color]
     return frames
 
   def sendInitMessage(self):

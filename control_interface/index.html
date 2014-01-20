@@ -11,7 +11,8 @@
     <script src="lib/underscore.min.js"></script>
     <script src="lib/handlebars-v1.3.0.js"></script>
     <script src="lib/backbone.min.js"></script>
-    
+    <script src="js/helpers.js"></script>
+
     <script src="init.js"></script>
 
     <script src="js/model/BeatModel.js"></script>
@@ -22,10 +23,20 @@
     <script src="js/view/DdfPreview.js"></script>
     <script src="js/view/BemisPreview.js"></script>
     <script src="js/view/GoodalePreview.js"></script>
+    <script src="js/view/DdfDebug.js"></script>
 
     <script src="js/endpoint.js"></script>
   </head>
 
+  <script id="ddf-debug-template" type="text/x-handlebars-template">
+    <select>
+      {{#each patterns}}
+      <option value="{{attributes.name}}">{{attributes.name}}</option>
+      {{/each}}
+    </select>
+  </script>
+
   <body>
+
   </body>
 </html>

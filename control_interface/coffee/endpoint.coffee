@@ -43,7 +43,13 @@ $('document').ready ( =>
     height: 111*3
   goodalePreview.render()
 
+  ddfDebug = new com.firsteast.DdfDebug
+    realDiscoModel: session.realDiscoModel
+    patternList: session.patternList
+  ddfDebug.render()
+
   $('body').append(ddfPreview.$el)
   $('body').append(bemisPreview.$el)
   $('body').append(goodalePreview.$el)
+  $('body').append(ddfDebug.$el)
 )

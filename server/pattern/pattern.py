@@ -90,7 +90,7 @@ class StaticPattern(Pattern):
     return self.frame
 
   def setParam(self, name, val):
-    self.params[name] = val
+    Pattern.setParam(self, name, val)
     self.newParams = True
 
   def renderFrame(self, device):
