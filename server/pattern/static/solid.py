@@ -4,19 +4,13 @@ from PIL import Image, ImageChops
 
 class SolidColor(StaticPattern):
   DEFAULT_PARAMS = {
-    'Color': BLUE.getRGBValues()
+    'Color': BLUE
   }
   
   def renderFrame(self, device):
     im = Image.new('RGB', (device.width, device.height))
-    im.putdata([self.params['Color']] * (device.width * device.height))
+    im.putdata([self.params['Color'].getRGBValues()] * (device.width * device.height))
     return im
-
-class Gradient(StaticPattern):
-  # Radial, linear, multicolor.
-  # interpolateColors function can help you do this
-  # Also make a parameter a color list so you can have N color gradients
-  pass
 
 class LinearRainbow(StaticPattern):
   DEFAULT_PARAMS = {

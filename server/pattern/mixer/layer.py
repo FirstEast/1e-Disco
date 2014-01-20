@@ -2,7 +2,7 @@ from pattern.color import *
 from pattern.pattern import *
 from pattern.importer import *
 from pattern.static.shapes import Circle
-from pattern.static.solid import LinearRainbow
+from pattern.static.solid import *
 
 from PIL import Image, ImageChops
 

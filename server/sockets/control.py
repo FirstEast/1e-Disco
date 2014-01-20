@@ -74,7 +74,6 @@ class DiscoControlProtocol(WebSocketServerProtocol):
       patternClass = loadPatternFromModuleClassName(patternData['__module__'] + '_' + patternData['name'])
       pattern = patternClass(self.factory.discoSession.beatModel, patternData['params'])
     patternModel[deviceName] = pattern
-    print patternModel
 
   def getCurrentDeviceData(self):
     data = {
@@ -99,10 +98,13 @@ class DiscoControlProtocol(WebSocketServerProtocol):
   def getRenderFrames(self):
     frames = {'mock': {}, 'real': {}}
     for key in self.factory.discoSession.patternModel:
-      mockFrame = self.mockPatternModel[key].render(MOCK_DEVICES[key])
-      frames['mock'][key] = [value for color in mockFrame.getdata() for value in color]
-      realFrame = self.factory.discoSession.patternModel[key].render(MOCK_DEVICES[key])
-      frames['real'][key] = [value for color in realFrame.getdata() for value in color]
+      try:
+        mockFrame = self.mockPatternModel[key].render(MOCK_DEVICES[key])
+        frames['mock'][key] = [value for color in mockFrame.getdata() for value in color]
+        realFrame = self.factory.discoSession.patternModel[key].render(MOCK_DEVICES[key])
+        frames['real'][key] = [value for color in realFrame.getdata() for value in color]
+      except Exception, e: 
+        print str(e)
     return frames
 
   def sendInitMessage(self):
