@@ -28,13 +28,9 @@ clip = lambda val, low, high: min(high, max(low, val))
 # Shared beat data object to share between sockets
 class BeatData():
   def __init__(self):
-    self.leftCentroid = [0]
-    self.leftVolume = [0]
-    self.leftFrequencies = [0] * BUCKET_SIZE
-
-    self.rightCentroid = [0]
-    self.rightVolume = [0]
-    self.rightFrequencies = [0] * BUCKET_SIZE
+    self.centroid = 0
+    self.volume = 0
+    self.frequencies = [0] * BUCKET_SIZE
 
 class WaveStream():
   def __init__(self, filename):

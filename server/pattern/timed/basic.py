@@ -35,9 +35,9 @@ class MovingLight(TimedPattern):
 
   def renderFrame(self, device, frameCount):
     count = frameCount % device.width
-    frame = [[0, 0, 0]] * count
-    frame = frame + [self.params['color']]
-    frame = frame + [[0, 0, 0]] * (device.width - 1 - count)
+    frame = [(0, 0, 0)] * count
+    frame = frame + [self.params['Color'].getRGBValues()]
+    frame = frame + [(0, 0, 0)] * (device.width - 1 - count)
     im = Image.new('RGB', (device.width, 1))
     im.putdata(frame)
     return im
@@ -54,7 +54,7 @@ class MovingLine(TimedPattern):
 
   def renderFrame(self, device, frameCount):
     count = frameCount % device.width
-    oneline = [[0, 0, 0]] * (count) + [self.params['color'].getRGBValues()] + [[0, 0, 0]] * (device.width - count - 1)
+    oneline = [(0, 0, 0)] * (count) + [self.params['Color'].getRGBValues()] + [(0, 0, 0)] * (device.width - count - 1)
     im = Image.new('RGB', (device.width, device.height))
     im.putdata(oneline * device.height)
     return im

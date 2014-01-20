@@ -5,6 +5,7 @@ from pattern.importer import *
 from pattern.util import *
 
 import json
+import traceback
 
 # Oh lawd I apologize
 class MockDevice():
@@ -104,6 +105,7 @@ class DiscoControlProtocol(WebSocketServerProtocol):
         realFrame = self.factory.discoSession.patternModel[key].render(MOCK_DEVICES[key])
         frames['real'][key] = [value for color in realFrame.getdata() for value in color]
       except Exception, e: 
+        traceback.print_stack()
         print str(e)
     return frames
 
