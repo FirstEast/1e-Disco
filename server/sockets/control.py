@@ -86,7 +86,7 @@ class DiscoControlProtocol(WebSocketServerProtocol):
   def getCurrentPatternData(self):
     realPatternClasses = {}
     realPatternParams = {}
-    for key in self.mockPatternModel:
+    for key in self.factory.discoSession.patternModel:
       realPatternClasses[key] = self.factory.discoSession.patternModel[key].__class__.__name__
       realPatternParams[key] = self.factory.discoSession.patternModel[key].params
 

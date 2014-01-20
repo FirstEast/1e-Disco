@@ -8,22 +8,24 @@ from PIL import Image, ImageChops
 
 import inspect
 
-def layerPatterns(top, bottom):
-    return ImageChops.add(top, maskPatterns(top, bottom, True))
-
-def maskPatterns(mask, patternImg, flip = False):
+def layerPatterns(top, bottom, mask = -1, flip = True): # by default, mask's black is the bottom layer
+  if mask == -1: mask = top
+  topData = top.getdata()
   maskData = mask.convert('L').getdata()
-  patternData = patternImg.getdata()
+  botData = bottom.getdata()
   
   newData = []
   for i in range(len(maskData)):
     if (maskData[i] > 0) != flip:
-      newData.append(patternData[i])
+      newData.append(botData[i])
     else:
-      newData.append((0, 0, 0))
+      newData.append(topData[i])
+  bottom.putdata(newData)
+  return bottom
 
-  patternImg.putdata(newData)
-  return patternImg
+def maskPatterns(mask, patternImg): # mask's light is what to keep
+  mask = mask.convert('L')
+  return layerPatterns(mask, patternImg, mask, False)
 
 class LayerPattern(Pattern):
   DEFAULT_PARAMS = {
