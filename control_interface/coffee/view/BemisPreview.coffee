@@ -15,7 +15,7 @@ do ->
       canvas.width = @width
       canvas.height = @height
 
-      @squareWidth = ((@width / com.firsteast.BEMIS_WIDTH) | 0) - 1
+      @squareWidth = ((@width / com.firsteast.BEMIS_WIDTH) | 0)
 
     renderCanvas: =>
       RGBArray = @model.get('frames')['bemis']
@@ -24,5 +24,5 @@ do ->
         green = RGBArray[i*3 + 1]
         blue = RGBArray[i*3 + 2]
         @context.fillStyle = "rgb(" + red + "," + green + "," + blue + ")"
-        @context.fillRect(i*(@squareWidth + 1), 40, @squareWidth, @squareWidth)
-        @context.fillRect(i*(@squareWidth + 1), @height-40, @squareWidth, @squareWidth)
+        @context.fillRect(i*(@squareWidth), 40, @squareWidth, @squareWidth)
+        @context.fillRect(i*(@squareWidth), @height-40, @squareWidth, @squareWidth)

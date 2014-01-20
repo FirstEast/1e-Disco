@@ -5,7 +5,7 @@
 
   com.firsteast.WEBSOCKET_PORT = '9000';
 
-  com.firsteast.OUTPUT_DEVICES = ['goodale', 'bemis', 'ddf'];
+  com.firsteast.OUTPUT_DEVICES = ['ddf', 'goodale', 'bemis'];
 
   com.firsteast.INPUT_DEVICES = ['beat'];
 
@@ -22,7 +22,7 @@
   com.firsteast.GOODALE_WIDTH = 395;
 
   $('document').ready((function() {
-    var bemisPreview, controller, ddfDebug, ddfPreview, goodalePreview, session;
+    var bemisPreview, controller, ddfPreview, device, goodalePreview, selector, session, _i, _len, _ref, _results;
     session = new com.firsteast.DiscoSession();
     controller = new com.firsteast.DiscoController({
       session: session
@@ -33,27 +33,34 @@
       height: 24 * 8
     });
     ddfPreview.render();
-    bemisPreview = new com.firsteast.BemisPreview({
-      model: session.realDiscoModel,
-      width: 261 * 3,
-      height: 24 * 8
-    });
-    bemisPreview.render();
     goodalePreview = new com.firsteast.GoodalePreview({
       model: session.realDiscoModel,
       width: 160 * 3,
       height: 111 * 3
     });
     goodalePreview.render();
-    ddfDebug = new com.firsteast.DdfDebug({
-      realDiscoModel: session.realDiscoModel,
-      patternList: session.patternList
+    bemisPreview = new com.firsteast.BemisPreview({
+      model: session.realDiscoModel,
+      width: 261 * 2,
+      height: 24 * 8
     });
-    ddfDebug.render();
+    bemisPreview.render();
     $('body').append(ddfPreview.$el);
-    $('body').append(bemisPreview.$el);
     $('body').append(goodalePreview.$el);
-    return $('body').append(ddfDebug.$el);
+    $('body').append(bemisPreview.$el);
+    _ref = com.firsteast.OUTPUT_DEVICES;
+    _results = [];
+    for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+      device = _ref[_i];
+      selector = new com.firsteast.PatternSelector({
+        discoModel: session.realDiscoModel,
+        patternList: session.patternList,
+        device: device
+      });
+      selector.render();
+      _results.push($('body').append(selector.$el));
+    }
+    return _results;
   }));
 
 }).call(this);

@@ -2,7 +2,7 @@ from pattern.color import *
 from pattern.pattern import *
 from pattern.util import *
 
-class BeatTest(Pattern):
+class VolumePulse(Pattern):
 
   DEFAULT_PARAMS = {
     'color1': RED,

@@ -5,8 +5,11 @@ import json
 import pattern
 
 # Map of device names to default pattern modules
+#
+# DON'T EDIT THIS TO CHANGE PATTERNS ANYMORE
+# SELECT YOUR PATTERN FROM THE WEB UI
 DEFAULT_PATTERNS = {
-  "goodale": "pattern.beat.goodale_BeatTest",
+  "goodale": "pattern.timed.basic_Interpolation",
   "bemis": "pattern.timed.basic_Interpolation",
   "ddf": "pattern.static.image_AnimatedGif"
 }

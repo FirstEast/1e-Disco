@@ -12,13 +12,15 @@
         this._buildPatternList = __bind(this._buildPatternList, this);
         this._parseMessage = __bind(this._parseMessage, this);
         this._initializeSocket = __bind(this._initializeSocket, this);
-        var _this = this;
+        var device, _i, _len, _ref;
         $.extend(this, Backbone.Events);
         this.session = options.session;
         this._initializeSocket();
-        this.listenTo(this.session.realDiscoModel, 'change:ddfPattern', (function() {
-          return _this._setRealPattern('ddf');
-        }));
+        _ref = com.firsteast.OUTPUT_DEVICES;
+        for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+          device = _ref[_i];
+          this.listenTo(this.session.realDiscoModel, "change:" + device + "Pattern", _.partial(this._setRealPattern, "" + device));
+        }
       }
 
       DiscoController.prototype._initializeSocket = function() {

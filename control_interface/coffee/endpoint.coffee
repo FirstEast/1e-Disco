@@ -1,7 +1,7 @@
 com.firsteast.WEBSOCKET_URL = window.location.origin.split('//')[1].split(':')[0]
 com.firsteast.WEBSOCKET_PORT = '9000'
 
-com.firsteast.OUTPUT_DEVICES = ['goodale', 'bemis', 'ddf']
+com.firsteast.OUTPUT_DEVICES = ['ddf', 'goodale', 'bemis']
 com.firsteast.INPUT_DEVICES = ['beat']
 
 com.firsteast.DDF_WIDTH = 48
@@ -31,25 +31,27 @@ $('document').ready ( =>
     height: 24*8
   ddfPreview.render()
 
-  bemisPreview = new com.firsteast.BemisPreview
-    model: session.realDiscoModel
-    width: 261*3
-    height: 24*8
-  bemisPreview.render()
-
   goodalePreview = new com.firsteast.GoodalePreview
     model: session.realDiscoModel
     width: 160*3
     height: 111*3
   goodalePreview.render()
 
-  ddfDebug = new com.firsteast.DdfDebug
-    realDiscoModel: session.realDiscoModel
-    patternList: session.patternList
-  ddfDebug.render()
+  bemisPreview = new com.firsteast.BemisPreview
+    model: session.realDiscoModel
+    width: 261*2
+    height: 24*8
+  bemisPreview.render()
 
   $('body').append(ddfPreview.$el)
-  $('body').append(bemisPreview.$el)
   $('body').append(goodalePreview.$el)
-  $('body').append(ddfDebug.$el)
+  $('body').append(bemisPreview.$el)
+
+  for device in com.firsteast.OUTPUT_DEVICES
+    selector = new com.firsteast.PatternSelector
+      discoModel: session.realDiscoModel
+      patternList: session.patternList
+      device: device
+    selector.render()
+    $('body').append(selector.$el)
 )

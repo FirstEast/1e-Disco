@@ -5,58 +5,63 @@
 
   (function() {
     var _ref;
-    return com.firsteast.DdfDebug = (function(_super) {
-      __extends(DdfDebug, _super);
+    return com.firsteast.PatternSelector = (function(_super) {
+      __extends(PatternSelector, _super);
 
-      function DdfDebug() {
+      function PatternSelector() {
         this._changeSelected = __bind(this._changeSelected, this);
         this._updateSelected = __bind(this._updateSelected, this);
         this.render = __bind(this.render, this);
         this.initialize = __bind(this.initialize, this);
-        _ref = DdfDebug.__super__.constructor.apply(this, arguments);
+        _ref = PatternSelector.__super__.constructor.apply(this, arguments);
         return _ref;
       }
 
-      DdfDebug.prototype.className = 'ddfDebug';
+      PatternSelector.prototype.className = 'patternSelector';
 
-      DdfDebug.prototype.events = {
+      PatternSelector.prototype.events = {
         'change select': '_changeSelected'
       };
 
-      DdfDebug.prototype.initialize = function(options) {
+      PatternSelector.prototype.initialize = function(options) {
         this.patternList = options.patternList;
-        this.realDiscoModel = options.realDiscoModel;
+        this.discoModel = options.discoModel;
+        this.device = options.device;
         this.listenTo(this.patternList, 'reset', this.render);
-        return this.listenTo(this.realDiscoModel, 'change:ddfPattern', this._updateSelected);
+        return this.listenTo(this.discoModel, "change:" + this.device + "Pattern", this._updateSelected);
       };
 
-      DdfDebug.prototype.render = function() {
-        var source, template;
+      PatternSelector.prototype.render = function() {
+        var models, source, template,
+          _this = this;
         this.$el.empty();
         source = $('#ddf-debug-template').html();
         template = Handlebars.compile(source);
+        models = this.patternList.filter((function(x) {
+          return x.get('DEVICES').indexOf(_this.device) >= 0;
+        }));
         this.$el.append(template({
-          patterns: this.patternList.models
+          patterns: models
         }));
         return this._updateSelected();
       };
 
-      DdfDebug.prototype._updateSelected = function() {
+      PatternSelector.prototype._updateSelected = function() {
         var _ref1;
-        return this.$('select').val((_ref1 = this.realDiscoModel.get('ddfPattern')) != null ? _ref1.get('name') : void 0);
+        return this.$('select').val((_ref1 = this.discoModel.get("" + this.device + "Pattern")) != null ? _ref1.get('name') : void 0);
       };
 
-      DdfDebug.prototype._changeSelected = function() {
+      PatternSelector.prototype._changeSelected = function() {
         var name, pattern;
         name = this.$('select').val();
         pattern = this.patternList.where({
           name: name
         })[0].attributes;
         pattern = $.extend(true, {}, pattern);
-        return this.realDiscoModel.set('ddfPattern', new com.firsteast.PatternModel(pattern));
+        return this.discoModel.set("" + this.device + "Pattern", new com.firsteast.PatternModel(pattern));
       };
 
-      return DdfDebug;
+      return PatternSelector;
 
     })(Backbone.View);
   })();

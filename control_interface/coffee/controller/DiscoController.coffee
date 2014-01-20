@@ -7,7 +7,8 @@ do ->
 
       @_initializeSocket()
 
-      @listenTo @session.realDiscoModel, 'change:ddfPattern', (=> @_setRealPattern('ddf'))
+      for device in com.firsteast.OUTPUT_DEVICES
+        @listenTo @session.realDiscoModel, "change:#{device}Pattern", _.partial(@_setRealPattern, "#{device}")
 
     _initializeSocket: =>
       @socket = new WebSocket("ws://#{com.firsteast.WEBSOCKET_URL}:#{com.firsteast.WEBSOCKET_PORT}/")

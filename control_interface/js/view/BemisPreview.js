@@ -32,7 +32,7 @@
         this.context = canvas.getContext('2d');
         canvas.width = this.width;
         canvas.height = this.height;
-        return this.squareWidth = ((this.width / com.firsteast.BEMIS_WIDTH) | 0) - 1;
+        return this.squareWidth = (this.width / com.firsteast.BEMIS_WIDTH) | 0;
       };
 
       BemisPreview.prototype.renderCanvas = function() {
@@ -44,8 +44,8 @@
           green = RGBArray[i * 3 + 1];
           blue = RGBArray[i * 3 + 2];
           this.context.fillStyle = "rgb(" + red + "," + green + "," + blue + ")";
-          this.context.fillRect(i * (this.squareWidth + 1), 40, this.squareWidth, this.squareWidth);
-          _results.push(this.context.fillRect(i * (this.squareWidth + 1), this.height - 40, this.squareWidth, this.squareWidth));
+          this.context.fillRect(i * this.squareWidth, 40, this.squareWidth, this.squareWidth);
+          _results.push(this.context.fillRect(i * this.squareWidth, this.height - 40, this.squareWidth, this.squareWidth));
         }
         return _results;
       };
