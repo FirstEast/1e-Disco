@@ -33,8 +33,8 @@
         this.context = canvas.getContext('2d');
         canvas.width = this.width;
         canvas.height = this.height;
-        this.squareWidth = ((this.width / com.firsteast.GOODALE_CANVAS_WIDTH) | 0) - 1;
-        return this.squareHeight = ((this.height / com.firsteast.GOODALE_CANVAS_HEIGHT) | 0) - 1;
+        this.squareWidth = (this.width / com.firsteast.GOODALE_CANVAS_WIDTH) | 0;
+        return this.squareHeight = (this.height / com.firsteast.GOODALE_CANVAS_HEIGHT) | 0;
       };
 
       GoodalePreview.prototype.renderCanvas = function() {
@@ -47,7 +47,7 @@
           green = RGBArray[i * 3 + 1];
           blue = RGBArray[i * 3 + 2];
           this.context.fillStyle = "rgb(" + red + "," + green + "," + blue + ")";
-          _results.push(this.context.fillRect(coords[0] * (this.squareWidth + 1), coords[1] * (this.squareHeight + 1), this.squareWidth, this.squareHeight));
+          _results.push(this.context.fillRect(coords[0] * this.squareWidth, coords[1] * this.squareHeight, this.squareWidth, this.squareHeight));
         }
         return _results;
       };

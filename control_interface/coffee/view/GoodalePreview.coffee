@@ -15,8 +15,8 @@ do ->
       canvas.width = @width
       canvas.height = @height
 
-      @squareWidth = ((@width / com.firsteast.GOODALE_CANVAS_WIDTH) | 0) - 1
-      @squareHeight = ((@height / com.firsteast.GOODALE_CANVAS_HEIGHT)  | 0) - 1
+      @squareWidth = ((@width / com.firsteast.GOODALE_CANVAS_WIDTH) | 0)
+      @squareHeight = ((@height / com.firsteast.GOODALE_CANVAS_HEIGHT)  | 0)
 
     renderCanvas: =>
       RGBArray = @model.get('frames')['goodale']
@@ -26,7 +26,7 @@ do ->
         green = RGBArray[i * 3 + 1]
         blue = RGBArray[i * 3 + 2]
         @context.fillStyle = "rgb(" + red + "," + green + "," + blue + ")"
-        @context.fillRect(coords[0]*(@squareWidth + 1), coords[1]*(@squareHeight + 1), @squareWidth, @squareHeight)
+        @context.fillRect(coords[0]*(@squareWidth), coords[1]*(@squareHeight), @squareWidth, @squareHeight)
 
     # Modifying this function will result in instantaneous death.
     _getCoordFromIndex: (index) =>
