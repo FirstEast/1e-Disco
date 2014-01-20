@@ -7,7 +7,7 @@ from PIL import Image
 class AnimatedGif(TimedPattern):
 
   DEFAULT_PARAMS = {
-    'Image Path': 'pattern/images/SuperMario.gif',
+    'Image Path': 'pattern/images/nyan.gif',
     'Resize': True,
     'DesWidth': 48,
     'DesHeight': 24,

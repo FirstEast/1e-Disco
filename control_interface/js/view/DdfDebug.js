@@ -27,7 +27,7 @@
         this.patternList = options.patternList;
         this.realDiscoModel = options.realDiscoModel;
         this.listenTo(this.patternList, 'reset', this.render);
-        return this.listenTo(this.realDiscoModel, 'change:patterns', this._updateSelected);
+        return this.listenTo(this.realDiscoModel, 'change:ddfPattern', this._updateSelected);
       };
 
       DdfDebug.prototype.render = function() {
@@ -43,19 +43,17 @@
 
       DdfDebug.prototype._updateSelected = function() {
         var _ref1;
-        return this.$('select').val((_ref1 = this.realDiscoModel.get('patterns').ddf) != null ? _ref1.get('name') : void 0);
+        return this.$('select').val((_ref1 = this.realDiscoModel.get('ddfPattern')) != null ? _ref1.get('name') : void 0);
       };
 
       DdfDebug.prototype._changeSelected = function() {
-        var name, pattern, realPatterns;
+        var name, pattern;
         name = this.$('select').val();
         pattern = this.patternList.where({
           name: name
         })[0].attributes;
         pattern = $.extend(true, {}, pattern);
-        realPatterns = $.extend(true, {}, this.realDiscoModel.get('patterns'));
-        realPatterns['ddf'] = new com.firsteast.PatternModel(pattern);
-        return this.realDiscoModel.set('patterns', realPatterns);
+        return this.realDiscoModel.set('ddfPattern', new com.firsteast.PatternModel(pattern));
       };
 
       return DdfDebug;

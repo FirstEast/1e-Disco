@@ -7,7 +7,7 @@ from pattern.util import *
 import json
 import traceback
 
-# Oh lawd I apologize
+# HACK: create mock devices since render requires a device (instead of using the socket)
 class MockDevice():
   def __init__(self, name, width, height, format='RGB'):
     self.name = name
@@ -60,7 +60,13 @@ class DiscoControlProtocol(WebSocketServerProtocol):
   def performSwap(self, deviceName):
     params = self.mockPatternModel[deviceName].params
     beat = self.factory.discoSession.beatModel
-    self.factory.discoSession.patternModel[deviceName] = self.mockPatternModel[deviceName].__class__(beat, params)
+    pattern = self.mockPatternModel[deviceName].__class__(beat, params)
+
+    # HACK: for timed patterns, we don't want the start time to be reset
+    if issubclass(self.mockPatternModel[deviceName], pattern.TimedPattern):
+      pattern.startTime = self.mockPatternModel[deviceName].startTime
+
+    self.factory.discoSession.patternModel[deviceName] = pattern
 
   def setMockPattern(self, deviceName, patternData):
     self.setPattern(deviceName, patternData, self.mockPatternModel)

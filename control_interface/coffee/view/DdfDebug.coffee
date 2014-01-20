@@ -9,7 +9,7 @@ do ->
       @realDiscoModel = options.realDiscoModel
 
       @listenTo @patternList, 'reset', @render
-      @listenTo @realDiscoModel, 'change:patterns', @_updateSelected
+      @listenTo @realDiscoModel, 'change:ddfPattern', @_updateSelected
 
     render: =>
       @$el.empty()
@@ -19,12 +19,10 @@ do ->
       @_updateSelected()
 
     _updateSelected: =>
-      @$('select').val(@realDiscoModel.get('patterns').ddf?.get('name'))
+      @$('select').val(@realDiscoModel.get('ddfPattern')?.get('name'))
 
     _changeSelected: =>
       name = @$('select').val()
       pattern = @patternList.where({name: name})[0].attributes
       pattern = $.extend(true, {}, pattern)
-      realPatterns = $.extend(true, {}, @realDiscoModel.get('patterns'))
-      realPatterns['ddf'] = new com.firsteast.PatternModel(pattern)
-      @realDiscoModel.set('patterns', realPatterns)
+      @realDiscoModel.set('ddfPattern', new com.firsteast.PatternModel(pattern))

@@ -17,14 +17,13 @@
       DiscoModel.prototype.defaults = function() {
         var attrs, device, _i, _len, _ref1;
         attrs = {
-          frames: {},
-          patterns: {}
+          frames: {}
         };
         _ref1 = com.firsteast.OUTPUT_DEVICES;
         for (_i = 0, _len = _ref1.length; _i < _len; _i++) {
           device = _ref1[_i];
           attrs.frames[device] = [];
-          attrs.patterns[device] = null;
+          attrs[device + 'Pattern'] = null;
         }
         return attrs;
       };

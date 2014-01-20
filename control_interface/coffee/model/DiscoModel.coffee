@@ -3,11 +3,10 @@ do ->
     defaults: =>
       attrs =
         frames: {}
-        patterns: {}
 
       # Frame and pattern for each device
       for device in com.firsteast.OUTPUT_DEVICES
         attrs.frames[device] = []
-        attrs.patterns[device] = null
+        attrs[device + 'Pattern'] = null
 
       return attrs
