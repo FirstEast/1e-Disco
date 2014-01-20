@@ -21,24 +21,19 @@ To run the beat code from source, you will also need to install the following:
 * PyAudio (Google for it and you'll find installers for Windows/Mac/Debian/Ubuntu)
 * Python wave module (may already be default? Not sure...)
 
-**NOTE: the beat code currently only runs properly on Mac.  Windows support is in the works.**
+**NOTE: the beat code currently only runs properly on Mac.  On other operating systems, you must pass a 16bit 44100Hz wav file as a command line argument.**
 
 Finally, to write and compile code for the web UI, you will need a means of compiled Coffeescript and LESS.  There are various tooling utilities you can install to compile these languages down to JS/CSS, and also have them watch your files for any changes and do it automatically.
 
 Using the Various Computer Utilities
 ======================================
 Each utility is either the main server or some peripheral that will attempt to connect to the main server.
-* Main server: `python server/DiscoServer.py`
+* Main server (run from server directory): `python DiscoServer.py`
 * Beat server: `python beat/BeatServer.py`
-* DDF Sim: `python ddf/simulation/DDFSimulation.py`
-* Bemis Sim: `python bemis/BemisLights.py`
-* Goodale Sim: `python goodale/GoodaleLights.py`
-
-Note that all simulations must connect to a running disco server before you can actually see anything.
 
 Currently all the network configurations (where to find the disco server, which port, etc) are all in those respective files as globals.  This should be abstracted to runtime args at a later point in time.
 
-To view the simulations, enter the directory with the main Python script, then open `interface/index.html` in your browser.  This will establish a websocket connection to the simulation device running on your computer.
+To view the simulations, head to `localhost` to see the Web UI.
 
 Running Code on the Controllers
 ======================================
