@@ -14,7 +14,10 @@ DDF_HEIGHT = 24
 BEMIS_WIDTH = 261
 BEMIS_HEIGHT = 1
 
-FLAT_GOODALE_LENGTH = 159 + 97 + 160
+FLAT_GOODALE_TOP = 160
+FLAT_GOODALE_SIDE = 97
+FLAT_GOODALE_BOTTOM = 159
+FLAT_GOODALE_LENGTH = FLAT_GOODALE_TOP + FLAT_GOODALE_SIDE + FLAT_GOODALE_BOTTOM
 
 def unflattenGoodaleArray(frame):
   newFrame = []
@@ -32,6 +35,27 @@ def unflattenGoodaleArray(frame):
   im = Image.new('RGB', (len(newFrame), 1))
   im.putdata(newFrame)
   return im
+
+def flatGoodaleArrayFromDdfImage(ddfImage):
+  (width, height) = ddfImage.size
+  data = ddfImage.getdata()
+  pxPerWidth = FLAT_GOODALE_TOP / width
+  pxPerHeight = FLAT_GOODALE_SIDE / height
+
+  top = []
+  side = []
+  bottom = []
+  for i in range(0, width):
+    top += pxPerWidth * [data[i]]
+    bottom += pxPerWidth * [(data[(height-1)*(width) + i])]
+  for i in range(0, height):
+    side += pxPerHeight * [data[width*i]]
+  bottom += [(0,0,0)] * (FLAT_GOODALE_BOTTOM - len(bottom))
+  bottom.reverse()
+  side.reverse()
+  top += [(0,0,0)] * (FLAT_GOODALE_TOP - len(top))
+  side += [(0,0,0)] * (FLAT_GOODALE_SIDE - len(side))
+  return [bottom + side + top]
 
 def scaleToBucket(value, minVal, maxVal):
   v = (maxVal - minVal) * value + minVal

@@ -1,6 +1,7 @@
 from pattern.color import *
 from pattern.pattern import *
 from pattern.mixer.layer import layerPatterns
+from pattern.util import *
 
 from PIL import Image
 
@@ -15,6 +16,8 @@ class AnimatedGif(TimedPattern):
   }
 
   DEFAULT_PARAMS.update(TimedPattern.DEFAULT_PARAMS)
+
+  DEVICES = ['ddf', 'goodale']
 
   def __init__(self, beat, params):
     TimedPattern.__init__(self, beat, params)
@@ -41,12 +44,16 @@ class AnimatedGif(TimedPattern):
       except EOFError:
         break
     
-
   def renderFrame(self, device, frameCount):
     frameCount %= len(self.frames)
-    im = Image.new('RGB', (device.width, device.height))
-    im.paste(self.frames[frameCount], (0, 0))
-    return im
+    if device.name == 'goodale':
+      im = Image.new('RGB', (DDF_WIDTH, DDF_HEIGHT))
+      im.paste(self.frames[frameCount], (0, 0))
+      return unflattenGoodaleArray(flatGoodaleArrayFromDdfImage(im))
+    else:
+      im = Image.new('RGB', (device.width, device.height))
+      im.paste(self.frames[frameCount], (0, 0))
+      return im
 
 class StaticImage(StaticPattern):
   DEFAULT_PARAMS = {
