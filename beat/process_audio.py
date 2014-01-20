@@ -36,6 +36,12 @@ class BeatData():
     self.rightVolume = [0]
     self.rightFrequencies = [0] * BUCKET_SIZE
 
+class WaveStream():
+  def __init__(self, filename):
+    self.wf = wave.open(filename, 'rb')
+  def read(self, chunkSize):
+    return self.wf.readframes(chunkSize)
+
 def getAudioStream():
   stream = P.open(format = FORMAT,
                   channels = CHANNELS,

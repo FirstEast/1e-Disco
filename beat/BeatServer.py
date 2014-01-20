@@ -2,6 +2,7 @@ from twisted.internet import reactor, task
 from twisted.internet.endpoints import TCP4ClientEndpoint
 from autobahn.twisted.websocket import listenWS
 from sockets import AudioWebSocketFactory, AudioWebSocket, AudioSocketFactory
+from sys import argv
 
 import process_audio
 
@@ -13,7 +14,11 @@ WEB_SOCKET_PORT = 2000
 if __name__ == '__main__':
   # Beat data model. Creates the model and stream, then repeatedly processes data
   beatData = process_audio.BeatData()
-  stream = process_audio.getAudioStream()
+  if 'wavemode' in argv[1:]: 
+    stream = process_audio.WaveStream(argv[2]) # for debugging purposes - MUST CALL 'python BeatServer.py wavemode <filename>'
+  else: 
+    stream = process_audio.getAudioStream()
+  
   task.LoopingCall(lambda: process_audio.processChunk(stream, beatData)).start(0.01)
 
   # Start the audio serving websocket
