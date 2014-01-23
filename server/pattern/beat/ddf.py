@@ -12,6 +12,13 @@ BASS = (0, 8)
 
 SMOOTHING_ALPHA = 0.8
 
+def getSummedFreqData(beat, start, end):
+  freqs = beat.avgFreqs
+  total = 0
+  for i in range(start, end):
+    total += (freqs[i] - 0.80) * 5
+  return total / (end - start)
+
 class VerticalVis(Pattern):
 
   DEFAULT_PARAMS = {
@@ -121,14 +128,11 @@ class PulsingCircle(Pattern):
     self.lastTotal = 0
 
   def render(self, device):
-    freqs = self.beat.avgFreqs
-    total = 0
-    for i in range(self.params['Frequency Band Start'], self.params['Frequency Band End']):
-      total += (freqs[i] - 0.80) * 5
+    total = getSummedFreqData(self.beat, self.params['Frequency Band Start'], self.params['Frequency Band End'])
     thisTotal = total * SMOOTHING_ALPHA + self.lastTotal * (1 - SMOOTHING_ALPHA)
     self.lastTotal = total
 
-    val = scaleToBucket(thisTotal / (self.params['Frequency Band End'] - self.params['Frequency Band Start']), 1, self.params['Max Pulse'])
+    val = scaleToBucket(thisTotal, 1, self.params['Max Pulse'])
     circleParams = {
       'Center X': self.params['Circle Center X'],
       'Center Y': self.params['Circle Center Y'],
@@ -139,6 +143,27 @@ class PulsingCircle(Pattern):
     circlePattern = Circle(self.beat, circleParams)
 
     return circlePattern.render(device)
+
+class FadingPulsingCircle(Pattern):
+  DEFAULT_PARAMS = {
+    'Circle Params': {},
+  }
+
+  USE_BEAT = True
+
+  DEVICES = ['ddf']
+
+  def __init__(self, beat, params):
+    Pattern.__init__(self, beat, params)
+    self.circlePattern = PulsingCircle(beat, self.params['Circle Params'])
+    self.originalColor = self.circlePattern.params['Circle Color']
+
+  def render(self, device):
+    total = getSummedFreqData(self.beat, self.circlePattern.params['Frequency Band Start'], self.circlePattern.params['Frequency Band End'])
+    circleColor = self.originalColor * total
+    self.circlePattern.setParam('Circle Color', circleColor)
+
+    return self.circlePattern.render(device)
 
 class ColorPulsingCircle(Pattern):
   DEFAULT_PARAMS = {
