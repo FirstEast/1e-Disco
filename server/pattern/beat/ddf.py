@@ -1,10 +1,12 @@
 from pattern.color import *
 from pattern.pattern import *
 from pattern.util import *
+from pattern.mixer.layer import *
 
 from pattern.static.shapes import Circle
+from pattern.static.solid import *
 
-from PIL import Image
+from PIL import Image, ImageChops
 
 BASS = (0, 8)
 
@@ -82,6 +84,22 @@ class HorizontalVis(Pattern):
     im.putdata(frame)
     return im.transpose(Image.ROTATE_270).transpose(Image.FLIP_LEFT_RIGHT)
 
+class RaindbowVis(Pattern):
+  USE_BEAT = True
+
+  DEVICES = ['ddf']
+
+  def __init__(self, beat, params):
+    Pattern.__init__(self, beat, params)
+    self.visPattern = VerticalVis(beat, {})
+    self.gradPattern = LinearRainbow(beat, {'EndHue': 0.25})
+
+  def render(self, device):
+    vis = self.visPattern.render(device)
+    grad = self.gradPattern.render(device)
+
+    return maskPatterns(vis, grad)
+
 class PulsingCircle(Pattern):
 
   DEFAULT_PARAMS = {
@@ -121,3 +139,26 @@ class PulsingCircle(Pattern):
     circlePattern = Circle(self.beat, circleParams)
 
     return circlePattern.render(device)
+
+class ColorPulsingCircle(Pattern):
+  DEFAULT_PARAMS = {
+    'Circle Params': {},
+    'Start Hue': 0.25,
+    'End Hue': 0.75
+  }
+
+  USE_BEAT = True
+
+  DEVICES = ['ddf']
+
+  def __init__(self, beat, params):
+    Pattern.__init__(self, beat, params)
+    self.circlePattern = PulsingCircle(beat, self.params['Circle Params'])
+
+  def render(self, device):
+    cent = max(self.beat.avgCentroid - 0.66, 0) * 3
+    hue = (self.params['End Hue'] - self.params['Start Hue']) * cent + self.params['Start Hue']
+    circleColor = Color((hue, 1, 255), isHSV=True)
+    self.circlePattern.setParam('Circle Color', circleColor)
+
+    return self.circlePattern.render(device)
