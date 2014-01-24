@@ -8,7 +8,7 @@ class Circle(StaticPattern):
     'Center Y': 12,
     'Radius': 10,
     'Fill': True,
-    'Color': BLUE.getRGBValues()
+    'Color': BLUE
   }
 
   def renderFrame(self, device):
@@ -20,9 +20,9 @@ class Circle(StaticPattern):
     draw = ImageDraw.Draw(im)
    
     if self.params['Fill']:
-      draw.ellipse((x0 - r, y0 - r, x0 + r, y0 + r), outline=self.params['Color'], fill=self.params['Color'])    
+      draw.ellipse((x0 - r, y0 - r, x0 + r, y0 + r), outline=self.params['Color'].getRGBValues(), fill=self.params['Color'].getRGBValues())    
     else:
-      draw.ellipse((x0 - r, y0 - r, x0 + r, y0 + r), outline=self.params['Color'])    
+      draw.ellipse((x0 - r, y0 - r, x0 + r, y0 + r), outline=self.params['Color'].getRGBValues())    
 
     return im
 
@@ -33,7 +33,7 @@ class Rectangle(StaticPattern):
     'Width': 47,
     'Height': 23,
     'Fill': False,
-    'Color': BLUE.getRGBValues()
+    'Color': BLUE
   }
   
   def renderFrame(self, device):
@@ -46,9 +46,9 @@ class Rectangle(StaticPattern):
     draw = ImageDraw.Draw(im)
    
     if self.params['Fill']:
-      draw.rectangle((x0, y0, x1, y), outline=self.params['Color'], fill=self.params['Color'])    
+      draw.rectangle((x0, y0, x1, y), outline=self.params['Color'].getRGBValues(), fill=self.params['Color'].getRGBValues())    
     else:
-      draw.rectangle((x0, y0, x1, y1), outline=self.params['Color'])    
+      draw.rectangle((x0, y0, x1, y1), outline=self.params['Color'].getRGBValues())    
 
     return im
 

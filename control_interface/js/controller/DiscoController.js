@@ -6,9 +6,11 @@
       function DiscoController(options) {
         this._sendMessage = __bind(this._sendMessage, this);
         this._setRealPattern = __bind(this._setRealPattern, this);
+        this._savePattern = __bind(this._savePattern, this);
         this._handlePatterns = __bind(this._handlePatterns, this);
         this._handleDevices = __bind(this._handleDevices, this);
         this._handleRender = __bind(this._handleRender, this);
+        this._buildSavedPatternList = __bind(this._buildSavedPatternList, this);
         this._buildPatternList = __bind(this._buildPatternList, this);
         this._parseMessage = __bind(this._parseMessage, this);
         this._initializeSocket = __bind(this._initializeSocket, this);
@@ -21,6 +23,7 @@
           device = _ref[_i];
           this.listenTo(this.session.realDiscoModel, "change:" + device + "Pattern", _.partial(this._setRealPattern, "" + device));
         }
+        this.listenTo(this.session.savedPatternList, 'add', this._savePattern);
       }
 
       DiscoController.prototype._initializeSocket = function() {
@@ -33,6 +36,7 @@
         data = JSON.parse(message.data);
         if (data.type === 'init') {
           this._buildPatternList(JSON.parse(data.patternListData));
+          this._buildSavedPatternList(JSON.parse(data.savedPatternListData));
           return this._sendMessage({
             type: 'render'
           });
@@ -57,6 +61,10 @@
           patterns.push(val);
         }
         return this.session.patternList.reset(patterns);
+      };
+
+      DiscoController.prototype._buildSavedPatternList = function(patternList) {
+        return this.session.savedPatternList.reset(patternList);
       };
 
       DiscoController.prototype._handleRender = function(renderData) {
@@ -89,6 +97,15 @@
           }
         }
         return _results;
+      };
+
+      DiscoController.prototype._savePattern = function(pattern) {
+        var data;
+        data = {
+          type: 'savePattern',
+          patternData: pattern.attributes
+        };
+        return this._sendMessage(data);
       };
 
       DiscoController.prototype._setRealPattern = function(device) {

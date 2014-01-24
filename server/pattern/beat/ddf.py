@@ -2,6 +2,7 @@ from pattern.color import *
 from pattern.pattern import *
 from pattern.util import *
 from pattern.mixer.layer import *
+from pattern.importer import *
 
 from pattern.static.shapes import Circle
 from pattern.static.solid import *
@@ -110,13 +111,10 @@ class RaindbowVis(Pattern):
 class PulsingCircle(Pattern):
 
   DEFAULT_PARAMS = {
-    'Circle Color': BLUE,
-    'Circle Fill': True,
-    'Circle Center X': 24,
-    'Circle Center Y': 12,
+    'Circle Pattern': 'default_circle.json',
     'Max Pulse': 24,
     'Frequency Band Start': BASS[0],
-    'Frequency Band End': BASS[1],
+    'Frequency Band End': BASS[1]
   }
 
   USE_BEAT = True
@@ -127,47 +125,43 @@ class PulsingCircle(Pattern):
     Pattern.__init__(self, beat, params)
     self.lastTotal = 0
 
+  def paramUpdate(self):
+    self.circlePattern = loadSavedPatternFromFilename(self.beat, self.params['Circle Pattern'])
+
   def render(self, device):
     total = getSummedFreqData(self.beat, self.params['Frequency Band Start'], self.params['Frequency Band End'])
     thisTotal = total * SMOOTHING_ALPHA + self.lastTotal * (1 - SMOOTHING_ALPHA)
     self.lastTotal = total
 
     val = scaleToBucket(thisTotal, 1, self.params['Max Pulse'])
-    circleParams = {
-      'Center X': self.params['Circle Center X'],
-      'Center Y': self.params['Circle Center Y'],
-      'Color': self.params['Circle Color'].getRGBValues(),
-      'Fill': self.params['Circle Fill'],
-      'Radius': val
-    }
-    circlePattern = Circle(self.beat, circleParams)
-
-    return circlePattern.render(device)
-
-class FadingPulsingCircle(Pattern):
-  DEFAULT_PARAMS = {
-    'Circle Params': {},
-  }
-
-  USE_BEAT = True
-
-  DEVICES = ['ddf']
-
-  def __init__(self, beat, params):
-    Pattern.__init__(self, beat, params)
-    self.circlePattern = PulsingCircle(beat, self.params['Circle Params'])
-    self.originalColor = self.circlePattern.params['Circle Color']
-
-  def render(self, device):
-    total = getSummedFreqData(self.beat, self.circlePattern.params['Frequency Band Start'], self.circlePattern.params['Frequency Band End'])
-    circleColor = self.originalColor * total
-    self.circlePattern.setParam('Circle Color', circleColor)
-
+    self.circlePattern.setParam('Radius', val)
     return self.circlePattern.render(device)
+
+# WILL FIX
+#
+# class FadingPulsingCircle(Pattern):
+#   DEFAULT_PARAMS = {
+#     'Pulsing Circle Pattern': 'default_pulsingCircle.json',
+#   }
+
+#   USE_BEAT = True
+
+#   DEVICES = ['ddf']
+
+#   def paramUpdate(self):
+#     self.circlePattern = loadSavedPatternFromFilename(self.beat, self.params['Pulsing Circle Pattern'])    
+#     self.originalColor = self.circlePattern.params['Circle Color']
+
+#   def render(self, device):
+#     total = getSummedFreqData(self.beat, self.circlePattern.params['Frequency Band Start'], self.circlePattern.params['Frequency Band End'])
+#     circleColor = self.originalColor * total
+#     self.circlePattern.setParam('Circle Color', circleColor)
+
+#     return self.circlePattern.render(device)
 
 class ColorPulsingCircle(Pattern):
   DEFAULT_PARAMS = {
-    'Circle Params': {},
+    'Pulsing Circle Pattern': 'default_pulsingCircle.json',
     'Start Hue': 0.25,
     'End Hue': 0.75
   }
@@ -176,14 +170,13 @@ class ColorPulsingCircle(Pattern):
 
   DEVICES = ['ddf']
 
-  def __init__(self, beat, params):
-    Pattern.__init__(self, beat, params)
-    self.circlePattern = PulsingCircle(beat, self.params['Circle Params'])
+  def paramUpdate(self):
+    self.circlePattern = loadSavedPatternFromFilename(self.beat, self.params['Pulsing Circle Pattern'])    
 
   def render(self, device):
     cent = max(self.beat.avgCentroid - 0.66, 0) * 3
     hue = (self.params['End Hue'] - self.params['Start Hue']) * cent + self.params['Start Hue']
     circleColor = Color((hue, 1, 255), isHSV=True)
-    self.circlePattern.setParam('Circle Color', circleColor)
+    solidColorPattern = SolidColor(self.beat, {'Color': circleColor})
 
-    return self.circlePattern.render(device)
+    return maskPatterns(self.circlePattern.render(device), solidColorPattern.render(device))

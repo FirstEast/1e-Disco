@@ -9,6 +9,7 @@
       __extends(PatternSelector, _super);
 
       function PatternSelector() {
+        this._savePattern = __bind(this._savePattern, this);
         this._changeSelected = __bind(this._changeSelected, this);
         this._updateSelected = __bind(this._updateSelected, this);
         this.render = __bind(this.render, this);
@@ -20,11 +21,13 @@
       PatternSelector.prototype.className = 'patternSelector';
 
       PatternSelector.prototype.events = {
-        'change select': '_changeSelected'
+        'change select': '_changeSelected',
+        'click .save-button': '_savePattern'
       };
 
       PatternSelector.prototype.initialize = function(options) {
         this.patternList = options.patternList;
+        this.savedPatternList = options.savedPatternList;
         this.discoModel = options.discoModel;
         this.device = options.device;
         this.listenTo(this.patternList, 'reset', this.render);
@@ -59,6 +62,17 @@
         })[0].attributes;
         pattern = $.extend(true, {}, pattern);
         return this.discoModel.set("" + this.device + "Pattern", new com.firsteast.PatternModel(pattern));
+      };
+
+      PatternSelector.prototype._savePattern = function() {
+        var pattern, patternModel, saveName;
+        saveName = this.$('.save-name-input').val();
+        pattern = this.discoModel.get("" + this.device + "Pattern").attributes;
+        pattern = $.extend(true, {}, pattern);
+        pattern.saved = true;
+        pattern.saveName = saveName;
+        patternModel = new com.firsteast.PatternModel(pattern);
+        return this.savedPatternList.add(patternModel);
       };
 
       return PatternSelector;

@@ -1,22 +1,22 @@
 import pkgutil
 import inspect
 import json
+import glob
 
 import pattern
 
 # Map of device names to default pattern modules
-#
-# DON'T EDIT THIS TO CHANGE PATTERNS ANYMORE
-# SELECT YOUR PATTERN FROM THE WEB UI
 DEFAULT_PATTERNS = {
   "goodale": "pattern.timed.basic_Interpolation",
   "bemis": "pattern.timed.basic_Interpolation",
-  "ddf": "pattern.static.image_AnimatedGif"
+  "ddf": "pattern.timed.basic_Interpolation"
 }
 
 SUPER_PATTERN_CLASSES = {
   'Pattern', 'StaticPattern', 'TimedPattern'
 }
+
+PATTERN_SAVE_DIR = 'pattern/saved/'
 
 # Returns a pattern class from a name formatted as "module.path_className"
 def loadPatternFromModuleClassName(name):
@@ -25,6 +25,18 @@ def loadPatternFromModuleClassName(name):
   for n, obj in inspect.getmembers(module):
     if inspect.isclass(obj) and issubclass(obj, pattern.Pattern) and obj.__name__ == name.split('_')[1]:
       return obj
+
+# Returns a pattern instance from a saved pattern name
+def loadSavedPattern(beat, patternData):
+  moduleClassName = patternData['__module__'] + '_' + patternData['name']
+  pattern = loadPatternFromModuleClassName(moduleClassName)(beat, patternData['params'])
+  return pattern
+
+def loadSavedPatternFromFilename(beat, fileName):
+  f = open(PATTERN_SAVE_DIR + fileName)
+  data = json.load(f)
+  f.close()
+  return loadSavedPattern(beat, data)
 
 # Returns a map of all the devices to their default pattern classes
 def getDefaultPatterns():
@@ -55,9 +67,18 @@ def getPatternMap():
 
   return pattern_classes
 
-# Loads the pattern map 
+# Loads the pattern map as a JSON string for the web UI
 def getPatternMapJson():
   return json.dumps(getPatternMap(), default=(lambda x: x.__dict__))
+
+def getSavedPatternJson():
+  result = []
+  saveFiles = glob.glob(PATTERN_SAVE_DIR + '*.json')
+  for saveFile in saveFiles:
+    f = open(saveFile)
+    result.append(json.load(f))
+    f.close()
+  return json.dumps(result)
 
 def deepImport(name):
   m = __import__(name)
