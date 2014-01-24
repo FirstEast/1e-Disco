@@ -8,8 +8,13 @@ from PIL import Image
 class AnimatedGif(TimedPattern):
 
   DEFAULT_PARAMS = {
+<<<<<<< HEAD
     'Image Path': 'pattern/images/Megaman Rotating.gif',
     'Resize': True,
+=======
+    'Image Path': 'pattern/images/megaman.gif',
+    'Resize': False,
+>>>>>>> d3ca0d2043c71a78bff79797385c168a171d9d86
     'DesWidth': 48,
     'DesHeight': 24,
     'RateMultiplier': 1.0
@@ -27,15 +32,15 @@ class AnimatedGif(TimedPattern):
     self.image = Image.open(self.params['Image Path'])
     self.params['Rate'] = float(1000 * self.params['RateMultiplier'] / self.image.info['duration'])
     self.frames = []
-    curFrame = self.image
+    lut = self.image.resize((256, 1))
+    lut.putdata(range(256))
+    pally = [el for lst in lut.convert("RGB").getdata() for el in lst]
+    curFrame = self.image.copy()
     while True:
-      if len(self.frames) > 0:
-        curFrame = layerPatterns(self.image, curFrame,
-          self.image.point(lambda x: int(x != self.image.info['transparency']) * 255, 'L'))
-      else:
-        curFrame = self.image.copy()
+      curFrame.putpalette(pally)
+      curFrame.save('frames/' + str(len(self.frames)) + '.png')
       if self.params['Resize']:
-        self.frames.append(curFrame.convert('RGB').resize((self.params['DesWidth'], self.params['DesHeight']), Image.ANTIALIAS))
+        self.frames.append(curFrame.convert('RGB').resize((self.params['DesWidth'], self.params['DesHeight']), Image.NEAREST))
       else:
         self.frames.append(Image.new('RGB',self.image.size))
         self.frames[-1].paste(curFrame, (0, 0))
@@ -43,7 +48,12 @@ class AnimatedGif(TimedPattern):
         self.image.seek(len(self.frames))
       except EOFError:
         break
-    
+      if len(self.frames) > 0 and self.image.dispose == None:
+        curFrame = layerPatterns(self.image, curFrame,
+          self.image.point(lambda x: int(x != self.image.info['transparency']) * 255, 'L'))
+      else:
+        curFrame = self.image.copy()
+
   def renderFrame(self, device, frameCount):
     frameCount %= len(self.frames)
     if device.name == 'goodale':
@@ -55,9 +65,17 @@ class AnimatedGif(TimedPattern):
       im.paste(self.frames[frameCount], (0, 0))
       return im
 
+class AnimGif2(AnimatedGif):
+  DEFAULT_PARAMS = {}
+  DEFAULT_PARAMS.update(AnimatedGif.DEFAULT_PARAMS)
+  DEFAULT_PARAMS.update({
+    'Image Path': 'pattern/images/nyan.gif',
+    'Resize': True
+  })
+
 class StaticImage(StaticPattern):
   DEFAULT_PARAMS = {
-    'Image Path': 'pattern/images/StarSprite.png'
+    'Image Path': 'pattern/images/1Emask.png'
   }
 
   def renderFrame(self, device):
