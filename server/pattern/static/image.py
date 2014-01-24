@@ -8,13 +8,8 @@ from PIL import Image
 class AnimatedGif(TimedPattern):
 
   DEFAULT_PARAMS = {
-<<<<<<< HEAD
-    'Image Path': 'pattern/images/Megaman Rotating.gif',
-    'Resize': True,
-=======
     'Image Path': 'pattern/images/megaman.gif',
     'Resize': False,
->>>>>>> d3ca0d2043c71a78bff79797385c168a171d9d86
     'DesWidth': 48,
     'DesHeight': 24,
     'RateMultiplier': 1.0
