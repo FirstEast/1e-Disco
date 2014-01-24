@@ -7,7 +7,7 @@ from pattern.importer import *
 from pattern.static.shapes import Circle
 from pattern.static.solid import *
 
-from PIL import Image, ImageChops
+from PIL import Image, ImageChops, ImageEnhance
 
 BASS = (0, 8)
 
@@ -112,7 +112,7 @@ class PulsingCircle(Pattern):
 
   DEFAULT_PARAMS = {
     'Circle Pattern': 'default_circle.json',
-    'Max Pulse': 24,
+    'Max Pulse': DDF_HEIGHT,
     'Frequency Band Start': BASS[0],
     'Frequency Band End': BASS[1]
   }
@@ -137,27 +137,25 @@ class PulsingCircle(Pattern):
     self.circlePattern.setParam('Radius', val)
     return self.circlePattern.render(device)
 
-# WILL FIX
-#
-# class FadingPulsingCircle(Pattern):
-#   DEFAULT_PARAMS = {
-#     'Pulsing Circle Pattern': 'default_pulsingCircle.json',
-#   }
+class FadingPulsingCircle(Pattern):
+  DEFAULT_PARAMS = {
+    'Pulsing Circle Pattern': 'default_pulsingCircle.json',
+  }
 
-#   USE_BEAT = True
+  USE_BEAT = True
 
-#   DEVICES = ['ddf']
+  DEVICES = ['ddf']
 
-#   def paramUpdate(self):
-#     self.circlePattern = loadSavedPatternFromFilename(self.beat, self.params['Pulsing Circle Pattern'])    
-#     self.originalColor = self.circlePattern.params['Circle Color']
+  def paramUpdate(self):
+    self.circlePattern = loadSavedPatternFromFilename(self.beat, self.params['Pulsing Circle Pattern'])    
 
-#   def render(self, device):
-#     total = getSummedFreqData(self.beat, self.circlePattern.params['Frequency Band Start'], self.circlePattern.params['Frequency Band End'])
-#     circleColor = self.originalColor * total
-#     self.circlePattern.setParam('Circle Color', circleColor)
+  def render(self, device):
+    total = getSummedFreqData(self.beat, self.circlePattern.params['Frequency Band Start'], self.circlePattern.params['Frequency Band End'])
+    pattern = self.circlePattern.render(device)
+    enhancer = ImageEnhance.Brightness(pattern)
+    pattern = enhancer.enhance(total)
 
-#     return self.circlePattern.render(device)
+    return pattern
 
 class ColorPulsingCircle(Pattern):
   DEFAULT_PARAMS = {

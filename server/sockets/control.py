@@ -6,7 +6,6 @@ from pattern.util import *
 
 import json
 import traceback
-import os
 
 # HACK: create mock devices since render requires a device (instead of using the socket)
 class MockDevice():
