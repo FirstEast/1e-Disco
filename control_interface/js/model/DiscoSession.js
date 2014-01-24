@@ -8,6 +8,8 @@
         this.mockDiscoModel = new com.firsteast.DiscoModel();
         this.patternList = new Backbone.Collection();
         this.patternList.model = com.firsteast.PatternModel;
+        this.savedPatternList = new Backbone.Collection();
+        this.savedPatternList.model = com.firsteast.PatternModel;
         this.outputDeviceModel = new Backbone.Model();
         _ref = com.firsteast.OUTPUT_DEVICES;
         for (_i = 0, _len = _ref.length; _i < _len; _i++) {

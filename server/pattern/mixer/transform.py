@@ -1,26 +1,75 @@
 from pattern.color import *
 from pattern.pattern import *
+from pattern.importer import *
 from pattern.static.shapes import *
+from sockets.control import MOCK_DEVICES
 from PIL import Image, ImageDraw, ImageFilter
 
+import math
 import inspect
+
+class RingsMaker(Pattern):
+  DEFAULT_PARAMS = {
+    'Pattern': 'sliding_rainbow.json',
+    'Size': 20,
+    'Rate': 5
+  }
+
+  def paramUpdate(self):
+    self.pattern = loadSavedPatternFromFilename(self.beat, self.params['Pattern'])
+    if 'Rate' in self.pattern.params: self.pattern.params['Rate'] *= self.params['Rate']
+
+  def render(self, device):
+    array = list(self.pattern.render(MOCK_DEVICES['goodale']).getdata())
+    ret = Image.new('RGB', (device.width, device.height))
+    ret.putdata([array[int(len(array) * math.sqrt(y*y + x*x) / (self.params['Size'])) % len(array)]
+      for y in range(-(device.height/2), (device.height + 1)/2)
+      for x in range(-(device.width/2), (device.width + 1)/2)])
+    return ret
+
+class RadarMaker(Pattern):
+  DEFAULT_PARAMS = {
+    'Pattern': 'sliding_rainbow.json',
+    'Rate': 5
+  }
+
+  def paramUpdate(self):
+    self.pattern = loadSavedPatternFromFilename(self.beat, self.params['Pattern'])
+    if 'Rate' in self.pattern.params: self.pattern.params['Rate'] *= self.params['Rate']
+
+  def render(self, device):
+    array = list(self.pattern.render(MOCK_DEVICES['goodale']).getdata())
+    ret = Image.new('RGB', (device.width, device.height))
+    ret.putdata([array[int(len(array) * math.atan2(y, x) / (2 * math.pi))]
+      for y in range(-(device.height/2), (device.height + 1)/2)
+      for x in range(-(device.width/2), (device.width + 1)/2)])
+    return ret
+
+class TrippyAsFuck(Pattern):
+  def paramUpdate(self):
+    self.pattern = loadSavedPatternFromFilename(self.beat, 'sliding_rainbow.json')
+
+  def render(self, device):
+    array = list(self.pattern.render(device).getdata())
+    ret = Image.new('RGB', (device.width, device.height))
+    ret.putdata([array[int(len(array) * math.atan2(y, x) / (2 * math.pi))]
+      for x in range(-(device.width/2), (device.width + 1)/2)
+      for y in range(-(device.height/2), (device.height + 1)/2)])
+    return ret
 
 class Zoom(Pattern):
   DEFAULT_PARAMS = {
-    'Pattern': Line,
+    'Pattern': 'default_line.json',
     'Zoom': 2,
     'Center X': 24,
     'Center Y': 12
   }
 
-  def __init__(self, beat, params):
-    Pattern.__init__(self, beat, params)
-
-    if inspect.isclass(self.params['Pattern']):
-      self.params['Pattern'] = self.params['Pattern'](beat, {})
+  def paramUpdate(self):
+    self.pattern = loadSavedPatternFromFilename(self.beat, self.params['Pattern'])
 
   def render(self, device):
-    im = self.params['Pattern'].render(device)
+    im = self.pattern.render(device)
     im2 = im.resize((device.width * 2, device.height * 2), Image.ANTIALIAS)
 
     width, height = im2.size
@@ -34,18 +83,15 @@ class Zoom(Pattern):
 
 class Rotate(Pattern):
   DEFAULT_PARAMS = {
-    'Pattern': Line,
+    'Pattern': 'default_line.json',
     'Angle': 120
   }
 
-  def __init__(self, beat, params):
-    Pattern.__init__(self, beat, params)
-
-    if inspect.isclass(self.params['Pattern']):
-      self.params['Pattern'] = self.params['Pattern'](beat, {})
+  def paramUpdate(self):
+    self.pattern = loadSavedPatternFromFilename(self.beat, self.params['Pattern'])
 
   def render(self, device):
-    im = self.params['Pattern'].render(device)
+    im = self.pattern.render(device)
     im = im.rotate(self.params['Angle'], expand=False).filter(ImageFilter.SMOOTH)
 
     return im

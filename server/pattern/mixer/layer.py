@@ -20,8 +20,9 @@ def layerPatterns(top, bottom, mask = -1, flip = True): # by default, mask's bla
       newData.append(botData[i])
     else:
       newData.append(topData[i])
-  bottom.putdata(newData)
-  return bottom
+  ret = bottom.copy()
+  ret.putdata(newData)
+  return ret
 
 def maskPatterns(mask, patternImg): # mask's light is what to keep
   mask = mask.convert('L')
@@ -29,62 +30,55 @@ def maskPatterns(mask, patternImg): # mask's light is what to keep
 
 class LayerPattern(Pattern):
   DEFAULT_PARAMS = {
-    'LayerClasses': (Circle, LinearRainbow),
-    'Params': ({}, {})
+    'Top': 'default_circle.json',
+    'Bottom': 'default_interpolation.json'
   }
 
   def __init__(self, beat, params):
     Pattern.__init__(self, beat, params)
-    self.params['Layers'] = []
-    for i in range(len(self.params['LayerClasses'])):
-       clazz = self.params['LayerClasses'][i]
-       if inspect.isclass(clazz):
-         self.params['Layers'].append(clazz(beat, self.params['Params'][i]))
-       else:
-         print "Error initializing LayerPattern: LayerClasses parameter must contain only classes"
+    self.topPattern = loadSavedPatternFromFilename(self.beat, self.params['Top'])
+    self.botPattern = loadSavedPatternFromFilename(self.beat, self.params['Bottom'])
 
   def render(self, device):
-    current = self.params['Layers'][0].render(device)
-    for layer in self.params['Layers'][1:]:
-      current = layerPatterns(current, layer.render(device))
-    return current
+    return layerPatterns(self.topPattern.render(device), self.botPattern.render(device))
 
 class MaskPattern(Pattern):
   DEFAULT_PARAMS = {
-    'Mask': Circle,
-    'MaskParams': {},
-    'Pattern': LinearRainbow,
-    'PatternParams': {}
+    'Mask': 'default_circle.json',
+    'Pattern': 'default_linrainbow.json',
   }
 
-  def __init__(self, beat, params):
-    Pattern.__init__(self, beat, params)
-
-    if inspect.isclass(self.params['Mask']):
-      self.params['Mask'] = self.params['Mask'](beat, self.params['MaskParams'])
-
-    if inspect.isclass(self.params['Pattern']):
-      self.params['Pattern'] = self.params['Pattern'](beat, self.params['PatternParams'])
+  def paramUpdate(self):
+    self.maskPattern = loadSavedPatternFromFilename(self.beat, self.params['Mask'])
+    self.bottomPattern = loadSavedPatternFromFilename(self.beat, self.params['Pattern'])
 
   def render(self, device):
-    mask = self.params['Mask'].render(device)
-    patternImg = self.params['Pattern'].render(device)
+    mask = self.maskPattern.render(device)
+    patternImg = self.bottomPattern.render(device)
     return maskPatterns(mask, patternImg)
 
 class Adding(Pattern):
-  def __init__(self, beat, params):
-    Pattern.__init__(self, beat, params)
-    self.p1 = SolidColor(beat, {})
-    self.p2 = SolidColor(beat, {'Color': GREEN})
+  DEFAULT_PARAMS = {
+    'Pattern 1': 'default_circle.json',
+    'Pattern 2': 'default_interpolation.json',
+  }
+
+  def paramUpdate(self):
+    self.p1 = loadSavedPatternFromFilename(self.beat, self.params['Pattern 1'])
+    self.p2 = loadSavedPatternFromFilename(self.beat, self.params['Pattern 2'])
   
   def render(self, device):
     return ImageChops.add(self.p1.render(device), self.p2.render(device))
 
 class Subtracting(Pattern):
-  def __init__(self, beat, params):
-    Pattern.__init__(self, beat, params)
-    self.p1 = SolidColor(beat, {'Color': WHITE})
-    self.p2 = SolidColor(beat, {'Color': GREEN})
+  DEFAULT_PARAMS = {
+    'Pattern 1': 'default_circle.json',
+    'Pattern 2': 'default_interpolation.json',
+  }
+
+  def paramUpdate(self):
+    self.p1 = loadSavedPatternFromFilename(self.beat, self.params['Pattern 1'])
+    self.p2 = loadSavedPatternFromFilename(self.beat, self.params['Pattern 2'])
   
   def render(self, device):
     return ImageChops.subtract(self.p1.render(device), self.p2.render(device))

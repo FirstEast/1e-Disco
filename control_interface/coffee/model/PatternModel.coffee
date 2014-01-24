@@ -14,4 +14,7 @@ do ->
 
       # Actual pattern settings
       params: {}
+
+      # Saved pattern stuff
       saved: false
+      saveName: ''

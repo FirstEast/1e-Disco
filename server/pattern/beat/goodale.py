@@ -5,8 +5,8 @@ from pattern.util import *
 class VolumePulse(Pattern):
 
   DEFAULT_PARAMS = {
-    'color1': RED,
-    'color2': BLUE,
+    'Pulse Color 1': RED,
+    'Pulse Color 2': BLUE,
   }
 
   USE_BEAT = True
@@ -17,7 +17,7 @@ class VolumePulse(Pattern):
     vol = min(self.beat.avgVolume, 1.0)
 
     centroid = self.beat.avgCentroid
-    centroidColor = getWeightedColorSum(self.params['color1'], self.params['color2'], centroid)
+    centroidColor = getWeightedColorSum(self.params['Pulse Color 1'], self.params['Pulse Color 2'], centroid)
     emptyColor = centroidColor.getComplimentaryColor().getRGBValues()
     centroidColor = centroidColor.getRGBValues()
 

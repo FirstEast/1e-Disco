@@ -10,6 +10,8 @@ do ->
       for device in com.firsteast.OUTPUT_DEVICES
         @listenTo @session.realDiscoModel, "change:#{device}Pattern", _.partial(@_setRealPattern, "#{device}")
 
+      @listenTo @session.savedPatternList, 'add', @_savePattern
+
     _initializeSocket: =>
       @socket = new WebSocket("ws://#{com.firsteast.WEBSOCKET_URL}:#{com.firsteast.WEBSOCKET_PORT}/")
       @socket.onmessage = @_parseMessage
@@ -18,7 +20,8 @@ do ->
       data = JSON.parse(message.data)
       if data.type == 'init'
         @_buildPatternList(JSON.parse(data.patternListData))
-        @_sendMessage {type: 'render'}
+        @_buildSavedPatternList(JSON.parse(data.savedPatternListData))
+        @_sendMessage {type: 'render'} 
       else if data.type == 'render'
         @_handleRender(data.renderData)
         @_sendMessage {type: 'render'}
@@ -33,6 +36,9 @@ do ->
         val.name = key
         patterns.push(val)
       @session.patternList.reset(patterns)
+
+    _buildSavedPatternList: (patternList) =>
+      @session.savedPatternList.reset(patternList)
 
     _handleRender: (renderData) =>
       @session.realDiscoModel.set('frames', renderData.real)
@@ -52,6 +58,13 @@ do ->
 
         if not @session.mockDiscoModel.get(device + 'Pattern')?
           @session.mockDiscoModel.set(device + 'Pattern', new com.firsteast.PatternModel($.extend(true, {}, actualPattern.attributes)))
+
+    _savePattern: (pattern) =>
+      data = {
+        type: 'savePattern'
+        patternData: pattern.attributes
+      }
+      @_sendMessage(data)
 
     _setRealPattern: (device) =>
       data = {

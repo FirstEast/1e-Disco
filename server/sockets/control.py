@@ -76,11 +76,18 @@ class DiscoControlProtocol(WebSocketServerProtocol):
 
   def setPattern(self, deviceName, patternData, patternModel):
     if patternData['saved']:
-      pattern = loadSavedPattern(patternData)
+      pattern = loadSavedPattern(self.factory.discoSession.beatModel, patternData)
     else:
       patternClass = loadPatternFromModuleClassName(patternData['__module__'] + '_' + patternData['name'])
       pattern = patternClass(self.factory.discoSession.beatModel, patternData['params'])
     patternModel[deviceName] = pattern
+
+  def savePattern(self, patternData):
+    name = str(patternData['saveName'])
+
+    f = open(PATTERN_SAVE_DIR + name + '.json','w')
+    json.dump(patternData, f)
+    f.close()
 
   def getCurrentDeviceData(self):
     data = {
@@ -119,6 +126,7 @@ class DiscoControlProtocol(WebSocketServerProtocol):
     message = {
       'type': 'init',
       'patternListData': getPatternMapJson(),
+      'savedPatternListData': getSavedPatternJson()
     }
     self.sendMessage(json.dumps(message, default=(lambda x: x.__dict__)))
 

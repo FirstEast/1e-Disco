@@ -3,9 +3,11 @@ do ->
     className: 'patternSelector'
     events:
       'change select': '_changeSelected'
+      'click .save-button': '_savePattern'
 
     initialize: (options) =>
       @patternList = options.patternList
+      @savedPatternList = options.savedPatternList
       @discoModel = options.discoModel
       @device  = options.device
 
@@ -28,3 +30,12 @@ do ->
       pattern = @patternList.where({name: name})[0].attributes
       pattern = $.extend(true, {}, pattern)
       @discoModel.set("#{@device}Pattern", new com.firsteast.PatternModel(pattern))
+
+    _savePattern: =>
+      saveName = @$('.save-name-input').val()
+      pattern = @discoModel.get("#{@device}Pattern").attributes
+      pattern = $.extend(true, {}, pattern)
+      pattern.saved = true
+      pattern.saveName = saveName
+      patternModel = new com.firsteast.PatternModel(pattern)
+      @savedPatternList.add(patternModel)

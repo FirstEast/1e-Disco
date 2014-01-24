@@ -22,7 +22,8 @@
           DEVICES: com.firsteast.OUTPUT_DEVICES,
           DEFAULT_PARAMS: {},
           params: {},
-          saved: false
+          saved: false,
+          saveName: ''
         };
       };
 

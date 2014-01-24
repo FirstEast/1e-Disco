@@ -55,6 +55,7 @@
       selector = new com.firsteast.PatternSelector({
         discoModel: session.realDiscoModel,
         patternList: session.patternList,
+        savedPatternList: session.savedPatternList,
         device: device
       });
       selector.render();
