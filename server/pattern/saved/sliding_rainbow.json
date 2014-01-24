@@ -1,0 +1,1 @@
+{"USE_BEAT": false, "__module__": "pattern.timed.basic", "renderFrame": {}, "name": "MovingAnything", "paramUpdate": {}, "saveName": "sliding_rainbow", "DEVICES": ["ddf", "goodale", "bemis"], "params": {}, "DEFAULT_PARAMS": {"X Rate": 1, "Base Pattern": "default_linrainbow.json", "Rate": 30, "Y Rate": 0}, "saved": true, "__doc__": null}

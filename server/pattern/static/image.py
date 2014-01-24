@@ -8,7 +8,7 @@ from PIL import Image
 class AnimatedGif(TimedPattern):
 
   DEFAULT_PARAMS = {
-    'Image Path': 'pattern/images/megaman.gif',
+    'Image Path': 'pattern/images/Pac Man DDF2.gif',
     'Resize': False,
     'DesWidth': 48,
     'DesHeight': 24,
@@ -33,7 +33,6 @@ class AnimatedGif(TimedPattern):
     curFrame = self.image.copy()
     while True:
       curFrame.putpalette(pally)
-      curFrame.save('frames/' + str(len(self.frames)) + '.png')
       if self.params['Resize']:
         self.frames.append(curFrame.convert('RGB').resize((self.params['DesWidth'], self.params['DesHeight']), Image.NEAREST))
       else:

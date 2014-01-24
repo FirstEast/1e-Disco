@@ -16,7 +16,7 @@ class LinearRainbow(StaticPattern):
   DEFAULT_PARAMS = {
     'Horizontal': True,
     'StartHue': 0.0,
-    'EndHue': 1.0
+    'EndHue': 1.0,
   } # Hues can and should go above 1 if you want wrapping.
 
   def renderFrame(self, device):

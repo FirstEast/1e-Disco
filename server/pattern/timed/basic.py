@@ -1,6 +1,7 @@
 from pattern.color import *
 from pattern.pattern import *
 from pattern.util import *
+from pattern.importer import loadSavedPatternFromFilename
 
 class Interpolation(TimedPattern):
 
@@ -22,6 +23,22 @@ class Interpolation(TimedPattern):
     im = Image.new('RGB', (device.width, device.height))
     im.putdata(frame)
     return im
+
+class MovingAnything(TimedPattern):
+  DEFAULT_PARAMS = {
+    'Base Pattern': 'default_linrainbow.json',
+    'X Rate': 1.0,
+    'Y Rate': 0.0
+  }
+
+  DEFAULT_PARAMS.update(TimedPattern.DEFAULT_PARAMS)
+
+  def paramUpdate(self):
+    self.base = loadSavedPatternFromFilename(self.beat, self.params['Base Pattern'])
+
+  def renderFrame(self, device, frameCount):
+    return self.base.render(device).offset(int(self.params['X Rate'] * frameCount),
+                                           int(self.params['Y Rate'] * frameCount))
 
 class MovingLight(TimedPattern):
 

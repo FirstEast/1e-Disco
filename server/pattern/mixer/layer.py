@@ -30,30 +30,22 @@ def maskPatterns(mask, patternImg): # mask's light is what to keep
 
 class LayerPattern(Pattern):
   DEFAULT_PARAMS = {
-    'LayerClasses': (Circle, LinearRainbow),
-    'Params': ({}, {})
+    'Top': 'default_circle.json',
+    'Bottom': 'default_interpolation.json'
   }
 
   def __init__(self, beat, params):
     Pattern.__init__(self, beat, params)
-    self.params['Layers'] = []
-    for i in range(len(self.params['LayerClasses'])):
-       clazz = self.params['LayerClasses'][i]
-       if inspect.isclass(clazz):
-         self.params['Layers'].append(clazz(beat, self.params['Params'][i]))
-       else:
-         print "Error initializing LayerPattern: LayerClasses parameter must contain only classes"
+    self.topPattern = loadSavedPatternFromFilename(self.beat, self.params['Top'])
+    self.botPattern = loadSavedPatternFromFilename(self.beat, self.params['Bottom'])
 
   def render(self, device):
-    current = self.params['Layers'][0].render(device)
-    for layer in self.params['Layers'][1:]:
-      current = layerPatterns(current, layer.render(device))
-    return current
+    return layerPatterns(self.topPattern.render(device), self.botPattern.render(device))
 
 class MaskPattern(Pattern):
   DEFAULT_PARAMS = {
     'Mask': 'default_circle.json',
-    'Pattern': 'default_interpolation.json',
+    'Pattern': 'default_linrainbow.json',
   }
 
   def paramUpdate(self):
