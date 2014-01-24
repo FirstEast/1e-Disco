@@ -20,8 +20,9 @@ def layerPatterns(top, bottom, mask = -1, flip = True): # by default, mask's bla
       newData.append(botData[i])
     else:
       newData.append(topData[i])
-  bottom.putdata(newData)
-  return bottom
+  ret = bottom.copy()
+  ret.putdata(newData)
+  return ret
 
 def maskPatterns(mask, patternImg): # mask's light is what to keep
   mask = mask.convert('L')
