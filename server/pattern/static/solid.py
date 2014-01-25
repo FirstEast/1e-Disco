@@ -46,5 +46,5 @@ class LinearRainbow(StaticPattern):
     colorArr = [Color((hue, 1, 255), True).getRGBValues() for hue in huerange]
     im = Image.new('RGB', (wid, hei))
     im.putdata(colorArr * hei)
-    if not self.params['Horizontal']: im = im.transpose(ROTATE_270).transpose(FLIP_LEFT_RIGHT)
+    if not self.params['Horizontal']: im = im.transpose(Image.ROTATE_270).transpose(Image.FLIP_LEFT_RIGHT)
     return im

@@ -44,7 +44,7 @@
         {{#each ../parameters}}
           <span>{{name}}: </span>
           {{#if type}}
-            <input class="param-input" type="{{type}}" value="{{val}}" name="{{name}}" checked="{{val}}"></input>
+            <input class="param-input" type="{{type}}" value="{{val}}" name="{{name}}" {{#if val}}checked="checked"{{/if}}></input>
           {{else}}
             {{#if pattern}}
             <select class="param-input" name="{{name}}" data-type="pattern">
