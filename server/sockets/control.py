@@ -3,6 +3,7 @@ from autobahn.twisted.websocket import WebSocketServerProtocol, \
 
 from pattern.importer import *
 from pattern.util import *
+from pattern.color import *
 
 import json
 import traceback
@@ -20,6 +21,21 @@ MOCK_DEVICES = {
   'goodale': MockDevice('goodale', GOODALE_WIDTH, GOODALE_HEIGHT),
   'bemis': MockDevice('bemis', BEMIS_WIDTH, BEMIS_HEIGHT)
 }
+
+def is_number(s):
+  try:
+    float(s)
+    return True
+  except ValueError:
+    return False
+
+def sanitizeParams(params):
+  for key, value in params.iteritems():
+    if type(value) == dict and 'RGBValues' in value:
+      params[key] = Color((value['RGBValues']))
+    elif is_number(value):
+      params[key] = int(value)
+  return params
 
 class DiscoControlProtocol(WebSocketServerProtocol):
   def onOpen(self):
@@ -79,7 +95,7 @@ class DiscoControlProtocol(WebSocketServerProtocol):
       pattern = loadSavedPattern(self.factory.discoSession.beatModel, patternData)
     else:
       patternClass = loadPatternFromModuleClassName(patternData['__module__'] + '_' + patternData['name'])
-      pattern = patternClass(self.factory.discoSession.beatModel, patternData['params'])
+      pattern = patternClass(self.factory.discoSession.beatModel, sanitizeParams(patternData['params']))
     patternModel[deviceName] = pattern
 
   def savePattern(self, patternData):
@@ -150,7 +166,6 @@ class DiscoControlProtocol(WebSocketServerProtocol):
       'renderData': self.getRenderFrames(),
     }
     self.sendMessage(json.dumps(message, default=(lambda x: x.__dict__)), binary)
-
 
 class DiscoControlSocketFactory(WebSocketServerFactory):
   def __init__(self, url, discoSession, debug = False, debugCodePaths = False):

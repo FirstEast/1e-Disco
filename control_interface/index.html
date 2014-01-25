@@ -29,11 +29,41 @@
   </head>
 
   <script id="ddf-debug-template" type="text/x-handlebars-template">
-    <select>
+    <select class="class-patterns">
       {{#each patterns}}
       <option value="{{attributes.name}}">{{attributes.name}}</option>
       {{/each}}
     </select>
+    <select class="saved-patterns">
+      {{#each savedPatterns}}
+      <option value="{{attributes.saveName}}">{{attributes.saveName}}</option>
+      {{/each}}
+    </select>
+    <div class="params">
+      {{#unless currentPattern.saved}}
+        {{#each ../parameters}}
+          <span>{{name}}: </span>
+          {{#if type}}
+            <input class="param-input" type="{{type}}" value="{{val}}" name="{{name}}" checked="{{val}}"></input>
+          {{else}}
+            {{#if pattern}}
+            <select class="param-input" name="{{name}}" data-type="pattern">
+              {{#each ../../../savedPatterns}}
+              <option value="{{attributes.saveName}}">{{attributes.saveName}}</option>
+              {{/each}}
+            </select>
+            {{/if}}
+            {{#if gif}}
+            <span>GIF TODO</span>
+            {{/if}}
+            {{#if image}}
+            <span>IMAGE TODO</span>
+            {{/if}}
+          {{/if}}
+          <br/>
+        {{/each}}
+      {{/unless}}
+    </div>
     <input type=text class="save-name-input"></input>
     <button class="save-button">Save Pattern</button>
   </script>

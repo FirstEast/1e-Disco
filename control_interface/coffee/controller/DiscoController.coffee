@@ -7,9 +7,6 @@ do ->
 
       @_initializeSocket()
 
-      for device in com.firsteast.OUTPUT_DEVICES
-        @listenTo @session.realDiscoModel, "change:#{device}Pattern", _.partial(@_setRealPattern, "#{device}")
-
       @listenTo @session.savedPatternList, 'add', @_savePattern
 
     _initializeSocket: =>
@@ -52,12 +49,17 @@ do ->
       patterns = {}
       mockPatterns = {}
       for device, obj of realPatternData.realPatternClasses
-        obj.params = realPatternData.realPatternParams[device]
         actualPattern = @session.patternList.where({name: obj})[0]
-        @session.realDiscoModel.set(device + 'Pattern', new com.firsteast.PatternModel(actualPattern.attributes))
+        attributes = $.extend(true, {}, actualPattern.attributes)
+        attributes.params = realPatternData.realPatternParams[device]
+        @session.realDiscoModel.set(device + 'Pattern', new com.firsteast.PatternModel(attributes))
 
         if not @session.mockDiscoModel.get(device + 'Pattern')?
-          @session.mockDiscoModel.set(device + 'Pattern', new com.firsteast.PatternModel($.extend(true, {}, actualPattern.attributes)))
+          @session.mockDiscoModel.set(device + 'Pattern', new com.firsteast.PatternModel($.extend(true, {}, attributes)))
+
+      # We have never had patterns before. Time to bind our listeners.
+      for device in com.firsteast.OUTPUT_DEVICES
+        @listenTo @session.realDiscoModel, "change:#{device}Pattern", _.partial(@_setRealPattern, "#{device}")
 
     _savePattern: (pattern) =>
       data = {
@@ -73,6 +75,9 @@ do ->
         patternData: @session.realDiscoModel.get(device + 'Pattern').attributes
       }
       @_sendMessage(data)
+
+    _updateRealPatternParams: (device) =>
+      console.log @session.realDiscoModel.get(device + 'Pattern').attributes.params
 
     _sendMessage: (data) =>
       msg = JSON.stringify(data)

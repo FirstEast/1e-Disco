@@ -123,7 +123,7 @@ class TimedPattern(Pattern):
     self.startTime = time.time() * 1000
 
   def getFrameCount(self):
-    return int((time.time() * 1000 - self.startTime) / float(1000 / self.params['Rate']))
+    return int((time.time() * 1000 - self.startTime) / float(1000 / int(self.params['Rate'])))
 
   def renderFrame(self, device, frameCount):
     pass

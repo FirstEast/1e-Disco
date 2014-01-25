@@ -6,16 +6,18 @@ from pattern.importer import loadSavedPatternFromFilename
 class Interpolation(TimedPattern):
 
   DEFAULT_PARAMS = {
-    'Colors': [RED, GREEN, BLUE],
+    'Color 1': RED,
+    'Color 2': GREEN,
+    'Color 3': BLUE,
   }
 
   DEFAULT_PARAMS.update(TimedPattern.DEFAULT_PARAMS)
 
   def paramUpdate(self):
     self.loop = []
-    colors = self.params['Colors'] + [self.params['Colors'][0]]
-    for i in range(len(self.params['Colors'])):
-      self.loop += interpolateColors(colors[i], colors[i+1])
+    self.loop += interpolateColors(self.params['Color 1'], self.params['Color 2'])
+    self.loop += interpolateColors(self.params['Color 2'], self.params['Color 3'])
+    self.loop += interpolateColors(self.params['Color 3'], self.params['Color 1'])
 
   def renderFrame(self, device, frameCount):
     count = frameCount % len(self.loop)
