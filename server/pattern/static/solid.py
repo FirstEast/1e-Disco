@@ -2,6 +2,22 @@ from pattern.color import *
 from pattern.pattern import *
 from PIL import Image, ImageChops
 
+class Checkerboard(StaticPattern):
+  DEFAULT_PARAMS = {
+    'Color 1': BLACK,
+    'Color 2': WHITE,
+    'Grain': 3,
+    'Offset': False
+  }
+
+  def renderFrame(self, device):
+    im = Image.new('RGB', (device.width, device.height))
+    im.putdata([self.params['Color 1'].getRGBValues()
+      if ((y / self.params['Grain'] % 2) != (x / self.params['Grain'] % 2)) != self.params['Offset']
+      else self.params['Color 2'].getRGBValues()
+      for y in range(device.height) for x in range(device.width)])
+    return im
+
 class SolidColor(StaticPattern):
   DEFAULT_PARAMS = {
     'Color': BLUE

@@ -31,16 +31,22 @@ def maskPatterns(mask, patternImg): # mask's light is what to keep
 class LayerPattern(Pattern):
   DEFAULT_PARAMS = {
     'Top': 'default_circle.json',
-    'Bottom': 'default_interpolation.json'
+    'Bottom': 'default_interpolation.json',
+    'Mask': 'masks_1e.json',
+    'UseMask': False
   }
 
   def __init__(self, beat, params):
     Pattern.__init__(self, beat, params)
     self.topPattern = loadSavedPatternFromFilename(self.beat, self.params['Top'])
     self.botPattern = loadSavedPatternFromFilename(self.beat, self.params['Bottom'])
+    if self.params['UseMask']: self.maskPattern = loadSavedPatternFromFilename(self.beat, self.params['Mask'])
 
   def render(self, device):
-    return layerPatterns(self.topPattern.render(device), self.botPattern.render(device))
+    if self.params['UseMask']:
+      return layerPatterns(self.topPattern.render(device), self.botPattern.render(device), self.maskPattern.render(device))
+    else:
+      return layerPatterns(self.topPattern.render(device), self.botPattern.render(device))
 
 class MaskPattern(Pattern):
   DEFAULT_PARAMS = {

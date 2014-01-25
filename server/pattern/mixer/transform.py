@@ -12,7 +12,9 @@ class RingsMaker(Pattern):
   DEFAULT_PARAMS = {
     'Pattern': 'sliding_rainbow.json',
     'Size': 20,
-    'Rate': 5
+    'Rate': 5,
+    'CenterX': 24,
+    'CenterY': 12
   }
 
   def paramUpdate(self):
@@ -23,14 +25,16 @@ class RingsMaker(Pattern):
     array = list(self.pattern.render(MOCK_DEVICES['goodale']).getdata())
     ret = Image.new('RGB', (device.width, device.height))
     ret.putdata([array[int(len(array) * math.sqrt(y*y + x*x) / (self.params['Size'])) % len(array)]
-      for y in range(-(device.height/2), (device.height + 1)/2)
-      for x in range(-(device.width/2), (device.width + 1)/2)])
+      for y in range(-self.params['CenterY'], device.height - self.params['CenterY'])
+      for x in range(-self.params['CenterX'], device.width - self.params['CenterX'])])
     return ret
 
 class RadarMaker(Pattern):
   DEFAULT_PARAMS = {
     'Pattern': 'sliding_rainbow.json',
-    'Rate': 5
+    'Rate': 5,
+    'CenterX': 24,
+    'CenterY': 12
   }
 
   def paramUpdate(self):
@@ -41,8 +45,8 @@ class RadarMaker(Pattern):
     array = list(self.pattern.render(MOCK_DEVICES['goodale']).getdata())
     ret = Image.new('RGB', (device.width, device.height))
     ret.putdata([array[int(len(array) * math.atan2(y, x) / (2 * math.pi))]
-      for y in range(-(device.height/2), (device.height + 1)/2)
-      for x in range(-(device.width/2), (device.width + 1)/2)])
+      for y in range(-self.params['CenterY'], device.height - self.params['CenterY'])
+      for x in range(-self.params['CenterX'], device.width - self.params['CenterX'])])
     return ret
 
 class TrippyAsFuck(Pattern):
