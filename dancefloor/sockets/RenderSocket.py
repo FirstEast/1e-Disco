@@ -11,14 +11,17 @@ from pp_herder import PPHerder
 NUM_MODULES = 6
 PIX_PER_MODULE = 192
 LENGTH = NUM_MODULES * PIX_PER_MODULE
-DDF_ARRAY = numpy.arange(LENGTH*3).reshape(NUM_MODULES, PIX_PER_MODULE, 3)
-DDF_INDEX = {key: tuple(value) for key in range(LENGTH*3) for value in numpy.argwhere(DDF_ARRAY==key)}
+# DDF_ARRAY = numpy.arange(LENGTH*3).reshape(NUM_MODULES, PIX_PER_MODULE, 3)
+# DDF_INDEX = {key: tuple(value) for key in range(LENGTH*3) for value in numpy.argwhere(DDF_ARRAY==key)}
 
 class RenderSocket(Protocol):
   def __init__(self):
     self.pixelpusher = False
     self.shepherd = PPHerder()
-    self.ddf_data = numpy.zeros(LENGTH*3).reshape(NUM_MODULES, PIX_PER_MODULE, 3)
+    # self.ddf_data = numpy.zeros(LENGTH*3).reshape(NUM_MODULES, PIX_PER_MODULE, 3)
+    # ddf_data variable is a dictionary, where the key is the module number ("strip"
+    # number on pixelpusher), and the value is the data for that module.
+    self.ddf_data = {key: numpy.zeros(PIX_PER_MODULE*3).reshape(PIX_PER_MODULE, 3) for key in range(6)}
 
     callback = lambda device: device.start_updates_with_source(self.render)
     self.shepherd.add_callbacks(found=callback)
@@ -61,10 +64,18 @@ class RenderSocket(Protocol):
     # Signal for the next frame
     self.sendMessage("OK")
 
-  def ddfConversion(self, output):
-    ddf_output = numpy.zeros(LENGTH*3).reshape(NUM_MODULES, PIX_PER_MODULE, 3)
-    for i in range(len(output)):
-      ddf_output[DDF_INDEX[i]] = output[i]
+  def update(self, new_data):
+    ddf_output = self.ddfConversion(new_data)
+    self.ddf_data = ddf_output
+
+  # Yes, I know this is really dumb and inefficient. It's 5 AM. I'm sorry.
+  def ddfConversion(self, data):
+    ddf_output = self.ddf_data
+    for i in range(LENGTH):
+      # index = DDF_INDEX[i]
+      module, index = self.unSnake(i)
+      output_data = numpy.reshape(data, (LENGTH, 3))
+      ddf_output[module][index] = output_data[i]
     return ddf_output
 
   def unSnake(self, i): #i is the index of the normal array
@@ -72,18 +83,20 @@ class RenderSocket(Protocol):
     Hm=12 #Height of 1 module
     W=3 #Nb of modules horizontally
     #(module id, index within module)
-    return ((i/(Hm*Wm*W))*W+(i%(Wm*W)/Wm),(i%Wm)*Hm+((((i%Wm)%2)*(-2)+1)*(((i/(Wm*Hm*W))%2)*(-2)+1)-1)/(-2)*(Hm-1)+(((i/(W*Wm))%Hm))*(((i%Wm)%2)*(-2)+1)*(((i/(Wm*Hm*W))%2)*(-2)+1))
-
-  def update(self, new_data):
-    ddf_output = self.ddfConversion(new_data)
-    self.ddf_data = ddf_output
+    module = (i/(Hm*Wm*W))*W+(i%(Wm*W)/Wm)
+    new_index = (i%Wm)*Hm+((((i%Wm)%2)*(-2)+1)*(((i/(Wm*Hm*W))%2)\
+      *(-2)+1)-1)/(-2)*(Hm-1)+(((i/(W*Wm))%Hm))*(((i%Wm)%2)*(-2)+1)*(((i/(Wm*Hm*W))%2)*(-2)+1)
+    if module > 5:
+      print i
+    return module, new_index
 
   def render(self, strip):
     # print "retrieving data for strip " + str(strip)
     # # scale = lambda data: int(0x55 * (data+1) / 2)
     # scale = lambda data: int(data)
     try:
-      intlist = map(int, self.ddf_data[strip].flatten().tolist())
+      module_data = self.ddf_data[strip]
+      intlist = map(int, module_data.flatten().tolist())
       return intlist
     except IndexError:
       print "IndexError"
