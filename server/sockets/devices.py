@@ -13,7 +13,7 @@ class DiscoDeviceReceiver(LineReceiver):
     self.format = format
 
   def sendNextFrame(self):
-    output = [value for color in self.discoSession.getPattern(name).render(self).getdata() for value in color]
+    output = [value for color in self.discoSession.getPattern(self.name).render(self).getdata() for value in color]
     self.sendMessage(struct.pack('B' * len(output), *output))
 
   def connectionMade(self):

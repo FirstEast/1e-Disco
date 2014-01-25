@@ -10,9 +10,6 @@ from pp_herder import PPHerder
 # HEIGHT = 24
 NUM_MODULES = 6
 PIX_PER_MODULE = 192
-# --- FOR TESTING: ---
-# NUM_MODULES = 1
-# PIX_PER_MODULE = 240
 LENGTH = NUM_MODULES * PIX_PER_MODULE
 DDF_ARRAY = numpy.arange(LENGTH*3).reshape(NUM_MODULES, PIX_PER_MODULE, 3)
 DDF_INDEX = {key: tuple(value) for key in range(LENGTH*3) for value in numpy.argwhere(DDF_ARRAY==key)}
@@ -52,7 +49,7 @@ class RenderSocket(Protocol):
     try:
       output = struct.unpack('B'*LENGTH*3, line)
     except struct.error:
-      print "Struct Error"
+      # print "Struct Error"
       self.sendMessage("OK")
       return
 
@@ -82,7 +79,7 @@ class RenderSocket(Protocol):
     self.ddf_data = ddf_output
 
   def render(self, strip):
-    print "retrieving data for strip " + str(strip)
+    # print "retrieving data for strip " + str(strip)
     # # scale = lambda data: int(0x55 * (data+1) / 2)
     # scale = lambda data: int(data)
     try:
