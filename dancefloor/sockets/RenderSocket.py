@@ -70,6 +70,13 @@ class RenderSocket(Protocol):
       ddf_output[DDF_INDEX[i]] = output[i]
     return ddf_output
 
+  def unSnake(self, i): #i is the index of the normal array
+    Wm=16 #Width of 1 module
+    Hm=12 #Height of 1 module
+    W=3 #Nb of modules horizontally
+    #(module id, index within module)
+    return ((i/(Hm*Wm*W))*W+(i%(Wm*W)/Wm),(i%Wm)*Hm+((((i%Wm)%2)*(-2)+1)*(((i/(Wm*Hm*W))%2)*(-2)+1)-1)/(-2)*(Hm-1)+(((i/(W*Wm))%Hm))*(((i%Wm)%2)*(-2)+1)*(((i/(Wm*Hm*W))%2)*(-2)+1))
+
   def update(self, new_data):
     ddf_output = self.ddfConversion(new_data)
     self.ddf_data = ddf_output
