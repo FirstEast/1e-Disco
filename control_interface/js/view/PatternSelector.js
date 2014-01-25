@@ -38,8 +38,8 @@
         this.discoModel = options.discoModel;
         this.device = options.device;
         this.parameters = {};
-        this.listenTo(this.patternList, 'reset', this.render);
-        this.listenTo(this.savedPatternList, 'reset', this.render);
+        this.listenTo(this.patternList, 'add, remove, reset', this.render);
+        this.listenTo(this.savedPatternList, 'add, remove, reset', this.render);
         return this.listenTo(this.discoModel, "change:" + this.device + "Pattern", this.render);
       };
 
