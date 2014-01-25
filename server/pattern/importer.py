@@ -4,6 +4,7 @@ import json
 import glob
 
 import pattern
+from color import *
 
 # Map of device names to default pattern modules
 DEFAULT_PATTERNS = {
@@ -18,6 +19,21 @@ SUPER_PATTERN_CLASSES = {
 
 PATTERN_SAVE_DIR = 'pattern/saved/'
 
+def is_number(s):
+  try:
+    float(s)
+    return True
+  except ValueError:
+    return False
+
+def sanitizeParams(params):
+  for key, value in params.iteritems():
+    if type(value) == dict and 'RGBValues' in value:
+      params[key] = Color((value['RGBValues']))
+    elif is_number(value):
+      params[key] = int(value)
+  return params
+
 # Returns a pattern class from a name formatted as "module.path_className"
 def loadPatternFromModuleClassName(name):
   moduleName = name.split('_')[0]
@@ -29,7 +45,7 @@ def loadPatternFromModuleClassName(name):
 # Returns a pattern instance from a saved pattern name
 def loadSavedPattern(beat, patternData):
   moduleClassName = patternData['__module__'] + '_' + patternData['name']
-  pattern = loadPatternFromModuleClassName(moduleClassName)(beat, patternData['params'])
+  pattern = loadPatternFromModuleClassName(moduleClassName)(beat, sanitizeParams(patternData['params']))
   return pattern
 
 def loadSavedPatternFromFilename(beat, fileName):
