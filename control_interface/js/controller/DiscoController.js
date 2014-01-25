@@ -5,6 +5,7 @@
     return com.firsteast.DiscoController = (function() {
       function DiscoController(options) {
         this._sendMessage = __bind(this._sendMessage, this);
+        this._updateRealPatternParams = __bind(this._updateRealPatternParams, this);
         this._setRealPattern = __bind(this._setRealPattern, this);
         this._savePattern = __bind(this._savePattern, this);
         this._handlePatterns = __bind(this._handlePatterns, this);
@@ -14,15 +15,9 @@
         this._buildPatternList = __bind(this._buildPatternList, this);
         this._parseMessage = __bind(this._parseMessage, this);
         this._initializeSocket = __bind(this._initializeSocket, this);
-        var device, _i, _len, _ref;
         $.extend(this, Backbone.Events);
         this.session = options.session;
         this._initializeSocket();
-        _ref = com.firsteast.OUTPUT_DEVICES;
-        for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-          device = _ref[_i];
-          this.listenTo(this.session.realDiscoModel, "change:" + device + "Pattern", _.partial(this._setRealPattern, "" + device));
-        }
         this.listenTo(this.session.savedPatternList, 'add', this._savePattern);
       }
 
@@ -78,23 +73,27 @@
       };
 
       DiscoController.prototype._handlePatterns = function(realPatternData) {
-        var actualPattern, device, mockPatterns, obj, patterns, _ref, _results;
+        var actualPattern, attributes, device, mockPatterns, obj, patterns, _i, _len, _ref, _ref1, _results;
         patterns = {};
         mockPatterns = {};
         _ref = realPatternData.realPatternClasses;
-        _results = [];
         for (device in _ref) {
           obj = _ref[device];
-          obj.params = realPatternData.realPatternParams[device];
           actualPattern = this.session.patternList.where({
             name: obj
           })[0];
-          this.session.realDiscoModel.set(device + 'Pattern', new com.firsteast.PatternModel(actualPattern.attributes));
+          attributes = $.extend(true, {}, actualPattern.attributes);
+          attributes.params = realPatternData.realPatternParams[device];
+          this.session.realDiscoModel.set(device + 'Pattern', new com.firsteast.PatternModel(attributes));
           if (this.session.mockDiscoModel.get(device + 'Pattern') == null) {
-            _results.push(this.session.mockDiscoModel.set(device + 'Pattern', new com.firsteast.PatternModel($.extend(true, {}, actualPattern.attributes))));
-          } else {
-            _results.push(void 0);
+            this.session.mockDiscoModel.set(device + 'Pattern', new com.firsteast.PatternModel($.extend(true, {}, attributes)));
           }
+        }
+        _ref1 = com.firsteast.OUTPUT_DEVICES;
+        _results = [];
+        for (_i = 0, _len = _ref1.length; _i < _len; _i++) {
+          device = _ref1[_i];
+          _results.push(this.listenTo(this.session.realDiscoModel, "change:" + device + "Pattern", _.partial(this._setRealPattern, "" + device)));
         }
         return _results;
       };
@@ -116,6 +115,10 @@
           patternData: this.session.realDiscoModel.get(device + 'Pattern').attributes
         };
         return this._sendMessage(data);
+      };
+
+      DiscoController.prototype._updateRealPatternParams = function(device) {
+        return console.log(this.session.realDiscoModel.get(device + 'Pattern').attributes.params);
       };
 
       DiscoController.prototype._sendMessage = function(data) {

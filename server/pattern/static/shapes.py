@@ -46,7 +46,7 @@ class Rectangle(StaticPattern):
     draw = ImageDraw.Draw(im)
    
     if self.params['Fill']:
-      draw.rectangle((x0, y0, x1, y), outline=self.params['Color'].getRGBValues(), fill=self.params['Color'].getRGBValues())    
+      draw.rectangle((x0, y0, x1, y1), outline=self.params['Color'].getRGBValues(), fill=self.params['Color'].getRGBValues())    
     else:
       draw.rectangle((x0, y0, x1, y1), outline=self.params['Color'].getRGBValues())    
 
