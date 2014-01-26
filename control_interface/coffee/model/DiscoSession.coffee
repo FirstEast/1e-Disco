@@ -20,3 +20,4 @@ do ->
         @inputDeviceModel.set(device, false)
 
       @gifList = new Backbone.Collection()
+      @imageList = new Backbone.Collection()

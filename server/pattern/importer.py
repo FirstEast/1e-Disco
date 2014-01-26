@@ -101,6 +101,9 @@ def getSavedPatternJson():
 def getGifList():
   return glob.glob(IMAGE_DIR + '*.gif')
 
+def getImageList():
+  return glob.glob(IMAGE_DIR + '*.png') + glob.glob(IMAGE_DIR + '*.jpg')
+
 def deepImport(name):
   m = __import__(name)
   for n in name.split(".")[1:]:

@@ -35,20 +35,21 @@
       PatternSelector.prototype.initialize = function(options) {
         this.patternList = options.patternList;
         this.savedPatternList = options.savedPatternList;
-        this.gifList = options.gifList;
         this.discoModel = options.discoModel;
+        this.gifList = options.gifList;
+        this.imageList = options.imageList;
         this.device = options.device;
         this.parameters = {};
         this.listenTo(this.patternList, 'add remove reset', this.render);
-        this.listenTo(this.gifList, 'add remove reset', this.render);
         this.listenTo(this.savedPatternList, 'add remove reset', this.render);
-        return this.listenTo(this.discoModel, "change:" + this.device + "Pattern", this.render);
+        this.listenTo(this.discoModel, "change:" + this.device + "Pattern", this.render);
+        this.listenTo(this.gifList, 'add remove reset', this.render);
+        return this.listenTo(this.imageList, 'add remove reset', this.render);
       };
 
       PatternSelector.prototype.render = function() {
         var currentPattern, models, parameters, saveModels, source, template, _ref1,
           _this = this;
-        console.log(this.gifList);
         this.$el.empty();
         source = $('#ddf-debug-template').html();
         template = Handlebars.compile(source);
@@ -70,6 +71,7 @@
           savedPatterns: saveModels,
           currentPattern: currentPattern,
           gifList: this.gifList.models,
+          imageList: this.imageList.models,
           parameters: parameters
         }));
         this._updateSelected();

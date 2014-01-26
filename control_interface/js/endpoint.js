@@ -57,6 +57,7 @@
         patternList: session.patternList,
         savedPatternList: session.savedPatternList,
         gifList: session.gifList,
+        imageList: session.imageList,
         device: device
       });
       selector.render();

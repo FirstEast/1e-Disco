@@ -128,7 +128,8 @@ class DiscoControlProtocol(WebSocketServerProtocol):
       'type': 'init',
       'patternListData': getPatternMapJson(),
       'savedPatternListData': getSavedPatternJson(),
-      'gifList': getGifList()
+      'gifList': getGifList(),
+      'imageList': getImageList()
     }
     self.sendMessage(json.dumps(message, default=(lambda x: x.__dict__)))
 

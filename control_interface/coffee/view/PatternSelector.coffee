@@ -10,19 +10,20 @@ do ->
     initialize: (options) =>
       @patternList = options.patternList
       @savedPatternList = options.savedPatternList
-      @gifList = options.gifList
       @discoModel = options.discoModel
+      @gifList = options.gifList
+      @imageList = options.imageList
       @device  = options.device
 
       @parameters = {}
 
       @listenTo @patternList, 'add remove reset', @render
-      @listenTo @gifList, 'add remove reset', @render
       @listenTo @savedPatternList, 'add remove reset', @render
       @listenTo @discoModel, "change:#{@device}Pattern", @render
+      @listenTo @gifList, 'add remove reset', @render
+      @listenTo @imageList, 'add remove reset', @render
 
     render: =>
-      console.log @gifList
       @$el.empty()
       source = $('#ddf-debug-template').html()
       template = Handlebars.compile(source)
@@ -38,6 +39,7 @@ do ->
         savedPatterns: saveModels
         currentPattern: currentPattern
         gifList: @gifList.models
+        imageList: @imageList.models
         parameters: parameters
       })
 

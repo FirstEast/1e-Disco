@@ -62,7 +62,11 @@
               </select>
               {{/if}}
               {{#if image}}
-              <span>IMAGE TODO</span>
+              <select class="param-input" name="{{name}}" data-type="image">
+                {{#each ../../../imageList}}
+                <option value="{{attributes.name}}">{{attributes.name}}</option>
+                {{/each}}
+              </select>
               {{/if}}
             {{/if}}
           </div>
