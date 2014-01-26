@@ -71,7 +71,6 @@ class RemotePixelPusher(object):
     u"""Returns a generator for packets"""
     self.next_strip = 0
     while(True):
-      # TODO: I only have one strip right now.
       yield [self.next_strip] + self.pixel_source(self.next_strip)
       self.next_strip = (self.next_strip + 1) % self.strips()
 
