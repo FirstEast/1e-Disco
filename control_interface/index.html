@@ -42,25 +42,26 @@
     <div class="params">
       {{#unless currentPattern.saved}}
         {{#each ../parameters}}
-          <span>{{name}}: </span>
-          {{#if type}}
-            <input class="param-input" type="{{type}}" value="{{val}}" name="{{name}}" {{#if val}}checked="checked"{{/if}}></input>
-          {{else}}
-            {{#if pattern}}
-            <select class="param-input" name="{{name}}" data-type="pattern">
-              {{#each ../../../savedPatterns}}
-              <option value="{{attributes.saveName}}">{{attributes.saveName}}</option>
-              {{/each}}
-            </select>
+          <div class="param">
+            <span>{{name}}: </span>
+            {{#if type}}
+              <input class="param-input" type="{{type}}" value="{{val}}" name="{{name}}" {{#if val}}checked="checked"{{/if}}></input>
+            {{else}}
+              {{#if pattern}}
+              <select class="param-input" name="{{name}}" data-type="pattern">
+                {{#each ../../../savedPatterns}}
+                <option value="{{attributes.saveName}}">{{attributes.saveName}}</option>
+                {{/each}}
+              </select>
+              {{/if}}
+              {{#if gif}}
+              <span>GIF TODO</span>
+              {{/if}}
+              {{#if image}}
+              <span>IMAGE TODO</span>
+              {{/if}}
             {{/if}}
-            {{#if gif}}
-            <span>GIF TODO</span>
-            {{/if}}
-            {{#if image}}
-            <span>IMAGE TODO</span>
-            {{/if}}
-          {{/if}}
-          <br/>
+          </div>
         {{/each}}
       {{/unless}}
     </div>
@@ -69,6 +70,7 @@
   </script>
 
   <body>
+    <div class="realVis"></div>
 
   </body>
 </html>

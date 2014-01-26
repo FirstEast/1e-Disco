@@ -1,6 +1,6 @@
 do ->
   class com.firsteast.PatternSelector extends Backbone.View
-    className: 'patternSelector'
+    className: 'pattern-selector'
     events:
       'change .class-patterns': '_changeClassSelected'
       'change .saved-patterns': '_changeSavedSelected'
@@ -23,8 +23,8 @@ do ->
       @$el.empty()
       source = $('#ddf-debug-template').html()
       template = Handlebars.compile(source)
-      models = @patternList.filter(((x) => x.get('DEVICES').indexOf(@device) >= 0))
-      saveModels = @savedPatternList.filter((x) => x.get('DEVICES').indexOf(@device) >= 0)
+      models = _.sortBy(@patternList.filter(((x) => x.get('DEVICES').indexOf(@device) >= 0)), (x) -> return x.get('name'))
+      saveModels = _.sortBy(@savedPatternList.filter((x) => x.get('DEVICES').indexOf(@device) >= 0), (x) -> return x.get('saveName'))
       currentPattern = @discoModel.get("#{@device}Pattern")?.attributes
       parameters = @_parseParams(_.defaults({}, currentPattern?.params, currentPattern?.DEFAULT_PARAMS))
       @$el.append template({
@@ -63,7 +63,7 @@ do ->
         else
           param.type = 'text'
         result.push(param)
-      return result
+      return _.sortBy(result, (x) -> return x.name)
 
     _setParamValues: (params) =>
       for param in params

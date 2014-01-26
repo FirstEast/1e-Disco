@@ -23,7 +23,7 @@
         return _ref;
       }
 
-      PatternSelector.prototype.className = 'patternSelector';
+      PatternSelector.prototype.className = 'pattern-selector';
 
       PatternSelector.prototype.events = {
         'change .class-patterns': '_changeClassSelected',
@@ -49,11 +49,15 @@
         this.$el.empty();
         source = $('#ddf-debug-template').html();
         template = Handlebars.compile(source);
-        models = this.patternList.filter((function(x) {
+        models = _.sortBy(this.patternList.filter((function(x) {
           return x.get('DEVICES').indexOf(_this.device) >= 0;
-        }));
-        saveModels = this.savedPatternList.filter(function(x) {
+        })), function(x) {
+          return x.get('name');
+        });
+        saveModels = _.sortBy(this.savedPatternList.filter(function(x) {
           return x.get('DEVICES').indexOf(_this.device) >= 0;
+        }), function(x) {
+          return x.get('saveName');
         });
         currentPattern = (_ref1 = this.discoModel.get("" + this.device + "Pattern")) != null ? _ref1.attributes : void 0;
         parameters = this._parseParams(_.defaults({}, currentPattern != null ? currentPattern.params : void 0, currentPattern != null ? currentPattern.DEFAULT_PARAMS : void 0));
@@ -102,7 +106,9 @@
           }
           result.push(param);
         }
-        return result;
+        return _.sortBy(result, function(x) {
+          return x.name;
+        });
       };
 
       PatternSelector.prototype._setParamValues = function(params) {

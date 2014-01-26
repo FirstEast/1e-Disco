@@ -173,7 +173,7 @@ class ColorPulsingCircle(Pattern):
 
   def render(self, device):
     cent = max(self.beat.avgCentroid - 0.66, 0) * 3
-    hue = (self.params['100End Hue'] - self.params['100Start Hue']) * cent + self.params['Start Hue']
+    hue = (self.params['100End Hue'] - self.params['100Start Hue']) * cent + self.params['100Start Hue']
     circleColor = Color((hue / 100.0, 1, 255), isHSV=True)
     solidColorPattern = SolidColor(self.beat, {'Color': circleColor})
 

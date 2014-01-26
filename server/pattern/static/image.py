@@ -8,7 +8,7 @@ from PIL import Image
 class AnimatedGif(TimedPattern):
 
   DEFAULT_PARAMS = {
-    'Image Path': 'pattern/images/Pac Man DDF2.gif',
+    'Image Path': 'pattern/images/nyan.gif',
     'Resize': False,
     'DesWidth': 48,
     'DesHeight': 24,
@@ -58,14 +58,6 @@ class AnimatedGif(TimedPattern):
       im = Image.new('RGB', (device.width, device.height))
       im.paste(self.frames[frameCount], (0, 0))
       return im
-
-class AnimGif2(AnimatedGif):
-  DEFAULT_PARAMS = {}
-  DEFAULT_PARAMS.update(AnimatedGif.DEFAULT_PARAMS)
-  DEFAULT_PARAMS.update({
-    'Image Path': 'pattern/images/nyan.gif',
-    'Resize': True
-  })
 
 class StaticImage(StaticPattern):
   DEFAULT_PARAMS = {

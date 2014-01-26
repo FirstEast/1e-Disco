@@ -45,9 +45,9 @@
       height: 24 * 8
     });
     bemisPreview.render();
-    $('body').append(ddfPreview.$el);
-    $('body').append(goodalePreview.$el);
-    $('body').append(bemisPreview.$el);
+    $('.realVis').append(ddfPreview.$el);
+    $('.realVis').append(goodalePreview.$el);
+    $('.realVis').append(bemisPreview.$el);
     _ref = com.firsteast.OUTPUT_DEVICES;
     _results = [];
     for (_i = 0, _len = _ref.length; _i < _len; _i++) {
