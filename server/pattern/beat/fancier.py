@@ -20,6 +20,9 @@ class BeatAdjustParam(Pattern):
       self.base = loadSavedPatternFromFilename(self.beat, self.params['Pattern'])
     elif paramName == 'Pattern':
       self.base = loadSavedPatternFromFilename(self.beat, self.params['Pattern'])
+    elif not(paramName in self.DEFAULT_PARAMS):
+      self.base.params[paramName] = self.params[paramName]
+      if self.params['CallUpdate()']: self.base.paramUpdate(paramName)
 
   def getVal(self):
     pass

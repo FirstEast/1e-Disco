@@ -20,6 +20,9 @@ class AdjustParam(TimedPattern):
       self.base = loadSavedPatternFromFilename(self.beat, self.params['Pattern'])
     elif paramName == 'Pattern':
       self.base = loadSavedPatternFromFilename(self.beat, self.params['Pattern'])
+    elif not(paramName in self.DEFAULT_PARAMS):
+      self.base.params[paramName] = self.params[paramName]
+      if self.params['CallUpdate()']: self.base.paramUpdate(paramName)
     self.frameCount = 0
 
   def getVal(self):
@@ -127,7 +130,7 @@ class SinuParam(AdjustParamInt):
   DEFAULT_PARAMS.update(AdjustParamInt.DEFAULT_PARAMS)
 
   def getVal(self):
-    return self.params['MinValue'] + (self.params['MaxValue'] - self.params['MinValue']) * (1 + math.sin(self.frameCount * 2 * math.pi / self.params['FramePeriod'])) / 2
+    return int(self.params['MinValue'] + (self.params['MaxValue'] - self.params['MinValue']) * (1 + math.sin(self.frameCount * 2 * math.pi / self.params['FramePeriod'])) / 2)
 
 class AlterParamInt(AdjustParamInt):
   
