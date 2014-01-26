@@ -1,6 +1,5 @@
 from pattern.color import *
 from pattern.pattern import *
-from pattern.mixer.layer import layerPatterns
 from pattern.util import *
 
 from PIL import Image

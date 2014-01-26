@@ -1,6 +1,7 @@
 from pattern.color import *
 from pattern.pattern import *
 from pattern.importer import *
+from pattern.util import *
 from pattern.static.shapes import Circle
 from pattern.static.solid import *
 from pattern.importer import loadSavedPatternFromFilename
@@ -31,26 +32,6 @@ class TilePattern(Pattern):
       for x in range(self.params['X Segments']):
         ret.paste(self.pats[y][x].render(self.mockDevice), (x * lwid, y * lhei))
     return ret
-
-def layerPatterns(top, bottom, mask = -1, flip = True, blend = False): # by default, mask's black is the bottom layer
-  if mask == -1: mask = top
-  topData = top.getdata()
-  maskData = mask.convert('L').getdata()
-  botData = bottom.getdata()
-  
-  newData = []
-  for i in range(len(maskData)):
-    if (maskData[i] > 0) != flip:
-      newData.append(botData[i])
-    else:
-      newData.append(topData[i])
-  ret = bottom.copy()
-  ret.putdata(newData)
-  return ret
-
-def maskPatterns(mask, patternImg): # mask's light is what to keep
-  mask = mask.convert('L')
-  return layerPatterns(mask, patternImg, mask, False)
 
 class LayerPattern(Pattern):
   DEFAULT_PARAMS = {

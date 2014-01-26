@@ -92,22 +92,6 @@ class HorizontalVis(Pattern):
     im.putdata(frame)
     return im.transpose(Image.ROTATE_270).transpose(Image.FLIP_LEFT_RIGHT)
 
-class RaindbowVis(Pattern):
-  USE_BEAT = True
-
-  DEVICES = ['ddf']
-
-  def __init__(self, beat, params):
-    Pattern.__init__(self, beat, params)
-    self.visPattern = VerticalVis(beat, {})
-    self.gradPattern = LinearRainbow(beat, {'EndHue': 0.25})
-
-  def render(self, device):
-    vis = self.visPattern.render(device)
-    grad = self.gradPattern.render(device)
-
-    return maskPatterns(vis, grad)
-
 class PulsingCircle(Pattern):
 
   DEFAULT_PARAMS = {
