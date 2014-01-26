@@ -34,7 +34,7 @@ def sanitizeParams(params):
     if type(value) == dict and 'RGBValues' in value:
       params[key] = Color((value['RGBValues']))
     elif is_number(value):
-      params[key] = float(value)
+      params[key] = int(value)
   return params
 
 class DiscoControlProtocol(WebSocketServerProtocol):
