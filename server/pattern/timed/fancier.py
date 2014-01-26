@@ -101,7 +101,8 @@ class LoopParam(AdjustParamInt):
   DEFAULT_PARAMS = {
     '10ParamRate': 70,
     'BounceBack': True,
-    'StartForward': True
+    'StartForward': True,
+    'Offset': 0
   }
 
   DEFAULT_PARAMS.update(AdjustParamInt.DEFAULT_PARAMS)
@@ -109,6 +110,7 @@ class LoopParam(AdjustParamInt):
   def paramUpdate(self, paramName):
     AdjustParamInt.paramUpdate(self, paramName)
     self.val = float(self.params['MinValue']) if self.params['StartForward'] else float(self.params['MaxValue'])
+    self.val += self.params['Offset']
     self.forward = 1 if self.params['StartForward'] else -1
 
   def getVal(self):
@@ -124,33 +126,36 @@ class LoopParam(AdjustParamInt):
 class SinuParam(AdjustParamInt):
   
   DEFAULT_PARAMS = {
-    'FramePeriod': 70
+    'FramePeriod': 70,
+    'DegPhase': 0
   }
 
   DEFAULT_PARAMS.update(AdjustParamInt.DEFAULT_PARAMS)
 
   def getVal(self):
-    return int(self.params['MinValue'] + (self.params['MaxValue'] - self.params['MinValue']) * (1 + math.sin(self.frameCount * 2 * math.pi / self.params['FramePeriod'])) / 2)
+    return int(self.params['MinValue'] + (self.params['MaxValue'] - self.params['MinValue']) * (1 + math.sin((self.params['DegPhase'] * 2 * math.pi / 360.0) + self.frameCount * 2 * math.pi / self.params['FramePeriod'])) / 2)
 
 class AlterParamInt(AdjustParamInt):
   
   DEFAULT_PARAMS = {
-    'FramePeriod': 70
+    'FramePeriod': 70,
+    'Offset': False
   }
 
   DEFAULT_PARAMS.update(AdjustParamInt.DEFAULT_PARAMS)
 
   def getVal(self):
-    if (self.frameCount / self.params['FramePeriod']) % 2 == 0: return self.params['MinValue']
+    if ((self.frameCount / self.params['FramePeriod']) % 2 == 0) == self.params['Offset']: return self.params['MinValue']
     else: return self.params['MaxValue']
 
 class AlterParamBool(AdjustParam):
   
   DEFAULT_PARAMS = {
-    'FramePeriod': 70
+    'FramePeriod': 70,
+    'Offset': False
   }
 
   DEFAULT_PARAMS.update(AdjustParam.DEFAULT_PARAMS)
 
   def getVal(self):
-    return (self.frameCount / self.params['FramePeriod']) % 2 == 0
+    return ((self.frameCount / self.params['FramePeriod']) % 2 == 0) == self.params['Offset']
