@@ -40,38 +40,36 @@
       {{/each}}
     </select>
     <div class="params">
-      {{#unless currentPattern.saved}}
-        {{#each ../parameters}}
-          <div class="param">
-            <span>{{name}}: </span>
-            {{#if type}}
-              <input class="param-input" type="{{type}}" value="{{val}}" name="{{name}}" {{#if val}}checked="checked"{{/if}}></input>
-            {{else}}
-              {{#if pattern}}
-              <select class="param-input" name="{{name}}" data-type="pattern">
-                {{#each ../../../savedPatterns}}
-                <option value="{{attributes.saveName}}">{{attributes.saveName}}</option>
-                {{/each}}
-              </select>
-              {{/if}}
-              {{#if gif}}
-              <select class="param-input" name="{{name}}" data-type="gif">
-                {{#each ../../../gifList}}
-                <option value="{{attributes.name}}">{{attributes.name}}</option>
-                {{/each}}
-              </select>
-              {{/if}}
-              {{#if image}}
-              <select class="param-input" name="{{name}}" data-type="image">
-                {{#each ../../../imageList}}
-                <option value="{{attributes.name}}">{{attributes.name}}</option>
-                {{/each}}
-              </select>
-              {{/if}}
+      {{#each parameters}}
+        <div class="param">
+          <span>{{name}}: </span>
+          {{#if type}}
+            <input class="param-input" type="{{type}}" value="{{val}}" name="{{name}}" {{#if val}}checked="checked"{{/if}}></input>
+          {{else}}
+            {{#if pattern}}
+            <select class="param-input" name="{{name}}" data-type="pattern">
+              {{#each ../../../savedPatterns}}
+              <option value="{{attributes.saveName}}">{{attributes.saveName}}</option>
+              {{/each}}
+            </select>
             {{/if}}
-          </div>
-        {{/each}}
-      {{/unless}}
+            {{#if gif}}
+            <select class="param-input" name="{{name}}" data-type="gif">
+              {{#each ../../../gifList}}
+              <option value="{{attributes.name}}">{{attributes.name}}</option>
+              {{/each}}
+            </select>
+            {{/if}}
+            {{#if image}}
+            <select class="param-input" name="{{name}}" data-type="image">
+              {{#each ../../../imageList}}
+              <option value="{{attributes.name}}">{{attributes.name}}</option>
+              {{/each}}
+            </select>
+            {{/if}}
+          {{/if}}
+        </div>
+      {{/each}}
     </div>
     <input type=text class="save-name-input"></input>
     <button class="save-button">Save Pattern</button>
