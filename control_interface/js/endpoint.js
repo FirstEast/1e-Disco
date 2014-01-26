@@ -56,6 +56,7 @@
         discoModel: session.realDiscoModel,
         patternList: session.patternList,
         savedPatternList: session.savedPatternList,
+        gifList: session.gifList,
         device: device
       });
       selector.render();

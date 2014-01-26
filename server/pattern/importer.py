@@ -18,6 +18,7 @@ SUPER_PATTERN_CLASSES = {
 }
 
 PATTERN_SAVE_DIR = 'pattern/saved/'
+IMAGE_DIR = 'pattern/images/'
 
 def is_number(s):
   try:
@@ -96,6 +97,9 @@ def getSavedPatternJson():
     result.append(json.load(f))
     f.close()
   return json.dumps(result)
+
+def getGifList():
+  return glob.glob(IMAGE_DIR + '*.gif')
 
 def deepImport(name):
   m = __import__(name)

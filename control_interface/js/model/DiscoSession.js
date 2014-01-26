@@ -22,6 +22,7 @@
           device = _ref1[_j];
           this.inputDeviceModel.set(device, false);
         }
+        this.gifList = new Backbone.Collection();
       }
 
       return DiscoSession;

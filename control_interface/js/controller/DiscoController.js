@@ -11,6 +11,7 @@
         this._handlePatterns = __bind(this._handlePatterns, this);
         this._handleDevices = __bind(this._handleDevices, this);
         this._handleRender = __bind(this._handleRender, this);
+        this._buildGifList = __bind(this._buildGifList, this);
         this._buildSavedPatternList = __bind(this._buildSavedPatternList, this);
         this._buildPatternList = __bind(this._buildPatternList, this);
         this._parseMessage = __bind(this._parseMessage, this);
@@ -32,6 +33,7 @@
         if (data.type === 'init') {
           this._buildPatternList(JSON.parse(data.patternListData));
           this._buildSavedPatternList(JSON.parse(data.savedPatternListData));
+          this._buildGifList(data.gifList);
           return this._sendMessage({
             type: 'render'
           });
@@ -60,6 +62,18 @@
 
       DiscoController.prototype._buildSavedPatternList = function(patternList) {
         return this.session.savedPatternList.reset(patternList);
+      };
+
+      DiscoController.prototype._buildGifList = function(gifList) {
+        var gif, result, _i, _len;
+        result = [];
+        for (_i = 0, _len = gifList.length; _i < _len; _i++) {
+          gif = gifList[_i];
+          result.push({
+            name: gif
+          });
+        }
+        return this.session.gifList.reset(result);
       };
 
       DiscoController.prototype._handleRender = function(renderData) {

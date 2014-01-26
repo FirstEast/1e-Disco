@@ -10,30 +10,37 @@ do ->
     initialize: (options) =>
       @patternList = options.patternList
       @savedPatternList = options.savedPatternList
+      @gifList = options.gifList
       @discoModel = options.discoModel
       @device  = options.device
 
       @parameters = {}
 
-      @listenTo @patternList, 'add, remove, reset', @render
-      @listenTo @savedPatternList, 'add, remove, reset', @render
+      @listenTo @patternList, 'add remove reset', @render
+      @listenTo @gifList, 'add remove reset', @render
+      @listenTo @savedPatternList, 'add remove reset', @render
       @listenTo @discoModel, "change:#{@device}Pattern", @render
 
     render: =>
+      console.log @gifList
       @$el.empty()
       source = $('#ddf-debug-template').html()
       template = Handlebars.compile(source)
+
       models = _.sortBy(@patternList.filter(((x) => x.get('DEVICES').indexOf(@device) >= 0)), (x) -> return x.get('name'))
       saveModels = _.sortBy(@savedPatternList.filter((x) => x.get('DEVICES').indexOf(@device) >= 0), (x) -> return x.get('saveName'))
       currentPattern = @discoModel.get("#{@device}Pattern")?.attributes
       parameters = @_parseParams(_.defaults({}, currentPattern?.params, currentPattern?.DEFAULT_PARAMS))
+
       @$el.append template({
         device: @device
         patterns: models
         savedPatterns: saveModels
         currentPattern: currentPattern
+        gifList: @gifList.models
         parameters: parameters
       })
+
       @_updateSelected()
       @_setParamValues(parameters)
 

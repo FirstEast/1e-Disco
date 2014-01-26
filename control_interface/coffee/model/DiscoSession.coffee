@@ -18,3 +18,5 @@ do ->
       @inputDeviceModel = new Backbone.Model()
       for device in com.firsteast.INPUT_DEVICES
         @inputDeviceModel.set(device, false)
+
+      @gifList = new Backbone.Collection()

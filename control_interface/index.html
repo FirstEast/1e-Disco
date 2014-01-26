@@ -55,7 +55,11 @@
               </select>
               {{/if}}
               {{#if gif}}
-              <span>GIF TODO</span>
+              <select class="param-input" name="{{name}}" data-type="gif">
+                {{#each ../../../gifList}}
+                <option value="{{attributes.name}}">{{attributes.name}}</option>
+                {{/each}}
+              </select>
               {{/if}}
               {{#if image}}
               <span>IMAGE TODO</span>
