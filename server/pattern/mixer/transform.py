@@ -28,6 +28,29 @@ class RingsMaker(Pattern):
       for y in range(-self.params['CenterY'], device.height - self.params['CenterY'])
       for x in range(-self.params['CenterX'], device.width - self.params['CenterX'])])
     return ret
+
+class SpiralMaker(Pattern):
+  DEFAULT_PARAMS = {
+    'Pattern': 'sliding_rainbow.json',
+    'Rate': 5,
+    '1000Twist': 15,
+    'CenterX': 24,
+    'CenterY': 12,
+    'Wraps': 1
+  }
+
+  def paramUpdate(self):
+    self.pattern = loadSavedPatternFromFilename(self.beat, self.params['Pattern'])
+    if 'Rate' in self.pattern.params: self.pattern.params['Rate'] *= self.params['Rate']
+
+  def render(self, device):
+    array = list(self.pattern.render(MOCK_DEVICES['goodale']).getdata())
+    ret = Image.new('RGB', (device.width, device.height))
+    func = lambda (x, y): (math.sqrt(y*y + x*x) * self.params['1000Twist'] / 1000.0 + math.atan2(y, x)) * self.params['Wraps'] / (2 * math.pi)
+    ret.putdata([array[int(len(array) * func((x, y))) % len(array)]
+      for y in range(-self.params['CenterY'], device.height - self.params['CenterY'])
+      for x in range(-self.params['CenterX'], device.width - self.params['CenterX'])])
+    return ret
   
 class DiamondMaker(Pattern):
   DEFAULT_PARAMS = {
