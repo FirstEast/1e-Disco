@@ -2,6 +2,49 @@ from pattern.color import *
 from pattern.pattern import *
 from PIL import Image, ImageChops
 
+import math
+
+class ColorBump(StaticPattern):
+  DEFAULT_PARAMS = {
+    'Color 1': BLACK,
+    'Color 2': BLUE,
+    '100Duty': 50
+  }
+
+  def paramUpdate(self):
+    self.params['Duty'] = self.params['100Duty'] / 100.0
+
+  def renderFrame(self, device):
+    im = Image.new('RGB', (device.width, device.height))
+    len1 = int(self.params['Duty'] * device.width)
+    len2 = device.width - len1
+    datarow = [getWeightedColorSum(self.params['Color 1'], self.params['Color 2'],
+      (1 + math.sin(x * math.pi / len1)) / 2).getRGBValues()
+      for x in range(len1)] + [getWeightedColorSum(self.params['Color 2'], self.params['Color 1'],
+      (1 + math.sin(x * math.pi / len2)) / 2).getRGBValues()
+      for x in range(len2)]
+    im.putdata(datarow * device.height)
+    return im
+
+class ColorSpike(StaticPattern):
+  DEFAULT_PARAMS = {
+    'Background': BLACK,
+    'Color': BLUE,
+    '100Duty': 20
+  }
+
+  def paramUpdate(self):
+    self.params['Duty'] = self.params['100Duty'] / 100.0
+
+  def renderFrame(self, device):
+    im = Image.new('RGB', (device.width, device.height))
+    len1 = int(self.params['Duty'] * device.width)
+    len2 = device.width - len1
+    datarow = [getWeightedColorSum(self.params['Background'], self.params['Color'], float(x) / len1
+      ).getRGBValues() for x in range(len1)] + [self.params['Background'].getRGBValues()] * len2
+    im.putdata(datarow * device.height)
+    return im
+
 class Checkerboard(StaticPattern):
   DEFAULT_PARAMS = {
     'Color 1': BLACK,
