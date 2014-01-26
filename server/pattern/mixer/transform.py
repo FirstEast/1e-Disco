@@ -13,7 +13,7 @@ class TrivialPattern(Pattern):
     'Pattern': 'sliding_rainbow.json'
   }
 
-  def paramUpdate(self):
+  def paramUpdate(self, paramName):
     self.pattern = loadSavedPatternFromFilename(self.beat, self.params['Pattern'])
 
   def render(self, device):
@@ -27,8 +27,9 @@ class HSVFilter(Pattern):
     '100dV': 0  # percent value shift
   }
 
-  def paramUpdate(self):
-    self.pattern = loadSavedPatternFromFilename(self.beat, self.params['Pattern'])
+  def paramUpdate(self, paramName):
+    if paramName == 'Pattern' or paramName == 'ALL':
+      self.pattern = loadSavedPatternFromFilename(self.beat, self.params['Pattern'])
 
   def render(self, device):
     def change(x):
@@ -44,14 +45,19 @@ class RingsMaker(Pattern):
   DEFAULT_PARAMS = {
     'Pattern': 'sliding_rainbow.json',
     'Size': 20,
-    'Rate': 5,
+    'Rate': 30,
     'CenterX': 24,
     'CenterY': 12
   }
 
-  def paramUpdate(self):
-    self.pattern = loadSavedPatternFromFilename(self.beat, self.params['Pattern'])
-    if 'Rate' in self.pattern.params: self.pattern.params['Rate'] *= self.params['Rate']
+  def paramUpdate(self, paramName):
+    if paramName == 'ALL':
+      self.pattern = loadSavedPatternFromFilename(self.beat, self.params['Pattern'])
+      self.pattern.params['Rate'] = self.params['Rate']
+    elif paramName == 'Pattern':
+      self.pattern = loadSavedPatternFromFilename(self.beat, self.params['Pattern'])
+    elif paramName == 'Rate':
+      self.pattern.params['Rate'] = self.params['Rate']
 
   def render(self, device):
     array = list(self.pattern.render(MOCK_DEVICES['goodale']).getdata())
@@ -64,16 +70,21 @@ class RingsMaker(Pattern):
 class SpiralMaker(Pattern):
   DEFAULT_PARAMS = {
     'Pattern': 'sliding_rainbow.json',
-    'Rate': 5,
+    'Rate': 30,
     '1000Twist': 15,
     'CenterX': 24,
     'CenterY': 12,
     'Wraps': 1
   }
 
-  def paramUpdate(self):
-    self.pattern = loadSavedPatternFromFilename(self.beat, self.params['Pattern'])
-    if 'Rate' in self.pattern.params: self.pattern.params['Rate'] *= self.params['Rate']
+  def paramUpdate(self, paramName):
+    if paramName == 'ALL':
+      self.pattern = loadSavedPatternFromFilename(self.beat, self.params['Pattern'])
+      self.pattern.params['Rate'] = self.params['Rate']
+    elif paramName == 'Pattern':
+      self.pattern = loadSavedPatternFromFilename(self.beat, self.params['Pattern'])
+    elif paramName == 'Rate':
+      self.pattern.params['Rate'] = self.params['Rate']
 
   def render(self, device):
     array = list(self.pattern.render(MOCK_DEVICES['goodale']).getdata())
@@ -88,14 +99,19 @@ class DiamondMaker(Pattern):
   DEFAULT_PARAMS = {
     'Pattern': 'sliding_rainbow.json',
     'Size': 20,
-    'Rate': 5,
+    'Rate': 30,
     'CenterX': 24,
     'CenterY': 12
   }
 
-  def paramUpdate(self):
-    self.pattern = loadSavedPatternFromFilename(self.beat, self.params['Pattern'])
-    if 'Rate' in self.pattern.params: self.pattern.params['Rate'] *= self.params['Rate']
+  def paramUpdate(self, paramName):
+    if paramName == 'ALL':
+      self.pattern = loadSavedPatternFromFilename(self.beat, self.params['Pattern'])
+      self.pattern.params['Rate'] = self.params['Rate']
+    elif paramName == 'Pattern':
+      self.pattern = loadSavedPatternFromFilename(self.beat, self.params['Pattern'])
+    elif paramName == 'Rate':
+      self.pattern.params['Rate'] = self.params['Rate']
 
   def render(self, device):
     array = list(self.pattern.render(MOCK_DEVICES['goodale']).getdata())
@@ -108,15 +124,20 @@ class DiamondMaker(Pattern):
 class RadarMaker(Pattern):
   DEFAULT_PARAMS = {
     'Pattern': 'sliding_rainbow.json',
-    'Rate': 5,
+    'Rate': 30,
     'CenterX': 24,
     'CenterY': 12,
     'Wraps': 1
   }
 
-  def paramUpdate(self):
-    self.pattern = loadSavedPatternFromFilename(self.beat, self.params['Pattern'])
-    if 'Rate' in self.pattern.params: self.pattern.params['Rate'] *= self.params['Rate'] * self.params['Wraps']
+  def paramUpdate(self, paramName):
+    if paramName == 'ALL':
+      self.pattern = loadSavedPatternFromFilename(self.beat, self.params['Pattern'])
+      self.pattern.params['Rate'] = self.params['Rate']
+    elif paramName == 'Pattern':
+      self.pattern = loadSavedPatternFromFilename(self.beat, self.params['Pattern'])
+    elif paramName == 'Rate':
+      self.pattern.params['Rate'] = self.params['Rate']
 
   def render(self, device):
     array = list(self.pattern.render(MOCK_DEVICES['goodale']).getdata())
@@ -127,7 +148,7 @@ class RadarMaker(Pattern):
     return ret
 
 class TrippyAsFuck(Pattern):
-  def paramUpdate(self):
+  def paramUpdate(self, paramName):
     self.pattern = loadSavedPatternFromFilename(self.beat, 'sliding_rainbow.json')
 
   def render(self, device):

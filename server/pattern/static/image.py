@@ -22,30 +22,31 @@ class AnimatedGif(TimedPattern):
     TimedPattern.__init__(self, beat, params)
     self.oldCount = 0
 
-  def paramUpdate(self):
-    self.image = Image.open(self.params['Image Path'])
-    self.params['Rate'] = float(100 * self.params['10RateMultiplier'] / self.image.info['duration'])
-    self.frames = []
-    lut = self.image.resize((256, 1))
-    lut.putdata(range(256))
-    pally = [el for lst in lut.convert("RGB").getdata() for el in lst]
-    curFrame = self.image.copy()
-    while True:
-      curFrame.putpalette(pally)
-      if self.params['Resize']:
-        self.frames.append(curFrame.convert('RGB').resize((self.params['DesWidth'], self.params['DesHeight']), Image.NEAREST))
-      else:
-        self.frames.append(Image.new('RGB',self.image.size))
-        self.frames[-1].paste(curFrame, (0, 0))
-      try:
-        self.image.seek(len(self.frames))
-      except EOFError:
-        break
-      if len(self.frames) > 0 and self.image.dispose == None:
-        curFrame = layerPatterns(self.image, curFrame,
-          self.image.point(lambda x: int(x != self.image.info['transparency']) * 255, 'L'))
-      else:
-        curFrame = self.image.copy()
+  def paramUpdate(self, paramName):
+    if paramName == 'Image Path' or paramName == 'ALL':
+      self.image = Image.open(self.params['Image Path'])
+      self.params['Rate'] = float(100 * self.params['10RateMultiplier'] / self.image.info['duration'])
+      self.frames = []
+      lut = self.image.resize((256, 1))
+      lut.putdata(range(256))
+      pally = [el for lst in lut.convert("RGB").getdata() for el in lst]
+      curFrame = self.image.copy()
+      while True:
+        curFrame.putpalette(pally)
+        if self.params['Resize']:
+          self.frames.append(curFrame.convert('RGB').resize((self.params['DesWidth'], self.params['DesHeight']), Image.NEAREST))
+        else:
+          self.frames.append(Image.new('RGB',self.image.size))
+          self.frames[-1].paste(curFrame, (0, 0))
+        try:
+          self.image.seek(len(self.frames))
+        except EOFError:
+          break
+        if len(self.frames) > 0 and self.image.dispose == None:
+          curFrame = layerPatterns(self.image, curFrame,
+            self.image.point(lambda x: int(x != self.image.info['transparency']) * 255, 'L'))
+        else:
+          curFrame = self.image.copy()
 
   def renderFrame(self, device, frameCount):
     frameCount %= len(self.frames)

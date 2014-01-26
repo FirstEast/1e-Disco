@@ -35,7 +35,8 @@ class Pattern():
     self.params.update(self.DEFAULT_PARAMS)
     self.params.update(params)
     self.beat = beat
-    self.paramUpdate()
+
+    self.paramUpdate('ALL')
 
   def render(self, device):
     '''
@@ -43,7 +44,7 @@ class Pattern():
     '''
     pass
 
-  def paramUpdate(self):
+  def paramUpdate(self, paramName):
     '''
     Do any stuff that needs to be calculated from the params.
     Called when the params change.
@@ -67,7 +68,7 @@ class Pattern():
     Sets parameter 'name' to value 'val'
     '''
     self.params[name] = val
-    self.paramUpdate()
+    self.paramUpdate(name)
 
   def getClass(self):
     return self.__class__
@@ -83,7 +84,7 @@ class StaticPattern(Pattern):
     self.newParams = True
     self.frame = None
 
-  def paramUpdate(self):
+  def paramUpdate(self, paramName):
     self.newParams = True
 
   def render(self, device):
@@ -113,16 +114,19 @@ class TimedPattern(Pattern):
 
   def __init__(self, beat, params):
     Pattern.__init__(self, beat, params)
-    self.startTime = time.time() * 1000
+    self.lastTime = time.time() * 1000
+    self.frame = 0
 
   def render(self, device):
     return self.renderFrame(device, self.getFrameCount())
 
-  def resetTimer(self):
-    self.startTime = time.time() * 1000
-
   def getFrameCount(self):
-    return int((time.time() * 1000 - self.startTime) / float(1000 / int(self.params['Rate'])))
+    thisTime = time.time() * 1000
+    inc = int((thisTime - self.lastTime) / float(1000.0 / int(self.params['Rate'])))
+    if inc > 0:
+      self.frame += inc
+      self.lastTime = thisTime
+    return self.frame
 
   def renderFrame(self, device, frameCount):
     pass

@@ -14,7 +14,7 @@ DEFAULT_PATTERNS = {
 }
 
 SUPER_PATTERN_CLASSES = {
-  'Pattern', 'StaticPattern', 'TimedPattern'
+  'Pattern', 'StaticPattern', 'TimedPattern', 'AdjustParam', 'BeatAdjustParam'
 }
 
 PATTERN_SAVE_DIR = 'pattern/saved/'

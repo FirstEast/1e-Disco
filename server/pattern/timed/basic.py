@@ -13,7 +13,7 @@ class Interpolation(TimedPattern):
 
   DEFAULT_PARAMS.update(TimedPattern.DEFAULT_PARAMS)
 
-  def paramUpdate(self):
+  def paramUpdate(self, paramName):
     self.loop = []
     self.loop += interpolateColors(self.params['Color 1'], self.params['Color 2'])
     self.loop += interpolateColors(self.params['Color 2'], self.params['Color 3'])
@@ -35,8 +35,11 @@ class MovingAnything(TimedPattern):
 
   DEFAULT_PARAMS.update(TimedPattern.DEFAULT_PARAMS)
 
-  def paramUpdate(self):
-    self.base = loadSavedPatternFromFilename(self.beat, self.params['Base Pattern'])
+  def paramUpdate(self, paramName):
+    if paramName == 'ALL':
+      self.base = loadSavedPatternFromFilename(self.beat, self.params['Base Pattern'])
+    elif paramName == 'Base Pattern':
+      self.base = loadSavedPatternFromFilename(self.beat, self.params['Base Pattern'])
 
   def renderFrame(self, device, frameCount):
     return self.base.render(device).offset(int(self.params['X Rate'] * frameCount),

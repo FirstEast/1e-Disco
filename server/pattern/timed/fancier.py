@@ -15,8 +15,11 @@ class AdjustParam(TimedPattern):
     'CallUpdate()': True
   }
 
-  def paramUpdate(self):
-    self.base = loadSavedPatternFromFilename(self.beat, self.params['Pattern'])
+  def paramUpdate(self, paramName):
+    if paramName == 'ALL':
+      self.base = loadSavedPatternFromFilename(self.beat, self.params['Pattern'])
+    elif paramName == 'Pattern':
+      self.base = loadSavedPatternFromFilename(self.beat, self.params['Pattern'])
     self.frameCount = 0
 
   def getVal(self):
@@ -26,7 +29,7 @@ class AdjustParam(TimedPattern):
     if frameCount != self.frameCount:
       self.frameCount = frameCount
       self.base.params[self.params['Param']] = self.getVal()
-      if self.params['CallUpdate()']: self.base.paramUpdate()
+      if self.params['CallUpdate()']: self.base.paramUpdate(self.params['Param'])
     return self.base.render(device)
 
   DEFAULT_PARAMS.update(TimedPattern.DEFAULT_PARAMS)
@@ -39,8 +42,8 @@ class RandParamInitInt(AdjustParam):
 
   DEFAULT_PARAMS.update(AdjustParam.DEFAULT_PARAMS)
 
-  def paramUpdate(self):
-    AdjustParam.paramUpdate(self)
+  def paramUpdate(self, paramName):
+    AdjustParam.paramUpdate(self, paramName)
     self.val = random.randint(self.params['MinValue'], self.params['MaxValue'])
 
   def getVal(self):
@@ -49,8 +52,8 @@ class RandParamInitInt(AdjustParam):
 class RandParamInitColor(AdjustParam):
   DEFAULT_PARAMS = AdjustParam.DEFAULT_PARAMS
 
-  def paramUpdate(self):
-    AdjustParam.paramUpdate(self)
+  def paramUpdate(self, paramName):
+    AdjustParam.paramUpdate(self, paramName)
     self.val = Color((random.randint(0, 255),
                      random.randint(0, 255),
                      random.randint(0, 255)))
@@ -68,8 +71,8 @@ class RandParamCycleInt(AdjustParam):
 
   DEFAULT_PARAMS.update(AdjustParam.DEFAULT_PARAMS)
 
-  def paramUpdate(self):
-    AdjustParam.paramUpdate(self)
+  def paramUpdate(self, paramName):
+    AdjustParam.paramUpdate(self, paramName)
     self.val = random.randint(self.params['MinValue'], self.params['MaxValue'])
 
   def getVal(self):
@@ -100,8 +103,8 @@ class LoopParam(AdjustParamInt):
 
   DEFAULT_PARAMS.update(AdjustParamInt.DEFAULT_PARAMS)
 
-  def paramUpdate(self):
-    AdjustParamInt.paramUpdate(self)
+  def paramUpdate(self, paramName):
+    AdjustParamInt.paramUpdate(self, paramName)
     self.val = float(self.params['MinValue']) if self.params['StartForward'] else float(self.params['MaxValue'])
     self.forward = 1 if self.params['StartForward'] else -1
 

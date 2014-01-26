@@ -9,16 +9,7 @@ from pattern.static.solid import *
 
 from PIL import Image, ImageChops, ImageEnhance
 
-BASS = (0, 8)
-
 SMOOTHING_ALPHA = 0.8
-
-def getSummedFreqData(beat, start, end):
-  freqs = beat.avgFreqs
-  total = 0
-  for i in range(start, end):
-    total += (freqs[i] - 0.80) * 5
-  return total / (end - start)
 
 class VerticalVis(Pattern):
 
@@ -109,7 +100,7 @@ class PulsingCircle(Pattern):
     Pattern.__init__(self, beat, params)
     self.lastTotal = 0
 
-  def paramUpdate(self):
+  def paramUpdate(self, paramName):
     self.circlePattern = loadSavedPatternFromFilename(self.beat, self.params['Circle Pattern'])
 
   def render(self, device):
@@ -130,7 +121,7 @@ class FadingPulsingCircle(Pattern):
 
   DEVICES = ['ddf']
 
-  def paramUpdate(self):
+  def paramUpdate(self, paramName):
     self.circlePattern = loadSavedPatternFromFilename(self.beat, self.params['Pulsing Circle Pattern'])    
 
   def render(self, device):
@@ -152,7 +143,7 @@ class ColorPulsingCircle(Pattern):
 
   DEVICES = ['ddf']
 
-  def paramUpdate(self):
+  def paramUpdate(self, paramName):
     self.circlePattern = loadSavedPatternFromFilename(self.beat, self.params['Pulsing Circle Pattern'])    
 
   def render(self, device):
