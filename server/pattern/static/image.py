@@ -8,8 +8,8 @@ from PIL import Image
 class AnimatedGif(TimedPattern):
 
   DEFAULT_PARAMS = {
-    'Image Path': 'pattern/images/nyan.gif',
-    'Resize': False,
+    'Image Path': 'pattern/images/Nyan Cat.gif',
+    'Resize': True,
     'DesWidth': 48,
     'DesHeight': 24,
     '10RateMultiplier': 10

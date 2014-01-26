@@ -41,39 +41,3 @@ class MovingAnything(TimedPattern):
   def renderFrame(self, device, frameCount):
     return self.base.render(device).offset(int(self.params['X Rate'] * frameCount),
                                            int(self.params['Y Rate'] * frameCount))
-
-class MovingLight(TimedPattern):
-
-  DEFAULT_PARAMS = {
-    'Color': BLUE,
-  }
-
-  DEFAULT_PARAMS.update(TimedPattern.DEFAULT_PARAMS)
-
-  DEVICES = ['goodale', 'bemis']
-
-  def renderFrame(self, device, frameCount):
-    count = frameCount % device.width
-    frame = [(0, 0, 0)] * count
-    frame = frame + [self.params['Color'].getRGBValues()]
-    frame = frame + [(0, 0, 0)] * (device.width - 1 - count)
-    im = Image.new('RGB', (device.width, 1))
-    im.putdata(frame)
-    return im
-
-class MovingLine(TimedPattern):
-
-  DEFAULT_PARAMS = {
-    'Color': BLUE,
-  }
-
-  DEFAULT_PARAMS.update(TimedPattern.DEFAULT_PARAMS)
-
-  DEVICES = ['ddf']
-
-  def renderFrame(self, device, frameCount):
-    count = frameCount % device.width
-    oneline = [(0, 0, 0)] * (count) + [self.params['Color'].getRGBValues()] + [(0, 0, 0)] * (device.width - count - 1)
-    im = Image.new('RGB', (device.width, device.height))
-    im.putdata(oneline * device.height)
-    return im
