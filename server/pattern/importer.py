@@ -41,6 +41,7 @@ def loadPatternFromModuleClassName(name):
   for n, obj in inspect.getmembers(module):
     if inspect.isclass(obj) and issubclass(obj, pattern.Pattern) and obj.__name__ == name.split('_')[1]:
       return obj
+  print "Failed to load pattern from module class name '" + name + "'!"
 
 # Returns a pattern instance from a saved pattern name
 def loadSavedPattern(beat, patternData):

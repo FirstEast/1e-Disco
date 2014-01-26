@@ -12,7 +12,7 @@ class AnimatedGif(TimedPattern):
     'Resize': False,
     'DesWidth': 48,
     'DesHeight': 24,
-    'RateMultiplier': 1.0
+    '10RateMultiplier': 10
   }
 
   DEFAULT_PARAMS.update(TimedPattern.DEFAULT_PARAMS)
@@ -25,7 +25,7 @@ class AnimatedGif(TimedPattern):
 
   def paramUpdate(self):
     self.image = Image.open(self.params['Image Path'])
-    self.params['Rate'] = float(1000 * self.params['RateMultiplier'] / self.image.info['duration'])
+    self.params['Rate'] = float(100 * self.params['10RateMultiplier'] / self.image.info['duration'])
     self.frames = []
     lut = self.image.resize((256, 1))
     lut.putdata(range(256))

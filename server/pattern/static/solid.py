@@ -12,6 +12,7 @@ class ColorBump(StaticPattern):
   }
 
   def paramUpdate(self):
+    StaticPattern.paramUpdate(self)
     self.params['Duty'] = self.params['100Duty'] / 100.0
 
   def renderFrame(self, device):
@@ -34,6 +35,7 @@ class ColorSpike(StaticPattern):
   }
 
   def paramUpdate(self):
+    StaticPattern.paramUpdate(self)
     self.params['Duty'] = self.params['100Duty'] / 100.0
 
   def renderFrame(self, device):
@@ -74,8 +76,8 @@ class SolidColor(StaticPattern):
 class LinearRainbow(StaticPattern):
   DEFAULT_PARAMS = {
     'Horizontal': True,
-    'StartHue': 0.0,
-    'EndHue': 1.0,
+    '100StartHue': 0,
+    '100EndHue': 100,
   } # Hues can and should go above 1 if you want wrapping.
 
   def renderFrame(self, device):
@@ -85,7 +87,7 @@ class LinearRainbow(StaticPattern):
     else:
       wid = device.height
       hei = device.width
-    huerange = [self.params['StartHue'] + (self.params['EndHue'] - self.params['StartHue']) * i / wid for i in range(wid)]
+    huerange = [self.params['100StartHue'] / 100.0 + (self.params['100EndHue'] - self.params['100StartHue']) * i / (100.0 * wid) for i in range(wid)]
     colorArr = [Color((hue, 1, 255), True).getRGBValues() for hue in huerange]
     im = Image.new('RGB', (wid, hei))
     im.putdata(colorArr * hei)

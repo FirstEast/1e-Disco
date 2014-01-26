@@ -26,6 +26,13 @@ def clampRGB(RGBValues):
   blue = int(min(max(0, RGBValues[2]), 255))
   return (red, green, blue)
 
+def HSV_shift(colvals, dh, ds, dv):
+  rgb = [val/255.0 for val in colvals]
+  hsv = colorsys.rgb_to_hsv(*rgb)
+  hsv = [hsv[0] + dh, hsv[1] + ds * hsv[1], hsv[2] + dv * hsv[2]]
+  rgb = colorsys.hsv_to_rgb(*hsv)
+  return clampRGB([int(val*255) for val in rgb])
+
 class Color():
   """
   Color class. Contains operator and other utilities for manipulating colors in patterns.

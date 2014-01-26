@@ -83,15 +83,14 @@ class StaticPattern(Pattern):
     self.newParams = True
     self.frame = None
 
+  def paramUpdate(self):
+    self.newParams = True
+
   def render(self, device):
     if self.newParams:
       self.frame = self.renderFrame(device)
       self.newParams = False
     return self.frame.copy()
-
-  def setParam(self, name, val):
-    Pattern.setParam(self, name, val)
-    self.newParams = True
 
   def renderFrame(self, device):
     '''
