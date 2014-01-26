@@ -1,0 +1,1 @@
+{"USE_BEAT": false, "__module__": "pattern.static.text", "renderFrame": {}, "name": "Word", "saveName": "rainaName", "DEVICES": ["ddf", "goodale", "bemis"], "params": {"Color": {"RGBValues": [0, 0, 255]}, "String": " RAINA "}, "DEFAULT_PARAMS": {"Color": {"RGBValues": [0, 0, 255]}, "String": "HELLO"}, "saved": true, "__doc__": null}
