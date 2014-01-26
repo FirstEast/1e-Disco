@@ -34,17 +34,18 @@ class RadarMaker(Pattern):
     'Pattern': 'sliding_rainbow.json',
     'Rate': 5,
     'CenterX': 24,
-    'CenterY': 12
+    'CenterY': 12,
+    'Wraps': 1
   }
 
   def paramUpdate(self):
     self.pattern = loadSavedPatternFromFilename(self.beat, self.params['Pattern'])
-    if 'Rate' in self.pattern.params: self.pattern.params['Rate'] *= self.params['Rate']
+    if 'Rate' in self.pattern.params: self.pattern.params['Rate'] *= self.params['Rate'] * self.params['Wraps']
 
   def render(self, device):
     array = list(self.pattern.render(MOCK_DEVICES['goodale']).getdata())
     ret = Image.new('RGB', (device.width, device.height))
-    ret.putdata([array[int(len(array) * math.atan2(y, x) / (2 * math.pi))]
+    ret.putdata([array[int(len(array) * self.params['Wraps'] * math.atan2(y, x) / (2 * math.pi)) % len(array)]
       for y in range(-self.params['CenterY'], device.height - self.params['CenterY'])
       for x in range(-self.params['CenterX'], device.width - self.params['CenterX'])])
     return ret
