@@ -160,8 +160,8 @@ class FadingPulsingCircle(Pattern):
 class ColorPulsingCircle(Pattern):
   DEFAULT_PARAMS = {
     'Pulsing Circle Pattern': 'default_pulsingCircle.json',
-    'Start Hue': 0.25,
-    'End Hue': 0.75
+    '100Start Hue': 25,
+    '100End Hue': 75
   }
 
   USE_BEAT = True
@@ -173,8 +173,8 @@ class ColorPulsingCircle(Pattern):
 
   def render(self, device):
     cent = max(self.beat.avgCentroid - 0.66, 0) * 3
-    hue = (self.params['End Hue'] - self.params['Start Hue']) * cent + self.params['Start Hue']
-    circleColor = Color((hue, 1, 255), isHSV=True)
+    hue = (self.params['100End Hue'] - self.params['100Start Hue']) * cent + self.params['Start Hue']
+    circleColor = Color((hue / 100.0, 1, 255), isHSV=True)
     solidColorPattern = SolidColor(self.beat, {'Color': circleColor})
 
     return maskPatterns(self.circlePattern.render(device), solidColorPattern.render(device))

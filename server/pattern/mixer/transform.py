@@ -8,6 +8,38 @@ from PIL import Image, ImageDraw, ImageFilter
 import math
 import inspect
 
+class TrivialPattern(Pattern):
+  DEFAULT_PARAMS = {
+    'Pattern': 'sliding_rainbow.json'
+  }
+
+  def paramUpdate(self):
+    self.pattern = loadSavedPatternFromFilename(self.beat, self.params['Pattern'])
+
+  def render(self, device):
+    return self.pattern.render(device)
+
+class HSVFilter(Pattern):
+  DEFAULT_PARAMS = {
+    'Pattern': 'sliding_rainbow.json',
+    '100dH': 0, # hue shift
+    '100dS': 0, # percent saturation shift
+    '100dV': 0  # percent value shift
+  }
+
+  def paramUpdate(self):
+    self.pattern = loadSavedPatternFromFilename(self.beat, self.params['Pattern'])
+
+  def render(self, device):
+    def change(x):
+      return HSV_shift(x,
+        self.params['100dH'] / 100.0,
+        self.params['100dS'] / 100.0,
+        self.params['100dV'] / 100.0)
+    fr = self.pattern.render(device)
+    fr.putdata(map(change, fr.getdata()))
+    return fr
+
 class RingsMaker(Pattern):
   DEFAULT_PARAMS = {
     'Pattern': 'sliding_rainbow.json',

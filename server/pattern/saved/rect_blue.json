@@ -1,0 +1,1 @@
+{"USE_BEAT": false, "__module__": "pattern.static.shapes", "renderFrame": {}, "name": "Rectangle", "saveName": "rect_blue", "DEVICES": ["ddf", "goodale", "bemis"], "params": {}, "DEFAULT_PARAMS": {"Origin X": 0, "Origin Y": 0, "Color": {"RGBValues": [0, 0, 255]}, "Height": 23, "Width": 47, "Fill": false}, "saved": true, "__doc__": null}

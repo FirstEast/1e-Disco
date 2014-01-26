@@ -29,8 +29,8 @@ class Interpolation(TimedPattern):
 class MovingAnything(TimedPattern):
   DEFAULT_PARAMS = {
     'Base Pattern': 'default_linrainbow.json',
-    'X Rate': 1.0,
-    'Y Rate': 0.0
+    'X Rate': 1,
+    'Y Rate': 0
   }
 
   DEFAULT_PARAMS.update(TimedPattern.DEFAULT_PARAMS)
