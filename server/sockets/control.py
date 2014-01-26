@@ -22,21 +22,6 @@ MOCK_DEVICES = {
   'bemis': MockDevice('bemis', BEMIS_WIDTH, BEMIS_HEIGHT)
 }
 
-def is_number(s):
-  try:
-    float(s)
-    return True
-  except ValueError:
-    return False
-
-def sanitizeParams(params):
-  for key, value in params.iteritems():
-    if type(value) == dict and 'RGBValues' in value:
-      params[key] = Color((value['RGBValues']))
-    elif is_number(value):
-      params[key] = int(value)
-  return params
-
 class DiscoControlProtocol(WebSocketServerProtocol):
   def onOpen(self):
     self.factory.register(self)
