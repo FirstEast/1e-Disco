@@ -1,6 +1,7 @@
 from pattern.color import *
 from pattern.pattern import *
 from pattern.importer import *
+from pattern.util import *
 from pattern.static.shapes import Circle
 from pattern.static.solid import *
 from pattern.importer import loadSavedPatternFromFilename
@@ -17,10 +18,15 @@ class TilePattern(Pattern):
     'Pattern': 'default_linrainbow.json'
   }
 
-  def paramUpdate(self):
-    self.pats = [[loadSavedPatternFromFilename(self.beat, self.params['Pattern'])
-      for x in range(self.params['X Segments'])]
-      for y in range(self.params['Y Segments'])]
+  def paramUpdate(self, paramName):
+    if paramName == 'ALL':
+      self.pats = [[loadSavedPatternFromFilename(self.beat, self.params['Pattern'])
+        for x in range(self.params['X Segments'])]
+        for y in range(self.params['Y Segments'])]
+    elif paramName == 'Pattern':
+      self.pats = [[loadSavedPatternFromFilename(self.beat, self.params['Pattern'])
+        for x in range(self.params['X Segments'])]
+        for y in range(self.params['Y Segments'])]
 
   def render(self, device):
     lwid = device.width / self.params['X Segments']
@@ -32,26 +38,6 @@ class TilePattern(Pattern):
         ret.paste(self.pats[y][x].render(self.mockDevice), (x * lwid, y * lhei))
     return ret
 
-def layerPatterns(top, bottom, mask = -1, flip = True, blend = False): # by default, mask's black is the bottom layer
-  if mask == -1: mask = top
-  topData = top.getdata()
-  maskData = mask.convert('L').getdata()
-  botData = bottom.getdata()
-  
-  newData = []
-  for i in range(len(maskData)):
-    if (maskData[i] > 0) != flip:
-      newData.append(botData[i])
-    else:
-      newData.append(topData[i])
-  ret = bottom.copy()
-  ret.putdata(newData)
-  return ret
-
-def maskPatterns(mask, patternImg): # mask's light is what to keep
-  mask = mask.convert('L')
-  return layerPatterns(mask, patternImg, mask, False)
-
 class LayerPattern(Pattern):
   DEFAULT_PARAMS = {
     'Top': 'default_circle.json',
@@ -61,9 +47,15 @@ class LayerPattern(Pattern):
     'FlipMask': True
   }
 
-  def paramUpdate(self):
-    self.topPattern = loadSavedPatternFromFilename(self.beat, self.params['Top'])
-    self.botPattern = loadSavedPatternFromFilename(self.beat, self.params['Bottom'])
+  def paramUpdate(self, paramName):
+    if paramName == 'ALL':
+      self.topPattern = loadSavedPatternFromFilename(self.beat, self.params['Top'])
+      self.botPattern = loadSavedPatternFromFilename(self.beat, self.params['Bottom'])
+    elif paramName == 'Top':
+      self.topPattern = loadSavedPatternFromFilename(self.beat, self.params['Top'])
+    elif paramName == 'Bottom':
+      self.botPattern = loadSavedPatternFromFilename(self.beat, self.params['Bottom'])
+
     if self.params['UseMask']: self.maskPattern = loadSavedPatternFromFilename(self.beat, self.params['Mask'])
 
   def render(self, device):
@@ -78,9 +70,14 @@ class MaskPattern(Pattern):
     'Pattern': 'default_linrainbow.json',
   }
 
-  def paramUpdate(self):
-    self.maskPattern = loadSavedPatternFromFilename(self.beat, self.params['Mask'])
-    self.bottomPattern = loadSavedPatternFromFilename(self.beat, self.params['Pattern'])
+  def paramUpdate(self, paramName):
+    if paramName == 'ALL':
+      self.maskPattern = loadSavedPatternFromFilename(self.beat, self.params['Mask'])
+      self.bottomPattern = loadSavedPatternFromFilename(self.beat, self.params['Pattern'])
+    elif paramName == 'Mask':
+      self.maskPattern = loadSavedPatternFromFilename(self.beat, self.params['Mask'])
+    elif paramName == 'Pattern':
+      self.bottomPattern = loadSavedPatternFromFilename(self.beat, self.params['Pattern'])
 
   def render(self, device):
     mask = self.maskPattern.render(device)
@@ -94,7 +91,7 @@ class BlendPattern(Pattern):
     'Mask': 'masks_1e.json',
   }
 
-  def paramUpdate(self):
+  def paramUpdate(self, paramName):
     self.topPattern = loadSavedPatternFromFilename(self.beat, self.params['Top'])
     self.botPattern = loadSavedPatternFromFilename(self.beat, self.params['Bottom'])
     self.maskPattern = loadSavedPatternFromFilename(self.beat, self.params['Mask'])
@@ -109,7 +106,7 @@ class Blending(Pattern):
     '100Weight': 50
   }
 
-  def paramUpdate(self):
+  def paramUpdate(self, paramName):
     self.p1 = loadSavedPatternFromFilename(self.beat, self.params['Pattern 1'])
     self.p2 = loadSavedPatternFromFilename(self.beat, self.params['Pattern 2'])
   
@@ -122,7 +119,7 @@ class Adding(Pattern):
     'Pattern 2': 'default_interpolation.json',
   }
 
-  def paramUpdate(self):
+  def paramUpdate(self, paramName):
     self.p1 = loadSavedPatternFromFilename(self.beat, self.params['Pattern 1'])
     self.p2 = loadSavedPatternFromFilename(self.beat, self.params['Pattern 2'])
   
@@ -135,7 +132,7 @@ class Subtracting(Pattern):
     'Pattern 2': 'default_interpolation.json',
   }
 
-  def paramUpdate(self):
+  def paramUpdate(self, paramName):
     self.p1 = loadSavedPatternFromFilename(self.beat, self.params['Pattern 1'])
     self.p2 = loadSavedPatternFromFilename(self.beat, self.params['Pattern 2'])
   

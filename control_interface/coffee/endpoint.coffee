@@ -43,15 +43,17 @@ $('document').ready ( =>
     height: 24*8
   bemisPreview.render()
 
-  $('body').append(ddfPreview.$el)
-  $('body').append(goodalePreview.$el)
-  $('body').append(bemisPreview.$el)
+  $('.realVis').append(ddfPreview.$el)
+  $('.realVis').append(goodalePreview.$el)
+  $('.realVis').append(bemisPreview.$el)
 
   for device in com.firsteast.OUTPUT_DEVICES
     selector = new com.firsteast.PatternSelector
       discoModel: session.realDiscoModel
       patternList: session.patternList
       savedPatternList: session.savedPatternList
+      gifList: session.gifList
+      imageList: session.imageList
       device: device
     selector.render()
     $('body').append(selector.$el)

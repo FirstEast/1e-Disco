@@ -1,0 +1,1 @@
+{"USE_BEAT": true, "__module__": "pattern.beat.ddf", "name": "HorizontalVis", "render": {}, "saveName": "horizontalVisWhite", "DEVICES": ["ddf"], "params": {"Vis Color": {"RGBValues": [255, 255, 255]}}, "DEFAULT_PARAMS": {"Vis Color": {"RGBValues": [255, 0, 0]}}, "saved": true, "__doc__": null}

@@ -14,10 +14,11 @@ DEFAULT_PATTERNS = {
 }
 
 SUPER_PATTERN_CLASSES = {
-  'Pattern', 'StaticPattern', 'TimedPattern'
+  'Pattern', 'StaticPattern', 'TimedPattern', 'AdjustParam', 'BeatAdjustParam'
 }
 
 PATTERN_SAVE_DIR = 'pattern/saved/'
+IMAGE_DIR = 'pattern/images/'
 
 def is_number(s):
   try:
@@ -96,6 +97,12 @@ def getSavedPatternJson():
     result.append(json.load(f))
     f.close()
   return json.dumps(result)
+
+def getGifList():
+  return glob.glob(IMAGE_DIR + '*.gif')
+
+def getImageList():
+  return glob.glob(IMAGE_DIR + '*.png') + glob.glob(IMAGE_DIR + '*.jpg')
 
 def deepImport(name):
   m = __import__(name)

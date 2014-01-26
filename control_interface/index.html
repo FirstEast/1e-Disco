@@ -40,8 +40,8 @@
       {{/each}}
     </select>
     <div class="params">
-      {{#unless currentPattern.saved}}
-        {{#each ../parameters}}
+      {{#each parameters}}
+        <div class="param">
           <span>{{name}}: </span>
           {{#if type}}
             <input class="param-input" type="{{type}}" value="{{val}}" name="{{name}}" {{#if val}}checked="checked"{{/if}}></input>
@@ -54,21 +54,29 @@
             </select>
             {{/if}}
             {{#if gif}}
-            <span>GIF TODO</span>
+            <select class="param-input" name="{{name}}" data-type="gif">
+              {{#each ../../../gifList}}
+              <option value="{{attributes.name}}">{{attributes.name}}</option>
+              {{/each}}
+            </select>
             {{/if}}
             {{#if image}}
-            <span>IMAGE TODO</span>
+            <select class="param-input" name="{{name}}" data-type="image">
+              {{#each ../../../imageList}}
+              <option value="{{attributes.name}}">{{attributes.name}}</option>
+              {{/each}}
+            </select>
             {{/if}}
           {{/if}}
-          <br/>
-        {{/each}}
-      {{/unless}}
+        </div>
+      {{/each}}
     </div>
     <input type=text class="save-name-input"></input>
     <button class="save-button">Save Pattern</button>
   </script>
 
   <body>
+    <div class="realVis"></div>
 
   </body>
 </html>

@@ -67,12 +67,12 @@ class RenderSocket(Protocol):
     self.sendMessage("OK")
 
   def update(self, new_data):
+    output_data = numpy.reshape(new_data, (LENGTH, 3))
     for i in range(LENGTH):
       module, index = self.unSnake(i)
-      output_data = numpy.reshape(new_data, (LENGTH, 3))
       self.ddf_data[module][index] = output_data[i]
 
-  def unSnake(i): #i is the index of the normal array
+  def unSnake(self, i): #i is the index of the normal array
     # returns (module id, index within module)
     mod_index = i%MOD_WIDTH
     half_ddf_index = i/HALF_DDF_SIZE

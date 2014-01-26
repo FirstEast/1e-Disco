@@ -9,16 +9,7 @@ from pattern.static.solid import *
 
 from PIL import Image, ImageChops, ImageEnhance
 
-BASS = (0, 8)
-
 SMOOTHING_ALPHA = 0.8
-
-def getSummedFreqData(beat, start, end):
-  freqs = beat.avgFreqs
-  total = 0
-  for i in range(start, end):
-    total += (freqs[i] - 0.80) * 5
-  return total / (end - start)
 
 class VerticalVis(Pattern):
 
@@ -92,22 +83,6 @@ class HorizontalVis(Pattern):
     im.putdata(frame)
     return im.transpose(Image.ROTATE_270).transpose(Image.FLIP_LEFT_RIGHT)
 
-class RaindbowVis(Pattern):
-  USE_BEAT = True
-
-  DEVICES = ['ddf']
-
-  def __init__(self, beat, params):
-    Pattern.__init__(self, beat, params)
-    self.visPattern = VerticalVis(beat, {})
-    self.gradPattern = LinearRainbow(beat, {'EndHue': 0.25})
-
-  def render(self, device):
-    vis = self.visPattern.render(device)
-    grad = self.gradPattern.render(device)
-
-    return maskPatterns(vis, grad)
-
 class PulsingCircle(Pattern):
 
   DEFAULT_PARAMS = {
@@ -125,7 +100,7 @@ class PulsingCircle(Pattern):
     Pattern.__init__(self, beat, params)
     self.lastTotal = 0
 
-  def paramUpdate(self):
+  def paramUpdate(self, paramName):
     self.circlePattern = loadSavedPatternFromFilename(self.beat, self.params['Circle Pattern'])
 
   def render(self, device):
@@ -146,7 +121,7 @@ class FadingPulsingCircle(Pattern):
 
   DEVICES = ['ddf']
 
-  def paramUpdate(self):
+  def paramUpdate(self, paramName):
     self.circlePattern = loadSavedPatternFromFilename(self.beat, self.params['Pulsing Circle Pattern'])    
 
   def render(self, device):
@@ -168,12 +143,12 @@ class ColorPulsingCircle(Pattern):
 
   DEVICES = ['ddf']
 
-  def paramUpdate(self):
+  def paramUpdate(self, paramName):
     self.circlePattern = loadSavedPatternFromFilename(self.beat, self.params['Pulsing Circle Pattern'])    
 
   def render(self, device):
     cent = max(self.beat.avgCentroid - 0.66, 0) * 3
-    hue = (self.params['100End Hue'] - self.params['100Start Hue']) * cent + self.params['Start Hue']
+    hue = (self.params['100End Hue'] - self.params['100Start Hue']) * cent + self.params['100Start Hue']
     circleColor = Color((hue / 100.0, 1, 255), isHSV=True)
     solidColorPattern = SolidColor(self.beat, {'Color': circleColor})
 

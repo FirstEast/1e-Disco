@@ -19,6 +19,8 @@ FLAT_GOODALE_SIDE = 97
 FLAT_GOODALE_BOTTOM = 159
 FLAT_GOODALE_LENGTH = FLAT_GOODALE_TOP + FLAT_GOODALE_SIDE + FLAT_GOODALE_BOTTOM
 
+BASS = (0, 8)
+
 def unflattenGoodaleArray(frame):
   newFrame = []
   for i in range(len(frame[0])):
@@ -58,6 +60,34 @@ def flatGoodaleArrayFromDdfImage(ddfImage):
   return [bottom + side + top]
 
 def scaleToBucket(value, minVal, maxVal):
+  v = min(max(value, 0.0), 1.0)
   v = (maxVal - minVal) * value + minVal
   v = min(max(v, minVal), maxVal)
   return int(math.floor(v))
+
+def getSummedFreqData(beat, start, end):
+  freqs = beat.avgFreqs
+  total = 0
+  for i in range(start, end):
+    total += (freqs[i] - 0.80) * 5
+  return total / (end - start)
+
+def layerPatterns(top, bottom, mask = -1, flip = True, blend = False): # by default, mask's black is the bottom layer
+  if mask == -1: mask = top
+  topData = top.getdata()
+  maskData = mask.convert('L').getdata()
+  botData = bottom.getdata()
+  
+  newData = []
+  for i in range(len(maskData)):
+    if (maskData[i] > 0) != flip:
+      newData.append(botData[i])
+    else:
+      newData.append(topData[i])
+  ret = bottom.copy()
+  ret.putdata(newData)
+  return ret
+
+def maskPatterns(mask, patternImg): # mask's light is what to keep
+  mask = mask.convert('L')
+  return layerPatterns(mask, patternImg, mask, False)

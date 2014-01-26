@@ -11,8 +11,8 @@ class ColorBump(StaticPattern):
     '100Duty': 50
   }
 
-  def paramUpdate(self):
-    StaticPattern.paramUpdate(self)
+  def paramUpdate(self, paramName):
+    StaticPattern.paramUpdate(self, paramName)
     self.params['Duty'] = self.params['100Duty'] / 100.0
 
   def renderFrame(self, device):
@@ -34,8 +34,8 @@ class ColorSpike(StaticPattern):
     '100Duty': 20
   }
 
-  def paramUpdate(self):
-    StaticPattern.paramUpdate(self)
+  def paramUpdate(self, paramName):
+    StaticPattern.paramUpdate(self, paramName)
     self.params['Duty'] = self.params['100Duty'] / 100.0
 
   def renderFrame(self, device):

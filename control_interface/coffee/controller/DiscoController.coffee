@@ -18,6 +18,8 @@ do ->
       if data.type == 'init'
         @_buildPatternList(JSON.parse(data.patternListData))
         @_buildSavedPatternList(JSON.parse(data.savedPatternListData))
+        @_buildGifList(data.gifList)
+        @_buildImageList(data.imageList)
         @_sendMessage {type: 'render'} 
       else if data.type == 'render'
         @_handleRender(data.renderData)
@@ -36,6 +38,20 @@ do ->
 
     _buildSavedPatternList: (patternList) =>
       @session.savedPatternList.reset(patternList)
+
+    _buildGifList: (gifList) =>
+      result = []
+      for gif in gifList
+        result.push
+          name: gif
+      @session.gifList.reset(result)
+
+    _buildImageList: (imageList) =>
+      result = []
+      for image in imageList
+        result.push
+          name: image
+      @session.imageList.reset(result)
 
     _handleRender: (renderData) =>
       @session.realDiscoModel.set('frames', renderData.real)

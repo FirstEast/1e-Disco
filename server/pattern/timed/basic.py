@@ -13,7 +13,7 @@ class Interpolation(TimedPattern):
 
   DEFAULT_PARAMS.update(TimedPattern.DEFAULT_PARAMS)
 
-  def paramUpdate(self):
+  def paramUpdate(self, paramName):
     self.loop = []
     self.loop += interpolateColors(self.params['Color 1'], self.params['Color 2'])
     self.loop += interpolateColors(self.params['Color 2'], self.params['Color 3'])
@@ -35,45 +35,12 @@ class MovingAnything(TimedPattern):
 
   DEFAULT_PARAMS.update(TimedPattern.DEFAULT_PARAMS)
 
-  def paramUpdate(self):
-    self.base = loadSavedPatternFromFilename(self.beat, self.params['Base Pattern'])
+  def paramUpdate(self, paramName):
+    if paramName == 'ALL':
+      self.base = loadSavedPatternFromFilename(self.beat, self.params['Base Pattern'])
+    elif paramName == 'Base Pattern':
+      self.base = loadSavedPatternFromFilename(self.beat, self.params['Base Pattern'])
 
   def renderFrame(self, device, frameCount):
     return self.base.render(device).offset(int(self.params['X Rate'] * frameCount),
                                            int(self.params['Y Rate'] * frameCount))
-
-class MovingLight(TimedPattern):
-
-  DEFAULT_PARAMS = {
-    'Color': BLUE,
-  }
-
-  DEFAULT_PARAMS.update(TimedPattern.DEFAULT_PARAMS)
-
-  DEVICES = ['goodale', 'bemis']
-
-  def renderFrame(self, device, frameCount):
-    count = frameCount % device.width
-    frame = [(0, 0, 0)] * count
-    frame = frame + [self.params['Color'].getRGBValues()]
-    frame = frame + [(0, 0, 0)] * (device.width - 1 - count)
-    im = Image.new('RGB', (device.width, 1))
-    im.putdata(frame)
-    return im
-
-class MovingLine(TimedPattern):
-
-  DEFAULT_PARAMS = {
-    'Color': BLUE,
-  }
-
-  DEFAULT_PARAMS.update(TimedPattern.DEFAULT_PARAMS)
-
-  DEVICES = ['ddf']
-
-  def renderFrame(self, device, frameCount):
-    count = frameCount % device.width
-    oneline = [(0, 0, 0)] * (count) + [self.params['Color'].getRGBValues()] + [(0, 0, 0)] * (device.width - count - 1)
-    im = Image.new('RGB', (device.width, device.height))
-    im.putdata(oneline * device.height)
-    return im
