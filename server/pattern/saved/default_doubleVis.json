@@ -1,0 +1,1 @@
+{"USE_BEAT": false, "__module__": "pattern.test.mixing", "name": "DoubleVis", "render": {}, "saveName": "default_doubleVis", "DEVICES": ["ddf", "goodale", "bemis"], "params": {}, "DEFAULT_PARAMS": {}, "saved": true, "__doc__": null, "__init__": {}}

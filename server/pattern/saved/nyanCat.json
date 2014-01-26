@@ -1,0 +1,1 @@
+{"USE_BEAT": false, "__module__": "pattern.static.image", "name": "AnimGif2", "saveName": "nyanCat", "DEVICES": ["ddf", "goodale", "bemis"], "params": {}, "DEFAULT_PARAMS": {"DesWidth": 48, "DesHeight": 24, "RateMultiplier": 1, "Image Path": "pattern/images/nyan.gif", "Rate": 30, "Resize": true}, "saved": true, "__doc__": null}
