@@ -15,8 +15,8 @@ do ->
 
       @parameters = {}
 
-      @listenTo @patternList, 'reset', @render
-      @listenTo @savedPatternList, 'reset', @render
+      @listenTo @patternList, 'add, remove, reset', @render
+      @listenTo @savedPatternList, 'add, remove, reset', @render
       @listenTo @discoModel, "change:#{@device}Pattern", @render
 
     render: =>

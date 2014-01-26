@@ -2,6 +2,65 @@ from pattern.color import *
 from pattern.pattern import *
 from PIL import Image, ImageChops
 
+import math
+
+class ColorBump(StaticPattern):
+  DEFAULT_PARAMS = {
+    'Color 1': BLACK,
+    'Color 2': BLUE,
+    '100Duty': 50
+  }
+
+  def paramUpdate(self):
+    self.params['Duty'] = self.params['100Duty'] / 100.0
+
+  def renderFrame(self, device):
+    im = Image.new('RGB', (device.width, device.height))
+    len1 = int(self.params['Duty'] * device.width)
+    len2 = device.width - len1
+    datarow = [getWeightedColorSum(self.params['Color 1'], self.params['Color 2'],
+      (1 + math.sin(x * math.pi / len1)) / 2).getRGBValues()
+      for x in range(len1)] + [getWeightedColorSum(self.params['Color 2'], self.params['Color 1'],
+      (1 + math.sin(x * math.pi / len2)) / 2).getRGBValues()
+      for x in range(len2)]
+    im.putdata(datarow * device.height)
+    return im
+
+class ColorSpike(StaticPattern):
+  DEFAULT_PARAMS = {
+    'Background': BLACK,
+    'Color': BLUE,
+    '100Duty': 20
+  }
+
+  def paramUpdate(self):
+    self.params['Duty'] = self.params['100Duty'] / 100.0
+
+  def renderFrame(self, device):
+    im = Image.new('RGB', (device.width, device.height))
+    len1 = int(self.params['Duty'] * device.width)
+    len2 = device.width - len1
+    datarow = [getWeightedColorSum(self.params['Background'], self.params['Color'], float(x) / len1
+      ).getRGBValues() for x in range(len1)] + [self.params['Background'].getRGBValues()] * len2
+    im.putdata(datarow * device.height)
+    return im
+
+class Checkerboard(StaticPattern):
+  DEFAULT_PARAMS = {
+    'Color 1': BLACK,
+    'Color 2': WHITE,
+    'Grain': 3,
+    'Offset': False
+  }
+
+  def renderFrame(self, device):
+    im = Image.new('RGB', (device.width, device.height))
+    im.putdata([self.params['Color 1'].getRGBValues()
+      if ((y / self.params['Grain'] % 2) != (x / self.params['Grain'] % 2)) != self.params['Offset']
+      else self.params['Color 2'].getRGBValues()
+      for y in range(device.height) for x in range(device.width)])
+    return im
+
 class SolidColor(StaticPattern):
   DEFAULT_PARAMS = {
     'Color': BLUE
@@ -30,5 +89,5 @@ class LinearRainbow(StaticPattern):
     colorArr = [Color((hue, 1, 255), True).getRGBValues() for hue in huerange]
     im = Image.new('RGB', (wid, hei))
     im.putdata(colorArr * hei)
-    if not self.params['Horizontal']: im = im.transpose(ROTATE_270).transpose(FLIP_LEFT_RIGHT)
+    if not self.params['Horizontal']: im = im.transpose(Image.ROTATE_270).transpose(Image.FLIP_LEFT_RIGHT)
     return im
