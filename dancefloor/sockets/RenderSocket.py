@@ -82,6 +82,9 @@ class RenderSocket(Protocol):
 
     new_index = mod_index*MOD_HEIGHT+(variable-1)/(-2)\
       *(MOD_HEIGHT-1)+((i/DDF_WIDTH)%MOD_HEIGHT)*variable
+      
+    if module == MODS_ACROSS -1:
+      new_index = MOD_HEIGHT*MOD_WIDTH - new_index - 1
 
     return module, new_index
 
