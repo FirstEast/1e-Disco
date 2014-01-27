@@ -11,7 +11,7 @@ GOODALE_FORMAT = 'BGR'
 DDF_WIDTH = 48
 DDF_HEIGHT = 24
 
-BEMIS_WIDTH = 261
+BEMIS_WIDTH = 264
 BEMIS_HEIGHT = 1
 
 FLAT_GOODALE_TOP = 160
@@ -77,7 +77,7 @@ def layerPatterns(top, bottom, mask = -1, flip = True, blend = False): # by defa
   topData = top.getdata()
   maskData = mask.convert('L').getdata()
   botData = bottom.getdata()
-  
+
   newData = []
   for i in range(len(maskData)):
     if (maskData[i] > 0) != flip:
