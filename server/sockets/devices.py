@@ -19,6 +19,13 @@ class DiscoDeviceReceiver(LineReceiver):
       frame = unflattenGoodaleArray(flatGoodaleArrayFromDdfImage(self.discoSession.getPattern('ddf').render(MOCK_DEVICES['ddf']))).getdata()
     else:
       frame = self.discoSession.getPattern(self.name).render(self).getdata()
+
+    if self.name == 'goodale':
+      newFrame = []
+      for color in frame:
+        newFrame.append((color[2], color[1], color[0]))
+      frame = newFrame
+
     output = [value for color in frame for value in color]
     self.sendMessage(struct.pack('B' * len(output), *output))
 
