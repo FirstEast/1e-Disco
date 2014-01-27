@@ -1,0 +1,1 @@
+{"USE_BEAT": false, "__module__": "pattern.mixer.layer", "name": "TilePattern", "render": {}, "paramUpdate": {}, "saveName": "tiled_colors", "DEVICES": ["ddf", "goodale", "bemis"], "params": {"X Segments": 8, "Pattern": "random_color.json", "Y Segments": 4}, "DEFAULT_PARAMS": {"X Segments": 4, "Pattern": "default_linrainbow.json", "Y Segments": 1}, "saved": true, "__doc__": null}
