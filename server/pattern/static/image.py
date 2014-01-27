@@ -16,7 +16,7 @@ class AnimatedGif(TimedPattern):
 
   DEFAULT_PARAMS.update(TimedPattern.DEFAULT_PARAMS)
 
-  DEVICES = ['ddf', 'goodale']
+  DEVICES = ['ddf']
 
   def __init__(self, beat, params):
     TimedPattern.__init__(self, beat, params)

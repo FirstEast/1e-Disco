@@ -19,6 +19,9 @@ class TrivialPattern(Pattern):
   def render(self, device):
     return self.pattern.render(device)
 
+class MimicPattern(Pattern):
+  DEVICES = ['goodale']
+
 class HSVFilter(Pattern):
   DEFAULT_PARAMS = {
     'Pattern': 'sliding_rainbow.json',
