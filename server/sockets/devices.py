@@ -1,6 +1,8 @@
 from twisted.internet.protocol import Factory
 from twisted.protocols.basic import LineReceiver
 from pattern.pattern import *
+from pattern.util import *
+from sockets.control import *
 
 import struct
 
@@ -13,7 +15,18 @@ class DiscoDeviceReceiver(LineReceiver):
     self.format = format
 
   def sendNextFrame(self):
-    output = [value for color in self.discoSession.getPattern(self.name).render(self).getdata() for value in color]
+    if self.name == 'goodale' and self.discoSession.getPattern(self.name).__class__.__name__ == 'MimicPattern':
+      frame = unflattenGoodaleArray(flatGoodaleArrayFromDdfImage(self.discoSession.getPattern('ddf').render(MOCK_DEVICES['ddf']))).getdata()
+    else:
+      frame = self.discoSession.getPattern(self.name).render(self).getdata()
+
+    if self.name == 'goodale':
+      newFrame = []
+      for color in frame:
+        newFrame.append((color[2], color[1], color[0]))
+      frame = newFrame
+
+    output = [value for color in frame for value in color]
     self.sendMessage(struct.pack('B' * len(output), *output))
 
   def connectionMade(self):

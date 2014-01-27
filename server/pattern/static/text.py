@@ -10,10 +10,9 @@ class Word(StaticPattern):
     'String': 'HELLO',
     'Color': BLUE
   }
-  
+
   def renderFrame(self, device):
     im = Image.new('RGB', (device.width, device.height))
     draw = ImageDraw.Draw(im)
-    print draw.textsize(self.params['String'])
     draw.text((3, 7), self.params['String'], fill=self.params['Color'].getRGBValues())
     return im

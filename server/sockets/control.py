@@ -114,11 +114,18 @@ class DiscoControlProtocol(WebSocketServerProtocol):
     frames = {'mock': {}, 'real': {}}
     for key in self.factory.discoSession.patternModel:
       try:
-        mockFrame = self.mockPatternModel[key].render(MOCK_DEVICES[key])
+        if key == 'goodale' and self.mockPatternModel[key].__class__.__name__ == 'MimicPattern':
+          mockFrame = unflattenGoodaleArray(flatGoodaleArrayFromDdfImage(self.factory.discoSession.getPattern('ddf').render(MOCK_DEVICES['ddf'])))
+        else:
+          mockFrame = self.mockPatternModel[key].render(MOCK_DEVICES[key])
         frames['mock'][key] = [value for color in mockFrame.getdata() for value in color]
-        realFrame = self.factory.discoSession.patternModel[key].render(MOCK_DEVICES[key])
+
+        if key == 'goodale' and self.factory.discoSession.patternModel[key].__class__.__name__ == 'MimicPattern':
+          realFrame = unflattenGoodaleArray(flatGoodaleArrayFromDdfImage(self.factory.discoSession.getPattern('ddf').render(MOCK_DEVICES['ddf'])))
+        else:
+          realFrame = self.factory.discoSession.patternModel[key].render(MOCK_DEVICES[key])
         frames['real'][key] = [value for color in realFrame.getdata() for value in color]
-      except Exception, e: 
+      except Exception, e:
         traceback.print_stack()
         print str(e)
     return frames

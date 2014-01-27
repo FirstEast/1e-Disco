@@ -11,7 +11,7 @@ try:
 except ImportError:
   raspi = False
 
-LENGTH = 261
+LENGTH = 264
 
 class RenderSocket(Protocol):
   def connectionMade(self):
