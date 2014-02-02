@@ -1,4 +1,5 @@
 from pattern.color import *
+from pattern.util import *
 from pattern.pattern import *
 from pattern.importer import *
 from pattern.static.shapes import *
@@ -49,8 +50,8 @@ class RingsMaker(Pattern):
     'Pattern': 'sliding_rainbow.json',
     'Size': 20,
     'Rate': 30,
-    'CenterX': 24,
-    'CenterY': 12
+    'CenterX': DDF_WIDTH / 2,
+    'CenterY': DDF_HEIGHT / 2
   }
 
   def paramUpdate(self, paramName):
@@ -75,8 +76,8 @@ class SpiralMaker(Pattern):
     'Pattern': 'sliding_rainbow.json',
     'Rate': 30,
     '1000Twist': 15,
-    'CenterX': 24,
-    'CenterY': 12,
+    'CenterX': DDF_WIDTH / 2,
+    'CenterY': DDF_HEIGHT / 2,
     'Wraps': 1
   }
 
@@ -103,8 +104,8 @@ class DiamondMaker(Pattern):
     'Pattern': 'sliding_rainbow.json',
     'Size': 20,
     'Rate': 30,
-    'CenterX': 24,
-    'CenterY': 12
+    'CenterX': DDF_WIDTH / 2,
+    'CenterY': DDF_HEIGHT / 2
   }
 
   def paramUpdate(self, paramName):
@@ -128,8 +129,8 @@ class RadarMaker(Pattern):
   DEFAULT_PARAMS = {
     'Pattern': 'sliding_rainbow.json',
     'Rate': 30,
-    'CenterX': 24,
-    'CenterY': 12,
+    'CenterX': DDF_WIDTH / 2,
+    'CenterY': DDF_HEIGHT / 2,
     'Wraps': 1
   }
 

@@ -9,8 +9,8 @@ class AnimatedGif(TimedPattern):
   DEFAULT_PARAMS = {
     'Image Path': 'pattern/images/Nyan Cat.gif',
     'Resize': True,
-    'DesWidth': 48,
-    'DesHeight': 24,
+    'DesWidth': DDF_WIDTH,
+    'DesHeight': DDF_HEIGHT,
     '10RateMultiplier': 10
   }
 
@@ -50,14 +50,9 @@ class AnimatedGif(TimedPattern):
 
   def renderFrame(self, device, frameCount):
     frameCount %= len(self.frames)
-    if device.name == 'goodale':
-      im = Image.new('RGB', (DDF_WIDTH, DDF_HEIGHT))
-      im.paste(self.frames[frameCount], (0, 0))
-      return unflattenGoodaleArray(flatGoodaleArrayFromDdfImage(im))
-    else:
-      im = Image.new('RGB', (device.width, device.height))
-      im.paste(self.frames[frameCount], (0, 0))
-      return im
+    im = Image.new('RGB', (device.width, device.height))
+    im.paste(self.frames[frameCount], (0, 0))
+    return im
 
 class StaticImage(StaticPattern):
   DEFAULT_PARAMS = {

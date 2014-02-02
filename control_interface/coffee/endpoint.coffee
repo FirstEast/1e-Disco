@@ -4,8 +4,8 @@ com.firsteast.WEBSOCKET_PORT = '9000'
 com.firsteast.OUTPUT_DEVICES = ['ddf', 'goodale', 'bemis']
 com.firsteast.INPUT_DEVICES = ['beat']
 
-com.firsteast.DDF_WIDTH = 48
-com.firsteast.DDF_HEIGHT = 24
+com.firsteast.DDF_WIDTH = 16
+com.firsteast.DDF_HEIGHT = 12
 
 com.firsteast.BEMIS_WIDTH = 261
 
@@ -27,8 +27,8 @@ $('document').ready ( =>
   # Draw some debug views
   ddfPreview = new com.firsteast.DdfPreview
     model: session.realDiscoModel
-    width: 48*8
-    height: 24*8
+    width: com.firsteast.DDF_WIDTH*8
+    height: com.firsteast.DDF_HEIGHT*8
   ddfPreview.render()
 
   goodalePreview = new com.firsteast.GoodalePreview

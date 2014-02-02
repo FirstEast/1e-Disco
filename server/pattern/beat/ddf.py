@@ -26,10 +26,9 @@ class VerticalVis(Pattern):
     freqs = self.beat.avgFreqs
     smashed = []
 
+    div = len(freqs) / device.height
     if self.params['Mirrored']:
-      div = 4
-    else:
-      div = 2
+      div = div * 2
 
     for i in range(int(len(freqs) / div)):
       total = 0
@@ -71,15 +70,24 @@ class HorizontalVis(Pattern):
     for i in range(len(freqs)):
       newFreqs.append(scaleToBucket(max((freqs[i] - 0.66) * 3, 0), 0, device.height))
 
+    mergedFreqs = []
+    bucketsPerRow = len(newFreqs) / device.width
+    for i in range(device.width):
+      index = i * bucketsPerRow
+      total = 0
+      for j in range(bucketsPerRow):
+        total += newFreqs[index + j]
+      mergedFreqs.append(total / bucketsPerRow)
+
     frame = []
-    for i in range(len(freqs)):
+    for i in range(len(mergedFreqs)):
       row = []
-      for j in range(device.height - newFreqs[i]):
+      for j in range(device.height - mergedFreqs[i]):
         row.append(BLACK.getRGBValues())
-      for j in range(newFreqs[i]):
+      for j in range(mergedFreqs[i]):
         row.append(self.params['Vis Color'].getRGBValues())
       frame += row
-    im = Image.new('RGB', (device.height, len(freqs)))
+    im = Image.new('RGB', (device.height, len(mergedFreqs)))
     im.putdata(frame)
     return im.transpose(Image.ROTATE_270).transpose(Image.FLIP_LEFT_RIGHT)
 

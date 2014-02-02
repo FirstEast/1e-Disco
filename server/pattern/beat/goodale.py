@@ -25,12 +25,3 @@ class VolumePulse(Pattern):
     sideFrame = [centroidColor] * pulse
     midFrame = [emptyColor] * (FLAT_GOODALE_LENGTH - pulse * 2)
     return unflattenGoodaleArray([sideFrame + midFrame + sideFrame])
-
-# class ManyVolumePulses(Pattern):
-
-#   DEFAULT_PARAMS = {
-#     'Pulse Color': RED,
-#     'Non Pulse Color': BLACK
-#   }
-
-#   

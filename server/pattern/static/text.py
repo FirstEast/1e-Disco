@@ -14,5 +14,5 @@ class Word(StaticPattern):
   def renderFrame(self, device):
     im = Image.new('RGB', (device.width, device.height))
     draw = ImageDraw.Draw(im)
-    draw.text((3, 7), self.params['String'], fill=self.params['Color'].getRGBValues())
+    draw.text(((device.height / 6) - 1, (device.width / 6) - 1), self.params['String'], fill=self.params['Color'].getRGBValues())
     return im

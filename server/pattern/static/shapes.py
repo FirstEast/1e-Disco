@@ -1,12 +1,13 @@
+from pattern.util import *
 from pattern.color import *
 from pattern.pattern import *
 from PIL import Image, ImageDraw
 
 class Circle(StaticPattern):
   DEFAULT_PARAMS = {
-    'Center X': 24,
-    'Center Y': 12,
-    'Radius': 10,
+    'Center X': DDF_WIDTH / 2,
+    'Center Y': DDF_HEIGHT / 2,
+    'Radius': (DDF_HEIGHT / 2) - 2,
     'Fill': True,
     'Color': BLUE
   }
@@ -30,8 +31,8 @@ class Rectangle(StaticPattern):
   DEFAULT_PARAMS = {
     'Origin X': 0,
     'Origin Y': 0,
-    'Width': 47,
-    'Height': 23,
+    'Width': DDF_WIDTH - 1,
+    'Height': DDF_HEIGHT - 1,
     'Fill': False,
     'Color': BLUE
   }
