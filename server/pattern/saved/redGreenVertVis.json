@@ -1,0 +1,1 @@
+{"USE_BEAT": false, "__module__": "pattern.mixer.layer", "name": "MaskPattern", "render": {}, "paramUpdate": {}, "saveName": "redGreenVertVis", "DEVICES": ["ddf", "goodale", "bemis"], "params": {"Pattern": "greenRedRainbow.json", "Mask": "redVerticalVis.json"}, "DEFAULT_PARAMS": {"Pattern": "default_linrainbow.json", "Mask": "default_circle.json"}, "saved": true, "__doc__": null}
