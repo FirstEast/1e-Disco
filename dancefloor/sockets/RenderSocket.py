@@ -6,17 +6,25 @@ import struct
 
 from pp_herder import PPHerder
 
-DDF_WIDTH = 48
-DDF_HEIGHT = 24
-MOD_WIDTH = 16 #Width of 1 module
-MOD_HEIGHT = 12 #Height of 1 module
-MODS_ACROSS = 3 #Number of modules horizontally
-MOD_SIZE = MOD_WIDTH * MOD_HEIGHT
-HALF_DDF_SIZE = MOD_SIZE * MODS_ACROSS
+DEMO_MODULE = False
 
-NUM_MODULES = 6
+if DEMO_MODULE:
+  DDF_WIDTH = 16
+  DDF_HEIGHT = 12
+  MODS_ACROSS = 1 #Number of modules horizontally
+  NUM_MODULES = 1
+else:
+  DDF_WIDTH = 48
+  DDF_HEIGHT = 24
+  MODS_ACROSS = 3 #Number of modules horizontally
+  NUM_MODULES = 6
+
 PIX_PER_MODULE = 192
 LENGTH = NUM_MODULES * PIX_PER_MODULE
+MOD_WIDTH = 16 #Width of 1 module
+MOD_HEIGHT = 12 #Height of 1 module
+MOD_SIZE = MOD_WIDTH * MOD_HEIGHT
+HALF_DDF_SIZE = MOD_SIZE * MODS_ACROSS
 
 class RenderSocket(Protocol):
   def __init__(self):
@@ -82,7 +90,7 @@ class RenderSocket(Protocol):
 
     new_index = mod_index*MOD_HEIGHT+(variable-1)/(-2)\
       *(MOD_HEIGHT-1)+((i/DDF_WIDTH)%MOD_HEIGHT)*variable
-      
+
     if module == MODS_ACROSS -1:
       new_index = MOD_HEIGHT*MOD_WIDTH - new_index - 1
 

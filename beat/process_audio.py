@@ -42,7 +42,7 @@ def getAudioStream():
   stream = P.open(format = FORMAT,
                   channels = CHANNELS,
                   rate = RATE,
-                  input_device_index = 2,
+                  input_device_index = 3,   # index may change for different soundflower configurations.
                   input = True,
                   frames_per_buffer = CHUNK)
   return stream
@@ -89,7 +89,7 @@ def unpack_audio_data(data):
 
 def spectral_centroid(samples, spec_range=200.0):
   """ starting at seek_point read fft_size samples, and calculate the spectral centroid """
-  
+
   hanning = numpy.hanning(len(samples))
 
   fft = numpy.fft.fft(hanning * samples)
