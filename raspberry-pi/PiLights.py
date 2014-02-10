@@ -15,11 +15,11 @@ if __name__ == '__main__':
   usb = os.walk(USB_PREFIX).next()[1][0]
   config = USB_PREFIX + usb + '/config.txt'
   host = ''
-  port = ''
+  port = 0
   length = 0
   with open(config, 'r') as f:
     host = f.readline().strip()
-    port = f.readline().strip()
+    port = int(f.readline().strip())
     length = int(f.readline().strip())
 
   print host

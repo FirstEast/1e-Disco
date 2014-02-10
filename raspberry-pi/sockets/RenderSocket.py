@@ -4,6 +4,9 @@ import time
 import struct
 import RPi.GPIO as GPIO
 
+dev = "/dev/spidev0.0"
+spidev = file(dev, "wb")
+
 class RenderSocket(Protocol):
   def __init__(self, length):
     self.length = length
