@@ -4,10 +4,10 @@ com.firsteast.WEBSOCKET_PORT = '9000'
 com.firsteast.OUTPUT_DEVICES = ['ddf', 'goodale', 'bemis']
 com.firsteast.INPUT_DEVICES = ['beat']
 
-com.firsteast.DDF_WIDTH = 16
-com.firsteast.DDF_HEIGHT = 12
+com.firsteast.DDF_WIDTH = 48
+com.firsteast.DDF_HEIGHT = 24
 
-com.firsteast.BEMIS_WIDTH = 261
+com.firsteast.BEMIS_WIDTH = 264
 
 com.firsteast.GOODALE_CANVAS_WIDTH = 160
 com.firsteast.GOODALE_CANVAS_HEIGHT = 110
