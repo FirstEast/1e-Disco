@@ -33,13 +33,13 @@ $('document').ready ( =>
 
   goodalePreview = new com.firsteast.GoodalePreview
     model: session.realDiscoModel
-    width: 160*3
+    width: com.firsteast.GOODALE_CANVAS_WIDTH*3
     height: 111*3
   goodalePreview.render()
 
   bemisPreview = new com.firsteast.BemisPreview
     model: session.realDiscoModel
-    width: 261*2
+    width: com.firsteast.BEMIS_WIDTH*2
     height: 24*8
   bemisPreview.render()
 
