@@ -4,10 +4,10 @@ com.firsteast.WEBSOCKET_PORT = '9000'
 com.firsteast.OUTPUT_DEVICES = ['ddf', 'goodale', 'bemis']
 com.firsteast.INPUT_DEVICES = ['beat']
 
-com.firsteast.DDF_WIDTH = 16
-com.firsteast.DDF_HEIGHT = 12
+com.firsteast.DDF_WIDTH = 48
+com.firsteast.DDF_HEIGHT = 24
 
-com.firsteast.BEMIS_WIDTH = 261
+com.firsteast.BEMIS_WIDTH = 264
 
 com.firsteast.GOODALE_CANVAS_WIDTH = 160
 com.firsteast.GOODALE_CANVAS_HEIGHT = 110
@@ -33,13 +33,13 @@ $('document').ready ( =>
 
   goodalePreview = new com.firsteast.GoodalePreview
     model: session.realDiscoModel
-    width: 160*3
+    width: com.firsteast.GOODALE_CANVAS_WIDTH*3
     height: 111*3
   goodalePreview.render()
 
   bemisPreview = new com.firsteast.BemisPreview
     model: session.realDiscoModel
-    width: 261*2
+    width: com.firsteast.BEMIS_WIDTH*2
     height: 24*8
   bemisPreview.render()
 
