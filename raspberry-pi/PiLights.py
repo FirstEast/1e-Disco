@@ -8,17 +8,25 @@ import os
 
 USB_PREFIX = '/media/'
 
-DISCO_SERVER_HOST = "localhost"
-DISCO_SERVER_PORT = 8123
-
 if __name__ == '__main__':
+  # Sleep while Raspi wakes up (hack)
+  time.sleep(10)
+
   usb = os.walk(USB_PREFIX).next()[1][0]
   config = USB_PREFIX + usb + '/config.txt'
   host = ''
+  port = ''
+  length = 0
   with open(config, 'r') as f:
-    host = f.readline()
+    host = f.readline().strip()
+    port = f.readline().strip()
+    length = int(f.readline().strip())
+
+  print host
+  print port
+  print length
   
   # Setup render socket
-  point = TCP4ClientEndpoint(reactor, host, DISCO_SERVER_PORT)
-  d = point.connect(RenderSocketFactory())
+  point = TCP4ClientEndpoint(reactor, host, port)
+  d = point.connect(RenderSocketFactory(length))
   reactor.run()

@@ -2,18 +2,12 @@ from twisted.internet.protocol import Protocol, ReconnectingClientFactory
 
 import time
 import struct
-
-try:
-  import RPi.GPIO as GPIO
-  raspi = True
-  dev = "/dev/spidev0.0"
-  spidev = file(dev, "wb")
-except ImportError:
-  raspi = False
-
-LENGTH = 395
+import RPi.GPIO as GPIO
 
 class RenderSocket(Protocol):
+  def __init__(self, length):
+    self.length = length
+
   def connectionMade(self):
     print "connected successfully to central server"
 
@@ -27,16 +21,13 @@ class RenderSocket(Protocol):
     line = line.strip()
     output = []
     try:
-      output = struct.unpack('B'*LENGTH*3, line)
+      output = struct.unpack('B'*self.length*3, line)
     except struct.error:
       self.sendMessage("OK")
       return
 
-    # If we're running on a raspi, render the stuff we got,
-    # otherwise send it to the web visualizer as json
-    if raspi:
-      spidev.write(bytearray(output))
-      spidev.flush()
+    spidev.write(bytearray(output))
+    spidev.flush()
 
     # Signal for the next frame
     self.sendMessage("OK")
@@ -45,9 +36,12 @@ class RenderSocket(Protocol):
     self.transport.write(message + '\n')
 
 class RenderSocketFactory(ReconnectingClientFactory):
+  def __init__(self, length):
+    self.length = length
+
   def buildProtocol(self, addr):
     self.resetDelay()
-    return RenderSocket()
+    return RenderSocket(self.length)
 
   def clientConnectionLost(self, connector, reason):
     ReconnectingClientFactory.clientConnectionLost(self, connector, reason)
