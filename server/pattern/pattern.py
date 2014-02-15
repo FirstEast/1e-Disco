@@ -26,15 +26,13 @@ class Pattern():
   # Set to assign which devices this pattern is for
   DEVICES = ["goodale", "bemis", "ddf"]
 
-  def __init__(self, beat, params):
+  def __init__(self, params={}):
     '''
     Assign params to self.params. Make sure to call this in your subclass constructor!
-    Also assigns beat to self.beat, in case your pattern uses it.
     '''
     self.params = {}
     self.params.update(self.DEFAULT_PARAMS)
     self.params.update(params)
-    self.beat = beat
 
     self.paramUpdate('ALL')
 
@@ -79,8 +77,8 @@ class StaticPattern(Pattern):
   Children must implement renderNew.
   '''
 
-  def __init__(self, beat, params):
-    Pattern.__init__(self, beat, params)
+  def __init__(self, params={}):
+    Pattern.__init__(self, params)
     self.newParams = True
     self.frame = None
 
@@ -112,8 +110,8 @@ class TimedPattern(Pattern):
     'Rate': DEFAULT_RATE
   }
 
-  def __init__(self, beat, params):
-    Pattern.__init__(self, beat, params)
+  def __init__(self, params={}):
+    Pattern.__init__(self, params)
     self.lastTime = time.time() * 1000
     self.frame = 0
 

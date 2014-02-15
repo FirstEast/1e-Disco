@@ -9,11 +9,47 @@ body {
   color: white;
   font-family: sans-serif;
 }
-canvas {
-  border: 1px solid #333;
-  height: 192px;
+.menu {
+  float: left;
+  height: 100%;
+  width: 200px;
+  background-color: #333333;
+}
+.previews {
+  padding: 10px;
+}
+.preview-area {
+  display: flex;
+  justify-content: space-around;
 }
 .pattern-selector {
-  float: left;
-  margin-right: 20px;
+  display: inline-block;
+  vertical-align: top;
+}
+.pattern-selector .preview-view {
+  position: relative;
+}
+.pattern-selector .preview-view canvas {
+  border: 1px solid #333333;
+  height: 192px;
+}
+.pattern-selector .preview-view:hover .expander {
+  opacity: 1;
+}
+.pattern-selector .preview-view .expander {
+  position: absolute;
+  bottom: 5px;
+  left: 1px;
+  background-color: black;
+  padding: 2px 4px;
+  cursor: pointer;
+  opacity: 0;
+}
+.pattern-selector .selector-area {
+  width: 300px;
+  max-height: 200px;
+  overflow: scroll;
+}
+.pattern-selector .selector-area select {
+  width: 200px;
 }

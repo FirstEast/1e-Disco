@@ -21,3 +21,5 @@ do ->
 
       @gifList = new Backbone.Collection()
       @imageList = new Backbone.Collection()
+
+      @displayModel = new com.firsteast.DisplayModel()

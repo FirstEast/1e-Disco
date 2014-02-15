@@ -45,16 +45,16 @@ def loadPatternFromModuleClassName(name):
   print "Failed to load pattern from module class name '" + name + "'!"
 
 # Returns a pattern instance from a saved pattern name
-def loadSavedPattern(beat, patternData):
+def loadSavedPattern(patternData):
   moduleClassName = patternData['__module__'] + '_' + patternData['name']
-  pattern = loadPatternFromModuleClassName(moduleClassName)(beat, sanitizeParams(patternData['params']))
+  pattern = loadPatternFromModuleClassName(moduleClassName)(sanitizeParams(patternData['params']))
   return pattern
 
-def loadSavedPatternFromFilename(beat, fileName):
+def loadSavedPatternFromFilename(fileName):
   f = open(PATTERN_SAVE_DIR + fileName)
   data = json.load(f)
   f.close()
-  return loadSavedPattern(beat, data)
+  return loadSavedPattern(data)
 
 # Returns a map of all the devices to their default pattern classes
 def getDefaultPatterns():

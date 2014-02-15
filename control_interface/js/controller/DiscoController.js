@@ -6,6 +6,7 @@
       function DiscoController(options) {
         this._sendMessage = __bind(this._sendMessage, this);
         this._updateRealPatternParams = __bind(this._updateRealPatternParams, this);
+        this._setMockPattern = __bind(this._setMockPattern, this);
         this._setRealPattern = __bind(this._setRealPattern, this);
         this._savePattern = __bind(this._savePattern, this);
         this._handlePatterns = __bind(this._handlePatterns, this);
@@ -121,7 +122,8 @@
         _results = [];
         for (_i = 0, _len = _ref1.length; _i < _len; _i++) {
           device = _ref1[_i];
-          _results.push(this.listenTo(this.session.realDiscoModel, "change:" + device + "Pattern", _.partial(this._setRealPattern, "" + device)));
+          this.listenTo(this.session.realDiscoModel, "change:" + device + "Pattern", _.partial(this._setRealPattern, "" + device));
+          _results.push(this.listenTo(this.session.mockDiscoModel, "change:" + device + "Pattern", _.partial(this._setMockPattern, "" + device)));
         }
         return _results;
       };
@@ -140,7 +142,17 @@
         data = {
           type: 'setRealPattern',
           deviceName: device,
-          patternData: this.session.realDiscoModel.get(device + 'Pattern').attributes
+          patternData: this.session.realDiscoModel.get("" + device + "Pattern").attributes
+        };
+        return this._sendMessage(data);
+      };
+
+      DiscoController.prototype._setMockPattern = function(device) {
+        var data;
+        data = {
+          type: 'setMockPattern',
+          deviceName: device,
+          patternData: this.session.mockDiscoModel.get("" + device + "Pattern").attributes
         };
         return this._sendMessage(data);
       };

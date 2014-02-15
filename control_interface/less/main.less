@@ -1,3 +1,5 @@
+@lighter-color: #333;
+
 html, body {
   background: black;
   overflow: hidden;
@@ -9,12 +11,58 @@ html, body {
   font-family: sans-serif;
 }
 
-canvas {
-  border: 1px solid #333;
-  height: 192px;
+.menu {
+  float: left;
+  height: 100%;
+  width: 200px;
+  background-color: @lighter-color;
+}
+
+.previews {
+  padding: 10px;
+}
+
+.preview-area {
+  display: flex;
+  justify-content: space-around;
 }
 
 .pattern-selector {
-  float: left;
-  margin-right: 20px;
+  display: inline-block;
+  vertical-align: top;
+
+  .preview-view {
+    position: relative;
+
+    canvas {
+      border: 1px solid @lighter-color;
+      height: 192px;
+    }
+
+    &:hover {
+      .expander {
+        opacity: 1
+      }
+    }
+
+    .expander {
+      position: absolute;
+      bottom: 5px;
+      left: 1px;
+      background-color: black;
+      padding: 2px 4px;
+      cursor: pointer;
+      opacity: 0;
+    }
+  }
+
+  .selector-area {
+    width: 300px;
+    max-height: 200px;
+    overflow: scroll;
+
+    select {
+      width: 200px;
+    }
+  }
 }

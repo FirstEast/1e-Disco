@@ -18,8 +18,8 @@ class AnimatedGif(TimedPattern):
 
   DEVICES = ['ddf']
 
-  def __init__(self, beat, params):
-    TimedPattern.__init__(self, beat, params)
+  def __init__(self, params):
+    TimedPattern.__init__(self, params)
     self.oldCount = 0
 
   def paramUpdate(self, paramName):

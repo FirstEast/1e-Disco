@@ -24,6 +24,7 @@
         }
         this.gifList = new Backbone.Collection();
         this.imageList = new Backbone.Collection();
+        this.displayModel = new com.firsteast.DisplayModel();
       }
 
       return DiscoSession;

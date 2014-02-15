@@ -20,11 +20,11 @@ class TilePattern(Pattern):
 
   def paramUpdate(self, paramName):
     if paramName == 'ALL':
-      self.pats = [[loadSavedPatternFromFilename(self.beat, self.params['Pattern'])
+      self.pats = [[loadSavedPatternFromFilename(self.params['Pattern'])
         for x in range(self.params['X Segments'])]
         for y in range(self.params['Y Segments'])]
     elif paramName == 'Pattern':
-      self.pats = [[loadSavedPatternFromFilename(self.beat, self.params['Pattern'])
+      self.pats = [[loadSavedPatternFromFilename(self.params['Pattern'])
         for x in range(self.params['X Segments'])]
         for y in range(self.params['Y Segments'])]
 
@@ -49,14 +49,14 @@ class LayerPattern(Pattern):
 
   def paramUpdate(self, paramName):
     if paramName == 'ALL':
-      self.topPattern = loadSavedPatternFromFilename(self.beat, self.params['Top'])
-      self.botPattern = loadSavedPatternFromFilename(self.beat, self.params['Bottom'])
+      self.topPattern = loadSavedPatternFromFilename(self.params['Top'])
+      self.botPattern = loadSavedPatternFromFilename(self.params['Bottom'])
     elif paramName == 'Top':
-      self.topPattern = loadSavedPatternFromFilename(self.beat, self.params['Top'])
+      self.topPattern = loadSavedPatternFromFilename(self.params['Top'])
     elif paramName == 'Bottom':
-      self.botPattern = loadSavedPatternFromFilename(self.beat, self.params['Bottom'])
+      self.botPattern = loadSavedPatternFromFilename(self.params['Bottom'])
 
-    if self.params['UseMask']: self.maskPattern = loadSavedPatternFromFilename(self.beat, self.params['Mask'])
+    if self.params['UseMask']: self.maskPattern = loadSavedPatternFromFilename(self.params['Mask'])
 
   def render(self, device):
     if self.params['UseMask']:
@@ -72,12 +72,12 @@ class MaskPattern(Pattern):
 
   def paramUpdate(self, paramName):
     if paramName == 'ALL':
-      self.maskPattern = loadSavedPatternFromFilename(self.beat, self.params['Mask'])
-      self.bottomPattern = loadSavedPatternFromFilename(self.beat, self.params['Pattern'])
+      self.maskPattern = loadSavedPatternFromFilename(self.params['Mask'])
+      self.bottomPattern = loadSavedPatternFromFilename(self.params['Pattern'])
     elif paramName == 'Mask':
-      self.maskPattern = loadSavedPatternFromFilename(self.beat, self.params['Mask'])
+      self.maskPattern = loadSavedPatternFromFilename(self.params['Mask'])
     elif paramName == 'Pattern':
-      self.bottomPattern = loadSavedPatternFromFilename(self.beat, self.params['Pattern'])
+      self.bottomPattern = loadSavedPatternFromFilename(self.params['Pattern'])
 
   def render(self, device):
     mask = self.maskPattern.render(device)
@@ -92,9 +92,9 @@ class BlendPattern(Pattern):
   }
 
   def paramUpdate(self, paramName):
-    self.topPattern = loadSavedPatternFromFilename(self.beat, self.params['Top'])
-    self.botPattern = loadSavedPatternFromFilename(self.beat, self.params['Bottom'])
-    self.maskPattern = loadSavedPatternFromFilename(self.beat, self.params['Mask'])
+    self.topPattern = loadSavedPatternFromFilename(self.params['Top'])
+    self.botPattern = loadSavedPatternFromFilename(self.params['Bottom'])
+    self.maskPattern = loadSavedPatternFromFilename(self.params['Mask'])
 
   def render(self, device):
       return Image.composite(self.topPattern.render(device), self.botPattern.render(device), self.maskPattern.render(device).convert('L'))
@@ -107,8 +107,8 @@ class Blending(Pattern):
   }
 
   def paramUpdate(self, paramName):
-    self.p1 = loadSavedPatternFromFilename(self.beat, self.params['Pattern 1'])
-    self.p2 = loadSavedPatternFromFilename(self.beat, self.params['Pattern 2'])
+    self.p1 = loadSavedPatternFromFilename(self.params['Pattern 1'])
+    self.p2 = loadSavedPatternFromFilename(self.params['Pattern 2'])
   
   def render(self, device):
     return ImageChops.blend(self.p1.render(device), self.p2.render(device), self.params['100Weight'] / 100.0)
@@ -120,8 +120,8 @@ class Adding(Pattern):
   }
 
   def paramUpdate(self, paramName):
-    self.p1 = loadSavedPatternFromFilename(self.beat, self.params['Pattern 1'])
-    self.p2 = loadSavedPatternFromFilename(self.beat, self.params['Pattern 2'])
+    self.p1 = loadSavedPatternFromFilename(self.params['Pattern 1'])
+    self.p2 = loadSavedPatternFromFilename(self.params['Pattern 2'])
   
   def render(self, device):
     return ImageChops.add(self.p1.render(device), self.p2.render(device))
@@ -133,8 +133,8 @@ class Subtracting(Pattern):
   }
 
   def paramUpdate(self, paramName):
-    self.p1 = loadSavedPatternFromFilename(self.beat, self.params['Pattern 1'])
-    self.p2 = loadSavedPatternFromFilename(self.beat, self.params['Pattern 2'])
+    self.p1 = loadSavedPatternFromFilename(self.params['Pattern 1'])
+    self.p2 = loadSavedPatternFromFilename(self.params['Pattern 2'])
   
   def render(self, device):
     return ImageChops.subtract(self.p1.render(device), self.p2.render(device))

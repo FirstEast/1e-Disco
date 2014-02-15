@@ -22,48 +22,28 @@
   com.firsteast.GOODALE_WIDTH = 395;
 
   $('document').ready((function() {
-    var bemisPreview, controller, ddfPreview, device, goodalePreview, selector, session, _i, _len, _ref, _results;
+    var controller, model, previewArea, session, sideMenu, _i, _len, _ref;
     session = new com.firsteast.DiscoSession();
     controller = new com.firsteast.DiscoController({
       session: session
     });
-    ddfPreview = new com.firsteast.DdfPreview({
-      model: session.realDiscoModel,
-      width: com.firsteast.DDF_WIDTH * 8,
-      height: com.firsteast.DDF_HEIGHT * 8
-    });
-    ddfPreview.render();
-    goodalePreview = new com.firsteast.GoodalePreview({
-      model: session.realDiscoModel,
-      width: com.firsteast.GOODALE_CANVAS_WIDTH * 3,
-      height: 111 * 3
-    });
-    goodalePreview.render();
-    bemisPreview = new com.firsteast.BemisPreview({
-      model: session.realDiscoModel,
-      width: com.firsteast.BEMIS_WIDTH * 2,
-      height: 24 * 8
-    });
-    bemisPreview.render();
-    $('.realVis').append(ddfPreview.$el);
-    $('.realVis').append(goodalePreview.$el);
-    $('.realVis').append(bemisPreview.$el);
-    _ref = com.firsteast.OUTPUT_DEVICES;
-    _results = [];
+    _ref = [session.realDiscoModel, session.mockDiscoModel];
     for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-      device = _ref[_i];
-      selector = new com.firsteast.PatternSelector({
-        discoModel: session.realDiscoModel,
-        patternList: session.patternList,
-        savedPatternList: session.savedPatternList,
-        gifList: session.gifList,
-        imageList: session.imageList,
-        device: device
+      model = _ref[_i];
+      previewArea = new com.firsteast.PreviewArea({
+        model: model,
+        session: session
       });
-      selector.render();
-      _results.push($('body').append(selector.$el));
+      previewArea.render();
+      $('.previews').append(previewArea.$el);
     }
-    return _results;
+    sideMenu = new com.firsteast.SideMenu({
+      el: $('.menu'),
+      model: session.displayModel,
+      realDiscoModel: session.realDiscoModel,
+      mockDiscoModel: session.mockDiscoModel
+    });
+    return sideMenu.render();
   }));
 
 }).call(this);

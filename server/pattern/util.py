@@ -1,4 +1,6 @@
 from pattern import *
+from model.inputs import BeatModel
+
 from PIL import Image
 
 import math
@@ -24,7 +26,11 @@ FLAT_GOODALE_SIDE = 97
 FLAT_GOODALE_BOTTOM = 159
 FLAT_GOODALE_LENGTH = FLAT_GOODALE_TOP + FLAT_GOODALE_SIDE + FLAT_GOODALE_BOTTOM
 
+# Frequency band constants
 BASS = (0, 8)
+
+# Global input models
+BEAT_MODEL = BeatModel()
 
 def unflattenGoodaleArray(frame):
   newFrame = []

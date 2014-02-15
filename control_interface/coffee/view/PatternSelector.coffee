@@ -6,6 +6,7 @@ do ->
       'change .saved-patterns': '_changeSavedSelected'
       'change .param-input': '_changeParams'
       'click .save-button': '_savePattern'
+      'click .expander': '_toggleShowEdit'
 
     initialize: (options) =>
       @patternList = options.patternList
@@ -15,6 +16,12 @@ do ->
       @imageList = options.imageList
       @device  = options.device
 
+      @previewView = new com.firsteast.DevicePreview
+        device: @device
+        model: @discoModel
+      @previewView.render()
+
+      @showEdit = false;
       @parameters = {}
 
       @listenTo @patternList, 'add remove reset', @render
@@ -25,7 +32,7 @@ do ->
 
     render: =>
       @$el.empty()
-      source = $('#ddf-debug-template').html()
+      source = $('#preview-template').html()
       template = Handlebars.compile(source)
 
       models = _.sortBy(@patternList.filter(((x) => x.get('DEVICES').indexOf(@device) >= 0)), (x) -> return x.get('name'))
@@ -41,7 +48,10 @@ do ->
         gifList: @gifList.models
         imageList: @imageList.models
         parameters: parameters
+        showEdit: @showEdit
       })
+
+      @$('.preview-view').append(@previewView.$el)
 
       @_updateSelected()
       @_setParamValues(parameters)
@@ -77,6 +87,10 @@ do ->
     _setParamValues: (params) =>
       for param in params
         @$("[name='#{param.name}']").val(param.val)
+
+    _toggleShowEdit: =>
+      @showEdit = !@showEdit
+      @render()
 
     _updateSelected: =>
       if @discoModel.get("#{@device}Pattern")?.get('saved')

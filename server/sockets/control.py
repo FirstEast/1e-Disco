@@ -4,11 +4,12 @@ from autobahn.twisted.websocket import WebSocketServerProtocol, \
 from pattern.importer import *
 from pattern.util import *
 from pattern.color import *
+from pattern.pattern import TimedPattern
 
 import json
 import traceback
 
-# HACK: create mock devices since render requires a device (instead of using the socket)
+# Create mock devices since render requires a device (instead of using the socket)
 class MockDevice():
   def __init__(self, name, width, height, format='RGB'):
     self.name = name
@@ -27,10 +28,9 @@ class DiscoControlProtocol(WebSocketServerProtocol):
     self.factory.register(self)
 
     self.mockPatternModel = {}
-    beat = self.factory.discoSession.beatModel
     for key in self.factory.discoSession.patternModel:
       params = self.factory.discoSession.patternModel[key].params
-      self.mockPatternModel[key] = self.factory.discoSession.patternModel[key].__class__(beat, params)
+      self.mockPatternModel[key] = self.factory.discoSession.patternModel[key].__class__(params)
 
     self.sendInitMessage()
     self.sendDevicesMessage()
@@ -46,8 +46,6 @@ class DiscoControlProtocol(WebSocketServerProtocol):
       self.setRealPattern(data['deviceName'], data['patternData'])
     elif msgType == 'savePattern':
       self.savePattern(data['patternData'])
-    elif msgType == 'swapPattern':
-      self.performSwap(data['deviceName'])
     elif msgType == 'render':
       self.sendRenderMessage(binary)
     else:
@@ -58,17 +56,6 @@ class DiscoControlProtocol(WebSocketServerProtocol):
     WebSocketServerProtocol.connectionLost(self, reason)
     self.factory.unregister(self)
 
-  def performSwap(self, deviceName):
-    params = self.mockPatternModel[deviceName].params
-    beat = self.factory.discoSession.beatModel
-    pattern = self.mockPatternModel[deviceName].__class__(beat, params)
-
-    # HACK: for timed patterns, we don't want the start time to be reset
-    if issubclass(self.mockPatternModel[deviceName], pattern.TimedPattern):
-      pattern.startTime = self.mockPatternModel[deviceName].startTime
-
-    self.factory.discoSession.patternModel[deviceName] = pattern
-
   def setMockPattern(self, deviceName, patternData):
     self.setPattern(deviceName, patternData, self.mockPatternModel)
 
@@ -77,10 +64,10 @@ class DiscoControlProtocol(WebSocketServerProtocol):
 
   def setPattern(self, deviceName, patternData, patternModel):
     if patternData['saved']:
-      pattern = loadSavedPattern(self.factory.discoSession.beatModel, patternData)
+      pattern = loadSavedPattern(patternData)
     else:
       patternClass = loadPatternFromModuleClassName(patternData['__module__'] + '_' + patternData['name'])
-      pattern = patternClass(self.factory.discoSession.beatModel, sanitizeParams(patternData['params']))
+      pattern = patternClass(sanitizeParams(patternData['params']))
     patternModel[deviceName] = pattern
 
   def savePattern(self, patternData):
@@ -115,7 +102,7 @@ class DiscoControlProtocol(WebSocketServerProtocol):
     for key in self.factory.discoSession.patternModel:
       try:
         if key == 'goodale' and self.mockPatternModel[key].__class__.__name__ == 'MimicPattern':
-          mockFrame = unflattenGoodaleArray(flatGoodaleArrayFromDdfImage(self.factory.discoSession.getPattern('ddf').render(MOCK_DEVICES['ddf'])))
+          mockFrame = unflattenGoodaleArray(flatGoodaleArrayFromDdfImage(self.mockPatternModel['ddf'].render(MOCK_DEVICES['ddf'])))
         else:
           mockFrame = self.mockPatternModel[key].render(MOCK_DEVICES[key])
         frames['mock'][key] = [value for color in mockFrame.getdata() for value in color]

@@ -36,8 +36,8 @@ class Shuffle(TimedPattern):
 
   DEFAULT_PARAMS.update(TimedPattern.DEFAULT_PARAMS)
 
-  def __init__(self, beat, params):
-    TimedPattern.__init__(self, beat, params)
+  def __init__(self, params):
+    TimedPattern.__init__(self, params)
     self.ticker = 0
     self.duration = 0
     self.pattern = None
@@ -47,7 +47,7 @@ class Shuffle(TimedPattern):
     if count >= self.duration:
       self.ticker += self.duration
       i = random.randint(0, self.params['Patterns'] - 1)
-      self.pattern = loadSavedPatternFromFilename(self.beat, self.params['Pattern ' + str(i)])
+      self.pattern = loadSavedPatternFromFilename(self.params['Pattern ' + str(i)])
       self.duration = self.params['Duration ' + str(i)]
     return self.pattern.render(device)
 
@@ -78,8 +78,8 @@ class Queue(TimedPattern):
 
   DEFAULT_PARAMS.update(TimedPattern.DEFAULT_PARAMS)
 
-  def __init__(self, beat, params):
-    TimedPattern.__init__(self, beat, params)
+  def __init__(self, params):
+    TimedPattern.__init__(self, params)
     self.ticker = 0
     self.duration = 0
     self.pattern = None
@@ -90,6 +90,6 @@ class Queue(TimedPattern):
     if count >= self.duration:
       self.ticker += self.duration
       self.patternID = (self.patternID + 1) % self.params['Patterns']
-      self.pattern = loadSavedPatternFromFilename(self.beat, self.params['Pattern ' + str(self.patternID)])
+      self.pattern = loadSavedPatternFromFilename(self.params['Pattern ' + str(self.patternID)])
       self.duration = self.params['Duration ' + str(self.patternID)]
     return self.pattern.render(device)

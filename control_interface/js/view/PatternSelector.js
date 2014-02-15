@@ -15,6 +15,7 @@
         this._changeSavedSelected = __bind(this._changeSavedSelected, this);
         this._changeClassSelected = __bind(this._changeClassSelected, this);
         this._updateSelected = __bind(this._updateSelected, this);
+        this._toggleShowEdit = __bind(this._toggleShowEdit, this);
         this._setParamValues = __bind(this._setParamValues, this);
         this._parseParams = __bind(this._parseParams, this);
         this.render = __bind(this.render, this);
@@ -29,7 +30,8 @@
         'change .class-patterns': '_changeClassSelected',
         'change .saved-patterns': '_changeSavedSelected',
         'change .param-input': '_changeParams',
-        'click .save-button': '_savePattern'
+        'click .save-button': '_savePattern',
+        'click .expander': '_toggleShowEdit'
       };
 
       PatternSelector.prototype.initialize = function(options) {
@@ -39,6 +41,12 @@
         this.gifList = options.gifList;
         this.imageList = options.imageList;
         this.device = options.device;
+        this.previewView = new com.firsteast.DevicePreview({
+          device: this.device,
+          model: this.discoModel
+        });
+        this.previewView.render();
+        this.showEdit = false;
         this.parameters = {};
         this.listenTo(this.patternList, 'add remove reset', this.render);
         this.listenTo(this.savedPatternList, 'add remove reset', this.render);
@@ -51,7 +59,7 @@
         var currentPattern, models, parameters, saveModels, source, template, _ref1,
           _this = this;
         this.$el.empty();
-        source = $('#ddf-debug-template').html();
+        source = $('#preview-template').html();
         template = Handlebars.compile(source);
         models = _.sortBy(this.patternList.filter((function(x) {
           return x.get('DEVICES').indexOf(_this.device) >= 0;
@@ -72,8 +80,10 @@
           currentPattern: currentPattern,
           gifList: this.gifList.models,
           imageList: this.imageList.models,
-          parameters: parameters
+          parameters: parameters,
+          showEdit: this.showEdit
         }));
+        this.$('.preview-view').append(this.previewView.$el);
         this._updateSelected();
         return this._setParamValues(parameters);
       };
@@ -125,6 +135,11 @@
           _results.push(this.$("[name='" + param.name + "']").val(param.val));
         }
         return _results;
+      };
+
+      PatternSelector.prototype._toggleShowEdit = function() {
+        this.showEdit = !this.showEdit;
+        return this.render();
       };
 
       PatternSelector.prototype._updateSelected = function() {

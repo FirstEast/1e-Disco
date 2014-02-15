@@ -17,9 +17,9 @@ class BeatAdjustParam(Pattern):
 
   def paramUpdate(self, paramName):
     if paramName == 'ALL':
-      self.base = loadSavedPatternFromFilename(self.beat, self.params['Pattern'])
+      self.base = loadSavedPatternFromFilename(self.params['Pattern'])
     elif paramName == 'Pattern':
-      self.base = loadSavedPatternFromFilename(self.beat, self.params['Pattern'])
+      self.base = loadSavedPatternFromFilename(self.params['Pattern'])
     elif not(paramName in self.DEFAULT_PARAMS):
       self.base.params[paramName] = self.params[paramName]
       if self.params['CallUpdate()']: self.base.paramUpdate(paramName)
@@ -45,7 +45,7 @@ class BeatAdjustParamIntAvgVolume(BeatAdjustParam):
     self.val = self.getVal()
 
   def getVal(self):
-    self.val = scaleToBucket(self.beat.avgVolume, self.params['MinValue'], self.params['MaxValue'])
+    self.val = scaleToBucket(BEAT_MODEL.avgVolume, self.params['MinValue'], self.params['MaxValue'])
     return self.val
 
 class BeatAdjustParamIntAvgCentroid(BeatAdjustParam):
@@ -62,9 +62,9 @@ class BeatAdjustParamIntAvgCentroid(BeatAdjustParam):
     self.val = self.getVal()
 
   def getVal(self):
-    val = self.beat.avgCentroid
+    val = BEAT_MODEL.avgCentroid
     if self.params['AutoScale']:
-      val = max(self.beat.avgCentroid - 0.5, 0) * 2
+      val = max(BEAT_MODEL.avgCentroid - 0.5, 0) * 2
     self.val = scaleToBucket(val, self.params['MinValue'], self.params['MaxValue'])
     return self.val
 
@@ -80,11 +80,11 @@ class BeatAdjustParamIntFrequencySum(BeatAdjustParam):
 
   def paramUpdate(self, paramName):
     BeatAdjustParam.paramUpdate(self, paramName)
-    freqData = getSummedFreqData(self.beat, self.params['Frequency Start'], self.params['Frequency End'])
+    freqData = getSummedFreqData(BEAT_MODEL, self.params['Frequency Start'], self.params['Frequency End'])
     self.val = scaleToBucket(freqData, self.params['MinValue'], self.params['MaxValue'])
 
   def getVal(self):
-    freqData = getSummedFreqData(self.beat, self.params['Frequency Start'], self.params['Frequency End'])
+    freqData = getSummedFreqData(BEAT_MODEL, self.params['Frequency Start'], self.params['Frequency End'])
     oldVal = self.val
     newVal = scaleToBucket(freqData, self.params['MinValue'], self.params['MaxValue'])
     self.val = int(newVal * SMOOTHING_ALPHA + oldVal * (1 - SMOOTHING_ALPHA))

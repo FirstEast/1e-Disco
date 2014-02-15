@@ -23,7 +23,7 @@ class VerticalVis(Pattern):
   DEVICES = ['ddf']
 
   def render(self, device):
-    freqs = self.beat.avgFreqs
+    freqs = BEAT_MODEL.avgFreqs
     smashed = []
 
     div = len(freqs) / device.height
@@ -65,7 +65,7 @@ class HorizontalVis(Pattern):
   DEVICES = ['ddf']
 
   def render(self, device):
-    freqs = self.beat.avgFreqs
+    freqs = BEAT_MODEL.avgFreqs
     newFreqs = []
     for i in range(len(freqs)):
       newFreqs.append(scaleToBucket(max((freqs[i] - 0.66) * 3, 0), 0, device.height))
@@ -104,15 +104,15 @@ class PulsingCircle(Pattern):
 
   DEVICES = ['ddf']
 
-  def __init__(self, beat, params):
-    Pattern.__init__(self, beat, params)
+  def __init__(self, params):
+    Pattern.__init__(self, params)
     self.lastTotal = 0
 
   def paramUpdate(self, paramName):
-    self.circlePattern = loadSavedPatternFromFilename(self.beat, self.params['Circle Pattern'])
+    self.circlePattern = loadSavedPatternFromFilename(self.params['Circle Pattern'])
 
   def render(self, device):
-    total = getSummedFreqData(self.beat, self.params['Frequency Band Start'], self.params['Frequency Band End'])
+    total = getSummedFreqData(BEAT_MODEL, self.params['Frequency Band Start'], self.params['Frequency Band End'])
     thisTotal = total * SMOOTHING_ALPHA + self.lastTotal * (1 - SMOOTHING_ALPHA)
     self.lastTotal = total
 
@@ -130,10 +130,10 @@ class FadingPulsingCircle(Pattern):
   DEVICES = ['ddf']
 
   def paramUpdate(self, paramName):
-    self.circlePattern = loadSavedPatternFromFilename(self.beat, self.params['Pulsing Circle Pattern'])    
+    self.circlePattern = loadSavedPatternFromFilename(self.params['Pulsing Circle Pattern'])    
 
   def render(self, device):
-    total = getSummedFreqData(self.beat, self.circlePattern.params['Frequency Band Start'], self.circlePattern.params['Frequency Band End'])
+    total = getSummedFreqData(BEAT_MODEL, self.circlePattern.params['Frequency Band Start'], self.circlePattern.params['Frequency Band End'])
     pattern = self.circlePattern.render(device)
     enhancer = ImageEnhance.Brightness(pattern)
     pattern = enhancer.enhance(total)
@@ -152,12 +152,12 @@ class ColorPulsingCircle(Pattern):
   DEVICES = ['ddf']
 
   def paramUpdate(self, paramName):
-    self.circlePattern = loadSavedPatternFromFilename(self.beat, self.params['Pulsing Circle Pattern'])    
+    self.circlePattern = loadSavedPatternFromFilename(self.params['Pulsing Circle Pattern'])    
 
   def render(self, device):
-    cent = max(self.beat.avgCentroid - 0.66, 0) * 3
+    cent = max(BEAT_MODEL.avgCentroid - 0.66, 0) * 3
     hue = (self.params['100End Hue'] - self.params['100Start Hue']) * cent + self.params['100Start Hue']
     circleColor = Color((hue / 100.0, 1, 255), isHSV=True)
-    solidColorPattern = SolidColor(self.beat, {'Color': circleColor})
+    solidColorPattern = SolidColor({'Color': circleColor})
 
     return maskPatterns(self.circlePattern.render(device), solidColorPattern.render(device))

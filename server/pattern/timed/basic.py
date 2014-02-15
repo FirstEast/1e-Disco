@@ -37,9 +37,9 @@ class MovingAnything(TimedPattern):
 
   def paramUpdate(self, paramName):
     if paramName == 'ALL':
-      self.base = loadSavedPatternFromFilename(self.beat, self.params['Base Pattern'])
+      self.base = loadSavedPatternFromFilename(self.params['Base Pattern'])
     elif paramName == 'Base Pattern':
-      self.base = loadSavedPatternFromFilename(self.beat, self.params['Base Pattern'])
+      self.base = loadSavedPatternFromFilename(self.params['Base Pattern'])
 
   def renderFrame(self, device, frameCount):
     return self.base.render(device).offset(int(self.params['X Rate'] * frameCount),

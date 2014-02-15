@@ -15,7 +15,7 @@ class TrivialPattern(Pattern):
   }
 
   def paramUpdate(self, paramName):
-    self.pattern = loadSavedPatternFromFilename(self.beat, self.params['Pattern'])
+    self.pattern = loadSavedPatternFromFilename(self.params['Pattern'])
 
   def render(self, device):
     return self.pattern.render(device)
@@ -33,7 +33,7 @@ class HSVFilter(Pattern):
 
   def paramUpdate(self, paramName):
     if paramName == 'Pattern' or paramName == 'ALL':
-      self.pattern = loadSavedPatternFromFilename(self.beat, self.params['Pattern'])
+      self.pattern = loadSavedPatternFromFilename(self.params['Pattern'])
 
   def render(self, device):
     def change(x):
@@ -56,10 +56,10 @@ class RingsMaker(Pattern):
 
   def paramUpdate(self, paramName):
     if paramName == 'ALL':
-      self.pattern = loadSavedPatternFromFilename(self.beat, self.params['Pattern'])
+      self.pattern = loadSavedPatternFromFilename(self.params['Pattern'])
       self.pattern.params['Rate'] = self.params['Rate']
     elif paramName == 'Pattern':
-      self.pattern = loadSavedPatternFromFilename(self.beat, self.params['Pattern'])
+      self.pattern = loadSavedPatternFromFilename(self.params['Pattern'])
     elif paramName == 'Rate':
       self.pattern.params['Rate'] = self.params['Rate']
 
@@ -83,10 +83,10 @@ class SpiralMaker(Pattern):
 
   def paramUpdate(self, paramName):
     if paramName == 'ALL':
-      self.pattern = loadSavedPatternFromFilename(self.beat, self.params['Pattern'])
+      self.pattern = loadSavedPatternFromFilename(self.params['Pattern'])
       self.pattern.params['Rate'] = self.params['Rate']
     elif paramName == 'Pattern':
-      self.pattern = loadSavedPatternFromFilename(self.beat, self.params['Pattern'])
+      self.pattern = loadSavedPatternFromFilename(self.params['Pattern'])
     elif paramName == 'Rate':
       self.pattern.params['Rate'] = self.params['Rate']
 
@@ -110,10 +110,10 @@ class DiamondMaker(Pattern):
 
   def paramUpdate(self, paramName):
     if paramName == 'ALL':
-      self.pattern = loadSavedPatternFromFilename(self.beat, self.params['Pattern'])
+      self.pattern = loadSavedPatternFromFilename(self.params['Pattern'])
       self.pattern.params['Rate'] = self.params['Rate']
     elif paramName == 'Pattern':
-      self.pattern = loadSavedPatternFromFilename(self.beat, self.params['Pattern'])
+      self.pattern = loadSavedPatternFromFilename(self.params['Pattern'])
     elif paramName == 'Rate':
       self.pattern.params['Rate'] = self.params['Rate']
 
@@ -136,10 +136,10 @@ class RadarMaker(Pattern):
 
   def paramUpdate(self, paramName):
     if paramName == 'ALL':
-      self.pattern = loadSavedPatternFromFilename(self.beat, self.params['Pattern'])
+      self.pattern = loadSavedPatternFromFilename(self.params['Pattern'])
       self.pattern.params['Rate'] = self.params['Rate']
     elif paramName == 'Pattern':
-      self.pattern = loadSavedPatternFromFilename(self.beat, self.params['Pattern'])
+      self.pattern = loadSavedPatternFromFilename(self.params['Pattern'])
     elif paramName == 'Rate':
       self.pattern.params['Rate'] = self.params['Rate']
 
@@ -153,7 +153,7 @@ class RadarMaker(Pattern):
 
 class TrippyAsFuck(Pattern):
   def paramUpdate(self, paramName):
-    self.pattern = loadSavedPatternFromFilename(self.beat, 'sliding_rainbow.json')
+    self.pattern = loadSavedPatternFromFilename('sliding_rainbow.json')
 
   def render(self, device):
     array = list(self.pattern.render(device).getdata())

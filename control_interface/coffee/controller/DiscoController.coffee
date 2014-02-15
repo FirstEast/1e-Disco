@@ -76,6 +76,7 @@ do ->
       # We have never had patterns before. Time to bind our listeners.
       for device in com.firsteast.OUTPUT_DEVICES
         @listenTo @session.realDiscoModel, "change:#{device}Pattern", _.partial(@_setRealPattern, "#{device}")
+        @listenTo @session.mockDiscoModel, "change:#{device}Pattern", _.partial(@_setMockPattern, "#{device}")
 
     _savePattern: (pattern) =>
       data = {
@@ -88,7 +89,15 @@ do ->
       data = {
         type: 'setRealPattern'
         deviceName: device
-        patternData: @session.realDiscoModel.get(device + 'Pattern').attributes
+        patternData: @session.realDiscoModel.get("#{device}Pattern").attributes
+      }
+      @_sendMessage(data)
+
+    _setMockPattern: (device) =>
+      data = {
+        type: 'setMockPattern'
+        deviceName: device
+        patternData: @session.mockDiscoModel.get("#{device}Pattern").attributes
       }
       @_sendMessage(data)
 

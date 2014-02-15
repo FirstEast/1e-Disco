@@ -14,9 +14,9 @@ class VolumePulse(Pattern):
   DEVICES = ['goodale']
 
   def render(self, device):
-    vol = min(self.beat.avgVolume, 1.0)
+    vol = min(BEAT_MODEL.avgVolume, 1.0)
 
-    centroid = self.beat.avgCentroid
+    centroid = BEAT_MODEL.avgCentroid
     centroidColor = getWeightedColorSum(self.params['Pulse Color 1'], self.params['Pulse Color 2'], centroid)
     emptyColor = centroidColor.getComplimentaryColor().getRGBValues()
     centroidColor = centroidColor.getRGBValues()

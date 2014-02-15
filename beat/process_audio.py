@@ -42,7 +42,7 @@ def getAudioStream():
   stream = P.open(format = FORMAT,
                   channels = CHANNELS,
                   rate = RATE,
-                  input_device_index = 3,   # index may change for different soundflower configurations.
+                  input_device_index = 2,   # index may change for different soundflower configurations.
                   input = True,
                   frames_per_buffer = CHUNK)
   return stream

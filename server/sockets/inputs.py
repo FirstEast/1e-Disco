@@ -1,12 +1,13 @@
 from twisted.internet.protocol import Factory
 from twisted.protocols.basic import LineReceiver
+from pattern.util import BEAT_MODEL
 
 import json
 
 class BeatServerReceiver(LineReceiver):
   def __init__(self, discoSession):
     self.discoSession = discoSession
-    self.beatModel = self.discoSession.beatModel
+    self.beatModel = BEAT_MODEL
 
   def connectionMade(self):
     self.discoSession.inputDeviceModel["beat"] = True

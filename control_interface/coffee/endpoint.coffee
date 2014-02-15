@@ -21,40 +21,18 @@ $('document').ready ( =>
   controller = new com.firsteast.DiscoController
     session: session
 
-  # Draw the main view
-  # TODO: actually make a UI
+  # Create our preview views
+  for model in [session.realDiscoModel, session.mockDiscoModel]
+    previewArea = new com.firsteast.PreviewArea
+      model: model
+      session: session
+    previewArea.render()
+    $('.previews').append(previewArea.$el)
 
-  # Draw some debug views
-  ddfPreview = new com.firsteast.DdfPreview
-    model: session.realDiscoModel
-    width: com.firsteast.DDF_WIDTH*8
-    height: com.firsteast.DDF_HEIGHT*8
-  ddfPreview.render()
-
-  goodalePreview = new com.firsteast.GoodalePreview
-    model: session.realDiscoModel
-    width: com.firsteast.GOODALE_CANVAS_WIDTH*3
-    height: 111*3
-  goodalePreview.render()
-
-  bemisPreview = new com.firsteast.BemisPreview
-    model: session.realDiscoModel
-    width: com.firsteast.BEMIS_WIDTH*2
-    height: 24*8
-  bemisPreview.render()
-
-  $('.realVis').append(ddfPreview.$el)
-  $('.realVis').append(goodalePreview.$el)
-  $('.realVis').append(bemisPreview.$el)
-
-  for device in com.firsteast.OUTPUT_DEVICES
-    selector = new com.firsteast.PatternSelector
-      discoModel: session.realDiscoModel
-      patternList: session.patternList
-      savedPatternList: session.savedPatternList
-      gifList: session.gifList
-      imageList: session.imageList
-      device: device
-    selector.render()
-    $('body').append(selector.$el)
+  sideMenu = new com.firsteast.SideMenu
+    el: $('.menu')
+    model: session.displayModel
+    realDiscoModel: session.realDiscoModel
+    mockDiscoModel: session.mockDiscoModel
+  sideMenu.render()
 )
