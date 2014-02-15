@@ -52,28 +52,3 @@ class Rectangle(StaticPattern):
       draw.rectangle((x0, y0, x1, y1), outline=self.params['Color'].getRGBValues())    
 
     return im
-
-class Line(StaticPattern):
-  DEFAULT_PARAMS = {
-    'Point 1 X': 12,
-    'Point 1 Y': 6,
-    'Point 2 X': 36,
-    'Point 2 Y': 18,
-    'Thickness': 1,
-    'Fill Above': False,
-    'Fill Below': False,
-    'Color': RED
-  }
-  
-  def renderFrame(self, device):
-    x0 = self.params['Point 1 X']
-    y0 = self.params['Point 1 Y']
-    x1 = self.params['Point 2 X']
-    y1 = self.params['Point 2 Y']
-
-    im = Image.new('RGB', (device.width, device.height))
-    draw = ImageDraw.Draw(im)
-
-    draw.line([(x0, y0), (x1, y1)], fill=self.params['Color'].getRGBValues(), width=self.params['Thickness'])
-
-    return im

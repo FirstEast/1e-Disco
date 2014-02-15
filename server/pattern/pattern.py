@@ -2,6 +2,7 @@ from color import *
 import time
 
 DEFAULT_RATE = 30 #FPS
+START_TIME = time.time() * 1000
 
 class Pattern():
   '''
@@ -112,7 +113,7 @@ class TimedPattern(Pattern):
 
   def __init__(self, params={}):
     Pattern.__init__(self, params)
-    self.lastTime = time.time() * 1000
+    self.lastTime = START_TIME
     self.frame = 0
 
   def render(self, device):

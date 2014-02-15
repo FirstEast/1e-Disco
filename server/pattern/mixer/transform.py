@@ -7,7 +7,6 @@ from sockets.control import MOCK_DEVICES
 from PIL import Image, ImageDraw, ImageFilter
 
 import math
-import inspect
 
 class TrivialPattern(Pattern):
   DEFAULT_PARAMS = {

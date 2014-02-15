@@ -1,1 +1,0 @@
-{"USE_BEAT": true, "__module__": "pattern.beat.ddf", "name": "FadingPulsingCircle", "render": {}, "paramUpdate": {}, "saveName": "fadingPulsingCircle", "DEVICES": ["ddf"], "params": {}, "DEFAULT_PARAMS": {"Pulsing Circle Pattern": "default_pulsingCircle.json"}, "saved": true, "__doc__": null}
