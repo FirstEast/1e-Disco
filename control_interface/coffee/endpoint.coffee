@@ -29,6 +29,7 @@ $('document').ready ( =>
     previewArea.render()
     $('.previews').append(previewArea.$el)
 
+  # Create the menu view
   sideMenu = new com.firsteast.SideMenu
     el: $('.menu')
     model: session.displayModel

@@ -16,20 +16,20 @@ window.onload = function () {
     updateCentroid(data);
 
     if ($('.bar').length == 0) {
-      buildBars(data.leftFrequencies);
+      buildBars(data.frequencies);
     }
 
-    updateBars(data.leftFrequencies);
+    updateBars(data.frequencies);
   };
 };
 
 updateVolume = function(data) {
-  var avgVol = (data.leftVolume + data.rightVolume) / 2;
+  var avgVol = data.volume;
   $('.volume').height(((avgVol * 100) + 1) + '%');
 }
 
 updateCentroid = function(data) {
-  var avgCentroid = (data.leftCentroid + data.rightCentroid) / 2
+  var avgCentroid = data.centroid;
   $('.centroid').height(((avgCentroid * 100) + 1) + '%');
 }
 
@@ -43,6 +43,6 @@ buildBars = function(freqs) {
 updateBars = function(freqs) {
   $bars = $('.bar');
   for (var i = 0; i < freqs.length; i++) {
-    $($bars[i]).css('height', (Math.max(freqs[i],1)) + 'px'); 
+    $($bars[i]).css('height', ((Math.min((freqs[i] - 0.66)*3, 1))*100 + 1) + '%'); 
   }
 }
