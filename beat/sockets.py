@@ -14,14 +14,14 @@ class AudioWebSocket(WebSocketServerProtocol):
     self.factory.unregister(self)
 
 class AudioWebSocketFactory(WebSocketServerFactory):
-  def __init__(self, url, beatData, debug = False, debugCodePaths = False):
+  def __init__(self, url, audioProcessor, debug = False, debugCodePaths = False):
     WebSocketServerFactory.__init__(self, url, debug = debug, debugCodePaths = debugCodePaths)
     self.clients = []
-    self.beatData = beatData
+    self.audioProcessor = audioProcessor
     task.LoopingCall(self.sendData).start(0.05)
 
   def sendData(self):
-    self.broadcast(json.dumps(self.beatData.__dict__))
+    self.broadcast(json.dumps(self.audioProcessor.getBeatData()))
 
   def register(self, client):
     if not client in self.clients:
@@ -36,11 +36,11 @@ class AudioWebSocketFactory(WebSocketServerFactory):
       c.sendMessage(msg)
 
 class AudioSocket(Protocol):
-  def __init__(self, beatData):
-    self.beatData = beatData
+  def __init__(self, audioProcessor):
+    self.audioProcessor = audioProcessor
 
   def sendData(self):
-    self.sendMessage(json.dumps(self.beatData.__dict__))
+    self.sendMessage(json.dumps(self.audioProcessor.getBeatData()))
 
   def connectionMade(self):
     print "connected successfully to central server"
@@ -53,12 +53,12 @@ class AudioSocket(Protocol):
     self.transport.write(message + '\n')
 
 class AudioSocketFactory(ReconnectingClientFactory):
-  def __init__(self, beatData):
-    self.beatData = beatData
+  def __init__(self, audioProcessor):
+    self.audioProcessor = audioProcessor
 
   def buildProtocol(self, addr):
     self.resetDelay()
-    return AudioSocket(self.beatData)
+    return AudioSocket(self.audioProcessor)
 
   def clientConnectionLost(self, connector, reason):
     ReconnectingClientFactory.clientConnectionLost(self, connector, reason)
