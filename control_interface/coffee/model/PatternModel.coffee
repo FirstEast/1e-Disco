@@ -18,3 +18,4 @@ do ->
       # Saved pattern stuff
       saved: false
       saveName: ''
+      partyWorthy: false

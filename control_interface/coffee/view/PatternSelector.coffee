@@ -126,7 +126,7 @@ do ->
         else
           params[inp.prop('name')] = inp.val()
 
-      # HACK
+      # HACK - recreates pattern, doesn't smoothly update params
       pattern = @discoModel.get("#{@device}Pattern").attributes
       pattern = $.extend(true, {}, pattern)
       pattern.params = params

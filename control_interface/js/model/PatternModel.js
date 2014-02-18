@@ -23,7 +23,8 @@
           DEFAULT_PARAMS: {},
           params: {},
           saved: false,
-          saveName: ''
+          saveName: '',
+          partyWorthy: false
         };
       };
 
