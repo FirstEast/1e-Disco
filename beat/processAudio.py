@@ -25,11 +25,11 @@ P = pyaudio.PyAudio()
 
 clip = lambda val, low, high: min(high, max(low, val))
 
-def getAudioStream():
+def getAudioStream(input):
   stream = P.open(format = FORMAT,
                   channels = CHANNELS,
                   rate = RATE,
-                  input_device_index = 2,   # index may change for different soundflower configurations.
+                  input_device_index = int(input),
                   input = True,
                   frames_per_buffer = CHUNK)
   return stream
