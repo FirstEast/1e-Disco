@@ -15,6 +15,7 @@ do ->
       @gifList = options.gifList
       @imageList = options.imageList
       @device  = options.device
+      @isMock = options.isMock
 
       @previewView = new com.firsteast.DevicePreview
         device: @device
@@ -49,6 +50,7 @@ do ->
         imageList: @imageList.models
         parameters: parameters
         showEdit: @showEdit
+        isMock: @isMock
       })
 
       @$('.preview-view').append(@previewView.$el)

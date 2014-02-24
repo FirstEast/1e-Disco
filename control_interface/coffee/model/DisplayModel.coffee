@@ -7,3 +7,4 @@ do ->
       
       for device in com.firsteast.OUTPUT_DEVICES
         attrs["show#{device}"] = true
+      return attrs

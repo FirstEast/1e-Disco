@@ -22,21 +22,25 @@
   com.firsteast.GOODALE_WIDTH = 395;
 
   $('document').ready((function() {
-    var controller, model, previewArea, session, sideMenu, _i, _len, _ref;
+    var controller, mockPreviewArea, previewArea, session, sideMenu;
     session = new com.firsteast.DiscoSession();
     controller = new com.firsteast.DiscoController({
       session: session
     });
-    _ref = [session.realDiscoModel, session.mockDiscoModel];
-    for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-      model = _ref[_i];
-      previewArea = new com.firsteast.PreviewArea({
-        model: model,
-        session: session
-      });
-      previewArea.render();
-      $('.previews').append(previewArea.$el);
-    }
+    previewArea = new com.firsteast.PreviewArea({
+      model: session.realDiscoModel,
+      session: session,
+      isMock: false
+    });
+    previewArea.render();
+    $('.previews').append(previewArea.$el);
+    mockPreviewArea = new com.firsteast.PreviewArea({
+      model: session.mockDiscoModel,
+      session: session,
+      isMock: true
+    });
+    mockPreviewArea.render();
+    $('.previews').append(mockPreviewArea.$el);
     sideMenu = new com.firsteast.SideMenu({
       el: $('.menu'),
       model: session.displayModel,

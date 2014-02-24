@@ -22,12 +22,19 @@ $('document').ready ( =>
     session: session
 
   # Create our preview views
-  for model in [session.realDiscoModel, session.mockDiscoModel]
-    previewArea = new com.firsteast.PreviewArea
-      model: model
-      session: session
-    previewArea.render()
-    $('.previews').append(previewArea.$el)
+  previewArea = new com.firsteast.PreviewArea
+    model: session.realDiscoModel
+    session: session
+    isMock: false
+  previewArea.render()
+  $('.previews').append(previewArea.$el)
+
+  mockPreviewArea = new com.firsteast.PreviewArea
+    model: session.mockDiscoModel
+    session: session
+    isMock: true
+  mockPreviewArea.render()
+  $('.previews').append(mockPreviewArea.$el)
 
   # Create the menu view
   sideMenu = new com.firsteast.SideMenu

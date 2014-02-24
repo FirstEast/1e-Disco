@@ -13,7 +13,7 @@ from pattern.util import *
 
 # Web UI config
 CONTROL_WS_PORT = 9000
-CONTROL_UI_PORT = 80
+CONTROL_UI_PORT = 90
 CONTROL_UI_PATH = '../control_interface'
 
 # Device network config

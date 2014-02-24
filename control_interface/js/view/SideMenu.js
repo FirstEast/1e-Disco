@@ -9,6 +9,8 @@
       __extends(SideMenu, _super);
 
       function SideMenu() {
+        this._toggleShowMock = __bind(this._toggleShowMock, this);
+        this._toggleShowReal = __bind(this._toggleShowReal, this);
         this._triggerRealToMockSwap = __bind(this._triggerRealToMockSwap, this);
         this._triggerMockToRealSwap = __bind(this._triggerMockToRealSwap, this);
         this.render = __bind(this.render, this);
@@ -19,7 +21,9 @@
 
       SideMenu.prototype.events = {
         'click .swap-mock-real': '_triggerMockToRealSwap',
-        'click .swap-real-mock': '_triggerRealToMockSwap'
+        'click .swap-real-mock': '_triggerRealToMockSwap',
+        'change .show-real': '_toggleShowReal',
+        'change .show-mock': '_toggleShowMock'
       };
 
       SideMenu.prototype.initialize = function(options) {
@@ -58,6 +62,14 @@
           _results.push(this.mockDiscoModel.set("" + device + "Pattern", new com.firsteast.PatternModel($.extend(true, {}, attributes))));
         }
         return _results;
+      };
+
+      SideMenu.prototype._toggleShowReal = function() {
+        return this.model.set('showReal', this.$('.show-real').prop('checked'));
+      };
+
+      SideMenu.prototype._toggleShowMock = function() {
+        return this.model.set('showMock', this.$('.show-mock').prop('checked'));
       };
 
       return SideMenu;

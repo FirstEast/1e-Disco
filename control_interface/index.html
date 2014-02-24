@@ -32,6 +32,9 @@
 
   <script id="preview-template" type="text/x-handlebars-template">
     <div class="preview-view">
+      {{#if isMock}}
+        <div class="mock-label">MOCK</div>
+      {{/if}}
       <div class="expander">E</div>
     </div>
     <div class="selector-area">
@@ -85,9 +88,9 @@
   </script>
 
   <script id="side-menu-template" type="text/x-handlebars-template">
-    Show Real: <input type="checkbox" class="menu-check show-real"></input>
+    Show Real: <input type="checkbox" class="menu-check show-real" {{#if showReal}}checked="checked"{{/if}}></input>
     <br/>
-    Show Mock: <input type="checkbox" class="menu-check show-mock"></input>
+    Show Mock: <input type="checkbox" class="menu-check show-mock" {{#if showMock}}checked="checked"{{/if}}></input>
     <br/>
     <button class="swap-mock-real">Copy Mock Patterns to Real</button>
     <button class="swap-real-mock">Copy Real Patterns to Mock</button>

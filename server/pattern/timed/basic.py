@@ -44,3 +44,23 @@ class MovingAnything(TimedPattern):
   def renderFrame(self, device, frameCount):
     return self.base.render(device).offset(int(self.params['X Rate'] * frameCount),
                                            int(self.params['Y Rate'] * frameCount))
+
+class Strobe(TimedPattern):
+
+  DEFAULT_PARAMS = {
+    'Color': WHITE
+  }
+
+  DEFAULT_PARAMS.update(TimedPattern.DEFAULT_PARAMS)
+
+  def renderFrame(self, device, frameCount):
+    count = frameCount % 2
+
+    color = self.params['Color']
+    if count == 0:
+      color = BLACK
+
+    frame = [color.getRGBValues()] * (device.width * device.height)
+    im = Image.new('RGB', (device.width, device.height))
+    im.putdata(frame)
+    return im

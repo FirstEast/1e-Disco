@@ -212,7 +212,7 @@
 
       DevicePreview.prototype.render = function() {
         this.internalView.render();
-        return this.$el = this.internalView.$el;
+        return this.$el.html(this.internalView.$el);
       };
 
       return DevicePreview;

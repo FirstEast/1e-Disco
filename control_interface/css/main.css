@@ -45,6 +45,12 @@ body {
   cursor: pointer;
   opacity: 0;
 }
+.pattern-selector .preview-view .mock-label {
+  position: absolute;
+  background: black;
+  top: 1px;
+  left: 1px;
+}
 .pattern-selector .selector-area {
   width: 300px;
   max-height: 200px;

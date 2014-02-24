@@ -128,4 +128,4 @@ do ->
 
     render: =>
       @internalView.render()
-      @$el = @internalView.$el
+      @$el.html(@internalView.$el)

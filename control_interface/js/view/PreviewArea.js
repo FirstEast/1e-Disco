@@ -18,12 +18,13 @@
       PreviewArea.prototype.className = 'preview-area';
 
       PreviewArea.prototype.initialize = function(options) {
-        var device, selector, _i, _len, _ref1, _results;
+        var device, selector, _i, _len, _ref1;
         this.session = options.session;
         this.model = options.model;
+        this.isMock = options.isMock;
+        this.displayModel = this.session.displayModel;
         this.selectors = {};
         _ref1 = com.firsteast.OUTPUT_DEVICES;
-        _results = [];
         for (_i = 0, _len = _ref1.length; _i < _len; _i++) {
           device = _ref1[_i];
           selector = new com.firsteast.PatternSelector({
@@ -32,23 +33,33 @@
             savedPatternList: this.session.savedPatternList,
             gifList: this.session.gifList,
             imageList: this.session.imageList,
-            device: device
+            device: device,
+            isMock: this.isMock
           });
-          _results.push(this.selectors[device] = selector);
+          this.selectors[device] = selector;
         }
-        return _results;
+        if (this.isMock) {
+          return this.listenTo(this.displayModel, 'change:showMock', this.render);
+        } else {
+          return this.listenTo(this.displayModel, 'change:showReal', this.render);
+        }
       };
 
       PreviewArea.prototype.render = function() {
-        var key, view, _ref1, _results;
+        var key, view, _ref1;
         _ref1 = this.selectors;
-        _results = [];
         for (key in _ref1) {
           view = _ref1[key];
           view.render();
-          _results.push(this.$el.append(view.$el));
+          this.$el.append(view.$el);
         }
-        return _results;
+        if (this.isMock && !this.displayModel.get('showMock')) {
+          return this.$el.hide();
+        } else if (!this.isMock && !this.displayModel.get('showReal')) {
+          return this.$el.hide();
+        } else {
+          return this.$el.show();
+        }
       };
 
       return PreviewArea;

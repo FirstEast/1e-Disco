@@ -41,6 +41,7 @@
         this.gifList = options.gifList;
         this.imageList = options.imageList;
         this.device = options.device;
+        this.isMock = options.isMock;
         this.previewView = new com.firsteast.DevicePreview({
           device: this.device,
           model: this.discoModel
@@ -81,7 +82,8 @@
           gifList: this.gifList.models,
           imageList: this.imageList.models,
           parameters: parameters,
-          showEdit: this.showEdit
+          showEdit: this.showEdit,
+          isMock: this.isMock
         }));
         this.$('.preview-view').append(this.previewView.$el);
         this._updateSelected();

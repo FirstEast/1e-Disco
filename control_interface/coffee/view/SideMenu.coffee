@@ -3,6 +3,8 @@ do ->
     events:
       'click .swap-mock-real':'_triggerMockToRealSwap'
       'click .swap-real-mock':'_triggerRealToMockSwap'
+      'change .show-real': '_toggleShowReal'
+      'change .show-mock': '_toggleShowMock'
 
     initialize: (options) =>
       @model = options.model
@@ -24,3 +26,9 @@ do ->
       for device in com.firsteast.OUTPUT_DEVICES
         attributes = @realDiscoModel.get("#{device}Pattern").attributes
         @mockDiscoModel.set("#{device}Pattern", new com.firsteast.PatternModel($.extend(true, {}, attributes)))
+
+    _toggleShowReal: =>
+      @model.set 'showReal', @$('.show-real').prop('checked')
+
+    _toggleShowMock: =>
+      @model.set 'showMock', @$('.show-mock').prop('checked')
