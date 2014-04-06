@@ -35,4 +35,4 @@ do ->
       else if !@isMock && !@displayModel.get('showReal')
         @$el.hide()
       else
-        @$el.show()
+        @$el.css('display', 'flex')

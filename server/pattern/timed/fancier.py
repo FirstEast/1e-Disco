@@ -91,10 +91,16 @@ class RandParamCycleInt(AdjustParam):
 class AdjustParamInt(AdjustParam):
   DEFAULT_PARAMS = {
     'MinValue': 8,
-    'MaxValue': 40
+    'MaxValue': 40,
+    'FramePeriod': 30
   }
 
   DEFAULT_PARAMS.update(AdjustParam.DEFAULT_PARAMS)
+
+  def getVal(self):
+    frame = self.frameCount % self.params['FramePeriod']
+    fraction = float(frame) / self.params['FramePeriod']
+    return fraction * self.params['MinValue'] + (1 - fraction) * self.params['MaxValue']
 
 class LoopParam(AdjustParamInt):
   

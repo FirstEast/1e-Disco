@@ -58,7 +58,7 @@
         } else if (!this.isMock && !this.displayModel.get('showReal')) {
           return this.$el.hide();
         } else {
-          return this.$el.show();
+          return this.$el.css('display', 'flex');
         }
       };
 

@@ -32,7 +32,7 @@ class BeatAdjustParam(Pattern):
     if self.params['CallUpdate']: self.base.paramUpdate(self.params['Param'])
     return self.base.render(device)
 
-class BeatAdjustParamIntAvgVolume(BeatAdjustParam):
+class BeatAdjustParamIntVolume(BeatAdjustParam):
   DEFAULT_PARAMS = {
     'MinValue': 8,
     'MaxValue': 40
@@ -48,7 +48,7 @@ class BeatAdjustParamIntAvgVolume(BeatAdjustParam):
     self.val = scaleToBucket(BEAT_MODEL.avgVolume, self.params['MinValue'], self.params['MaxValue'])
     return self.val
 
-class BeatAdjustParamIntAvgCentroid(BeatAdjustParam):
+class BeatAdjustParamIntCentroid(BeatAdjustParam):
   DEFAULT_PARAMS = {
     'MinValue': 8,
     'MaxValue': 40,
@@ -68,7 +68,7 @@ class BeatAdjustParamIntAvgCentroid(BeatAdjustParam):
     self.val = scaleToBucket(val, self.params['MinValue'], self.params['MaxValue'])
     return self.val
 
-class BeatAdjustParamIntFrequencySum(BeatAdjustParam):
+class BeatAdjustParamIntFrequency(BeatAdjustParam):
   DEFAULT_PARAMS = {
     'MinValue': 8,
     'MaxValue': 40,

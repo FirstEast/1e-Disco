@@ -73,6 +73,34 @@ class SolidColor(StaticPattern):
     im.putdata([self.params['Color'].getRGBValues()] * (device.width * device.height))
     return im
 
+class HSVColor(StaticPattern):
+  DEFAULT_PARAMS = {
+    '1000H': 500,
+    '1000S': 1000,
+    '1000V': 1000,
+  }
+
+  def renderFrame(self, device):
+    im = Image.new('RGB', (device.width, device.height))
+
+    hsv = (self.params['1000H']/1000.0, self.params['1000S']/1000.0, self.params['1000V']/1000.0)
+    color = Color(hsv, isHSV = True)
+    im.putdata([color.getRGBValues()] * (device.width * device.height))
+    return im
+
+class RGBColor(StaticPattern):
+  DEFAULT_PARAMS = {
+    'R': 0,
+    'G': 0,
+    'B': 255,
+  }
+
+  def renderFrame(self, device):
+    im = Image.new('RGB', (device.width, device.height))
+    rgb = (self.params['R'], self.params['G'], self.params['B'])
+    im.putdata([rgb] * (device.width * device.height))
+    return im
+
 class LinearRainbow(StaticPattern):
   DEFAULT_PARAMS = {
     'Horizontal': True,
