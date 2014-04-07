@@ -38,6 +38,9 @@ do ->
 
       models = _.sortBy(@patternList.filter(((x) => x.get('DEVICES').indexOf(@device) >= 0)), (x) -> return x.get('name'))
       saveModels = _.sortBy(@savedPatternList.filter((x) => x.get('DEVICES').indexOf(@device) >= 0), (x) -> return x.get('saveName'))
+      partyWorthySaveModels = @savedPatternList.where({partyWorthy: true})
+      console.log partyWorthySaveModels
+      nonPartyWorthySaveModels = @savedPatternList.where({partyWorthy: false})
       currentPattern = @discoModel.get("#{@device}Pattern")?.attributes
       parameters = @_parseParams(_.defaults({}, currentPattern?.params, currentPattern?.DEFAULT_PARAMS))
 
@@ -45,6 +48,8 @@ do ->
         device: @device
         patterns: models
         savedPatterns: saveModels
+        partyWorthySavedPatterns: partyWorthySaveModels
+        nonPartyWorthySavedPatterns: nonPartyWorthySaveModels
         currentPattern: currentPattern
         gifList: @gifList.models
         imageList: @imageList.models
@@ -140,6 +145,7 @@ do ->
       pattern = $.extend(true, {}, pattern)
       pattern.saved = true
       pattern.saveName = saveName
+      pattern.partyWorthy = @$('.party-worthy-input').prop('checked')
       patternModel = new com.firsteast.PatternModel(pattern)
       @savedPatternList.add(patternModel)
 

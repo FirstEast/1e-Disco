@@ -4,8 +4,6 @@ import math, sys
 import numpy
 import wave
 
-from pylab import *
-
 CHUNK = 2048
 FORMAT = pyaudio.paInt16
 CHANNELS = 1

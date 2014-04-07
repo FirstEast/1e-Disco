@@ -40,9 +40,16 @@
     <div class="selector-area">
       {{#if showEdit}}
         <b>Saved:</b> <select class="saved-patterns">
-          {{#each savedPatterns}}
-          <option value="{{attributes.saveName}}">{{attributes.saveName}}</option>
-          {{/each}}
+          <optgroup label="Party Worthy">
+            {{#each partyWorthySavedPatterns}}
+              <option value="{{attributes.saveName}}">{{attributes.saveName}}</option>
+            {{/each}}
+          </optgroup>
+          <optgroup label="Non Party Worthy">
+            {{#each nonPartyWorthySavedPatterns}}
+              <option value="{{attributes.saveName}}">{{attributes.saveName}}</option>
+            {{/each}}
+          </optgroup>
         </select>
         <b>Builders:</b> <select class="class-patterns">
           {{#each patterns}}
@@ -81,6 +88,8 @@
             </div>
           {{/each}}
         </div>
+        <span>Party Worthy</span><input type=checkbox class="party-worthy-input" {{#if partyWorthy}}checked="checked"{{/if}}></input>
+        <br>
         <input type=text class="save-name-input"></input>
         <button class="save-button">Save Pattern</button>
       {{/if}}

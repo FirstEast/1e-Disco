@@ -1,1 +1,0 @@
-{"USE_BEAT": false, "__module__": "pattern.mixer.layer", "name": "MaskPattern", "render": {}, "paramUpdate": {}, "saveName": "ignacioRainbow", "DEVICES": ["ddf", "goodale", "bemis"], "params": {"Pattern": "sliding_rainbow.json", "Mask": "ignacioName.json"}, "DEFAULT_PARAMS": {"Pattern": "default_linrainbow.json", "Mask": "default_circle.json"}, "saved": true, "__doc__": null}

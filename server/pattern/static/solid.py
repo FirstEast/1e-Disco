@@ -83,7 +83,7 @@ class HSVColor(StaticPattern):
   def renderFrame(self, device):
     im = Image.new('RGB', (device.width, device.height))
 
-    hsv = (self.params['1000H']/1000.0, self.params['1000S']/1000.0, self.params['1000V']/1000.0)
+    hsv = (self.params['1000H']/1000.0, self.params['1000S']/1000.0, (self.params['1000V']/1000.0) * 255)
     color = Color(hsv, isHSV = True)
     im.putdata([color.getRGBValues()] * (device.width * device.height))
     return im
@@ -116,7 +116,7 @@ class LinearRainbow(StaticPattern):
       wid = device.height
       hei = device.width
     huerange = [self.params['100StartHue'] / 100.0 + (self.params['100EndHue'] - self.params['100StartHue']) * i / (100.0 * wid) for i in range(wid)]
-    colorArr = [Color((hue, 1, 255), True).getRGBValues() for hue in huerange]
+    colorArr = [Color((hue, 1, 255), isHSV=True).getRGBValues() for hue in huerange]
     im = Image.new('RGB', (wid, hei))
     im.putdata(colorArr * hei)
     if not self.params['Horizontal']: im = im.transpose(Image.ROTATE_270).transpose(Image.FLIP_LEFT_RIGHT)

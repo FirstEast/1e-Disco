@@ -57,7 +57,7 @@
       };
 
       PatternSelector.prototype.render = function() {
-        var currentPattern, models, parameters, saveModels, source, template, _ref1,
+        var currentPattern, models, nonPartyWorthySaveModels, parameters, partyWorthySaveModels, saveModels, source, template, _ref1,
           _this = this;
         this.$el.empty();
         source = $('#preview-template').html();
@@ -72,12 +72,21 @@
         }), function(x) {
           return x.get('saveName');
         });
+        partyWorthySaveModels = this.savedPatternList.where({
+          partyWorthy: true
+        });
+        console.log(partyWorthySaveModels);
+        nonPartyWorthySaveModels = this.savedPatternList.where({
+          partyWorthy: false
+        });
         currentPattern = (_ref1 = this.discoModel.get("" + this.device + "Pattern")) != null ? _ref1.attributes : void 0;
         parameters = this._parseParams(_.defaults({}, currentPattern != null ? currentPattern.params : void 0, currentPattern != null ? currentPattern.DEFAULT_PARAMS : void 0));
         this.$el.append(template({
           device: this.device,
           patterns: models,
           savedPatterns: saveModels,
+          partyWorthySavedPatterns: partyWorthySaveModels,
+          nonPartyWorthySavedPatterns: nonPartyWorthySaveModels,
           currentPattern: currentPattern,
           gifList: this.gifList.models,
           imageList: this.imageList.models,
@@ -207,6 +216,7 @@
         pattern = $.extend(true, {}, pattern);
         pattern.saved = true;
         pattern.saveName = saveName;
+        pattern.partyWorthy = this.$('.party-worthy-input').prop('checked');
         patternModel = new com.firsteast.PatternModel(pattern);
         return this.savedPatternList.add(patternModel);
       };

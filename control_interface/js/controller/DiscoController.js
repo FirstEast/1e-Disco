@@ -18,11 +18,27 @@
         this._buildPatternList = __bind(this._buildPatternList, this);
         this._parseMessage = __bind(this._parseMessage, this);
         this._initializeSocket = __bind(this._initializeSocket, this);
+        this._focusLost = __bind(this._focusLost, this);
+        this._focusReturn = __bind(this._focusReturn, this);
         $.extend(this, Backbone.Events);
         this.session = options.session;
         this._initializeSocket();
         this.listenTo(this.session.savedPatternList, 'add', this._savePattern);
+        this.isActive = true;
+        window.onfocus = this._focusReturn;
+        window.onblur = this._focusLost;
       }
+
+      DiscoController.prototype._focusReturn = function() {
+        this.isActive = true;
+        return this._sendMessage({
+          type: 'render'
+        });
+      };
+
+      DiscoController.prototype._focusLost = function() {
+        return this.isActive = false;
+      };
 
       DiscoController.prototype._initializeSocket = function() {
         this.socket = new WebSocket("ws://" + com.firsteast.WEBSOCKET_URL + ":" + com.firsteast.WEBSOCKET_PORT + "/");
@@ -42,9 +58,11 @@
           });
         } else if (data.type === 'render') {
           this._handleRender(data.renderData);
-          return this._sendMessage({
-            type: 'render'
-          });
+          if (this.isActive) {
+            return this._sendMessage({
+              type: 'render'
+            });
+          }
         } else if (data.type === 'devices') {
           return this._handleDevices(data.deviceData);
         } else if (data.type === 'realPatternData') {

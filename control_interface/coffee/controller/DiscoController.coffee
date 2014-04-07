@@ -9,6 +9,18 @@ do ->
 
       @listenTo @session.savedPatternList, 'add', @_savePattern
 
+      @isActive = true
+
+      window.onfocus = @_focusReturn
+      window.onblur = @_focusLost
+
+    _focusReturn: =>
+      @isActive = true
+      @_sendMessage {type: 'render'}
+
+    _focusLost: =>
+      @isActive = false
+
     _initializeSocket: =>
       @socket = new WebSocket("ws://#{com.firsteast.WEBSOCKET_URL}:#{com.firsteast.WEBSOCKET_PORT}/")
       @socket.onmessage = @_parseMessage
@@ -23,7 +35,8 @@ do ->
         @_sendMessage {type: 'render'} 
       else if data.type == 'render'
         @_handleRender(data.renderData)
-        @_sendMessage {type: 'render'}
+        if @isActive
+          @_sendMessage {type: 'render'}
       else if data.type == 'devices'
         @_handleDevices(data.deviceData)
       else if data.type == 'realPatternData'
