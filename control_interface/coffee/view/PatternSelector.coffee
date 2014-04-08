@@ -33,13 +33,11 @@ do ->
 
     render: =>
       @$el.empty()
-      source = $('#preview-template').html()
-      template = Handlebars.compile(source)
+      template = com.firsteast.templates['device-preview']
 
       models = _.sortBy(@patternList.filter(((x) => x.get('DEVICES').indexOf(@device) >= 0)), (x) -> return x.get('name'))
       saveModels = _.sortBy(@savedPatternList.filter((x) => x.get('DEVICES').indexOf(@device) >= 0), (x) -> return x.get('saveName'))
       partyWorthySaveModels = @savedPatternList.where({partyWorthy: true})
-      console.log partyWorthySaveModels
       nonPartyWorthySaveModels = @savedPatternList.where({partyWorthy: false})
       currentPattern = @discoModel.get("#{@device}Pattern")?.attributes
       parameters = @_parseParams(_.defaults({}, currentPattern?.params, currentPattern?.DEFAULT_PARAMS))

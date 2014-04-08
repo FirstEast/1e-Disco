@@ -48,6 +48,8 @@ class DiscoControlProtocol(WebSocketServerProtocol):
       self.savePattern(data['patternData'])
     elif msgType == 'render':
       self.sendRenderMessage(binary)
+    elif msgType == 'audio':
+      self.sendAudioMessage(binary)
     else:
       self.sendMessage('Unrecognized message type', binary)
       return
@@ -145,6 +147,17 @@ class DiscoControlProtocol(WebSocketServerProtocol):
     message = {
       'type': 'render',
       'renderData': self.getRenderFrames(),
+    }
+    self.sendMessage(json.dumps(message, default=(lambda x: x.__dict__)), binary)
+
+  def sendAudioMessage(self, binary):
+    message = {
+      'type': 'audio',
+      'audioData': {
+        'volume': BEAT_MODEL.avgVolume,
+        'centroid': BEAT_MODEL.avgCentroid,
+        'frequencies': BEAT_MODEL.avgFreqs
+      }
     }
     self.sendMessage(json.dumps(message, default=(lambda x: x.__dict__)), binary)
 

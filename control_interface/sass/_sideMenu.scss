@@ -1,0 +1,43 @@
+.side-menu {
+  position: relative;
+  float: left;
+  height: 100%;
+  width: 200px;
+  background-color: $lighter-color;
+  transition: width 0.5s;
+
+  &.hiding {
+    width: 15px;
+  }
+
+  .handle {
+    height: 100%;
+    position: absolute;
+    width: 15px;
+    text-align: center;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    background: #222;
+    cursor: pointer;
+
+    .inner-handle {
+      cursor: pointer;
+      height: 15px;
+      width: 15px;
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      margin: auto;
+    }
+  }
+
+  .controls {
+    width: 185px;
+    height: 100%;
+    transition: width 0.5s;
+    padding: 8px;
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+  }
+}

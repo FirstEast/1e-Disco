@@ -12,6 +12,7 @@
         this._handlePatterns = __bind(this._handlePatterns, this);
         this._handleDevices = __bind(this._handleDevices, this);
         this._handleRender = __bind(this._handleRender, this);
+        this._handleAudio = __bind(this._handleAudio, this);
         this._buildImageList = __bind(this._buildImageList, this);
         this._buildGifList = __bind(this._buildGifList, this);
         this._buildSavedPatternList = __bind(this._buildSavedPatternList, this);
@@ -31,8 +32,11 @@
 
       DiscoController.prototype._focusReturn = function() {
         this.isActive = true;
-        return this._sendMessage({
+        this._sendMessage({
           type: 'render'
+        });
+        return this._sendMessage({
+          type: 'audio'
         });
       };
 
@@ -53,14 +57,24 @@
           this._buildSavedPatternList(JSON.parse(data.savedPatternListData));
           this._buildGifList(data.gifList);
           this._buildImageList(data.imageList);
-          return this._sendMessage({
+          this._sendMessage({
             type: 'render'
+          });
+          return this._sendMessage({
+            type: 'audio'
           });
         } else if (data.type === 'render') {
           this._handleRender(data.renderData);
           if (this.isActive) {
             return this._sendMessage({
               type: 'render'
+            });
+          }
+        } else if (data.type === 'audio') {
+          this._handleAudio(data.audioData);
+          if (this.isActive) {
+            return this._sendMessage({
+              type: 'audio'
             });
           }
         } else if (data.type === 'devices') {
@@ -107,6 +121,10 @@
           });
         }
         return this.session.imageList.reset(result);
+      };
+
+      DiscoController.prototype._handleAudio = function(audioData) {
+        return this.session.beatModel.set(audioData);
       };
 
       DiscoController.prototype._handleRender = function(renderData) {

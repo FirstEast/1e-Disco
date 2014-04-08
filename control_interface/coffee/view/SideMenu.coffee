@@ -5,16 +5,17 @@ do ->
       'click .swap-real-mock':'_triggerRealToMockSwap'
       'change .show-real': '_toggleShowReal'
       'change .show-mock': '_toggleShowMock'
+      'click .handle': '_toggleShowing'
 
     initialize: (options) =>
       @model = options.model
       @realDiscoModel = options.realDiscoModel
       @mockDiscoModel = options.mockDiscoModel
+      @showing = true;
 
     render: =>
       @$el.empty()
-      source = $('#side-menu-template').html()
-      template = Handlebars.compile(source)
+      template = com.firsteast.templates['side-menu']
       @$el.append(template(@model.attributes))
 
     _triggerMockToRealSwap: =>
@@ -32,3 +33,13 @@ do ->
 
     _toggleShowMock: =>
       @model.set 'showMock', @$('.show-mock').prop('checked')
+
+    _toggleShowing: =>
+      if @showing
+        @$('.controls').hide()
+        @$el.addClass('hiding')
+      else
+        setTimeout((() => @$('.controls').show()), 500)
+        @$el.removeClass('hiding')
+
+      @showing = !@showing

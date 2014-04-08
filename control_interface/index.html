@@ -4,6 +4,8 @@
     <title>1E Disco Control</title>
     <meta http-equiv="Content-Type" content="application/xhtml+xml; charset=utf-8" />
 
+    <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
+    <link rel="icon" href="/favicon.ico" type="image/x-icon">
     <link type="text/css" rel="stylesheet" href="css/main.css"></script>
 
     <script src="lib/jquery-2.0.3.min.js"></script>
@@ -11,9 +13,9 @@
     <script src="lib/underscore.min.js"></script>
     <script src="lib/handlebars-v1.3.0.js"></script>
     <script src="lib/backbone.min.js"></script>
-    <script src="js/helpers.js"></script>
 
-    <script src="init.js"></script>
+    <script src="js/init.js"></script>
+    <script src="js/templates.js"></script>
 
     <script src="js/model/BeatModel.js"></script>
     <script src="js/model/PatternModel.js"></script>
@@ -22,6 +24,8 @@
     <script src="js/model/DiscoSession.js"></script>
     <script src="js/controller/DiscoController.js"></script>
 
+    <script src="js/view/NavBar.js"></script>
+    <script src="js/view/BeatPreview.js"></script>
     <script src="js/view/DevicePreview.js"></script>
     <script src="js/view/PatternSelector.js"></script>
     <script src="js/view/PreviewArea.js"></script>
@@ -30,83 +34,11 @@
     <script src="js/endpoint.js"></script>
   </head>
 
-  <script id="preview-template" type="text/x-handlebars-template">
-    <div class="preview-view">
-      {{#if isMock}}
-        <div class="mock-label">MOCK</div>
-      {{/if}}
-      <div class="expander">E</div>
-    </div>
-    <div class="selector-area">
-      {{#if showEdit}}
-        <b>Saved:</b> <select class="saved-patterns">
-          <optgroup label="Party Worthy">
-            {{#each partyWorthySavedPatterns}}
-              <option value="{{attributes.saveName}}">{{attributes.saveName}}</option>
-            {{/each}}
-          </optgroup>
-          <optgroup label="Non Party Worthy">
-            {{#each nonPartyWorthySavedPatterns}}
-              <option value="{{attributes.saveName}}">{{attributes.saveName}}</option>
-            {{/each}}
-          </optgroup>
-        </select>
-        <b>Builders:</b> <select class="class-patterns">
-          {{#each patterns}}
-          <option value="{{attributes.name}}">{{attributes.name}}</option>
-          {{/each}}
-        </select>
-        <div class="params">
-          {{#each parameters}}
-            <div class="param">
-              <span>{{name}}: </span>
-              {{#if type}}
-                <input class="param-input" type="{{type}}" value="{{val}}" name="{{name}}" {{#if val}}checked="checked"{{/if}}></input>
-              {{else}}
-                {{#if pattern}}
-                <select class="param-input" name="{{name}}" data-type="pattern">
-                  {{#each ../../../savedPatterns}}
-                  <option value="{{attributes.saveName}}">{{attributes.saveName}}</option>
-                  {{/each}}
-                </select>
-                {{/if}}
-                {{#if gif}}
-                <select class="param-input" name="{{name}}" data-type="gif">
-                  {{#each ../../../gifList}}
-                  <option value="{{attributes.name}}">{{attributes.name}}</option>
-                  {{/each}}
-                </select>
-                {{/if}}
-                {{#if image}}
-                <select class="param-input" name="{{name}}" data-type="image">
-                  {{#each ../../../imageList}}
-                  <option value="{{attributes.name}}">{{attributes.name}}</option>
-                  {{/each}}
-                </select>
-                {{/if}}
-              {{/if}}
-            </div>
-          {{/each}}
-        </div>
-        <span>Party Worthy</span><input type=checkbox class="party-worthy-input" {{#if partyWorthy}}checked="checked"{{/if}}></input>
-        <br>
-        <input type=text class="save-name-input"></input>
-        <button class="save-button">Save Pattern</button>
-      {{/if}}
-    </div>
-  </script>
-
-  <script id="side-menu-template" type="text/x-handlebars-template">
-    Show Real: <input type="checkbox" class="menu-check show-real" {{#if showReal}}checked="checked"{{/if}}></input>
-    <br/>
-    Show Mock: <input type="checkbox" class="menu-check show-mock" {{#if showMock}}checked="checked"{{/if}}></input>
-    <br/>
-    <button class="swap-mock-real">Copy Mock Patterns to Real</button>
-    <button class="swap-real-mock">Copy Real Patterns to Mock</button>
-  </script>
-
   <body>
-    <div class="menu"></div>
-    <div class="previews"></div>
+    <div class="nav-bar"></div>
+    <div class="content-area">
+      <div class="side-menu"></div>
+      <div class="previews"></div>
+    </div>
   </body>
 </html>

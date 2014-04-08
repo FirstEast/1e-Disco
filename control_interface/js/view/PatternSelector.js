@@ -4,8 +4,7 @@
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
   (function() {
-    var getHexStringFromRgb, getRgbFromHexString, _ref,
-      _this = this;
+    var getHexStringFromRgb, getRgbFromHexString;
     com.firsteast.PatternSelector = (function(_super) {
       __extends(PatternSelector, _super);
 
@@ -20,8 +19,7 @@
         this._parseParams = __bind(this._parseParams, this);
         this.render = __bind(this.render, this);
         this.initialize = __bind(this.initialize, this);
-        _ref = PatternSelector.__super__.constructor.apply(this, arguments);
-        return _ref;
+        return PatternSelector.__super__.constructor.apply(this, arguments);
       }
 
       PatternSelector.prototype.className = 'pattern-selector';
@@ -57,29 +55,30 @@
       };
 
       PatternSelector.prototype.render = function() {
-        var currentPattern, models, nonPartyWorthySaveModels, parameters, partyWorthySaveModels, saveModels, source, template, _ref1,
-          _this = this;
+        var currentPattern, models, nonPartyWorthySaveModels, parameters, partyWorthySaveModels, saveModels, template, _ref;
         this.$el.empty();
-        source = $('#preview-template').html();
-        template = Handlebars.compile(source);
-        models = _.sortBy(this.patternList.filter((function(x) {
-          return x.get('DEVICES').indexOf(_this.device) >= 0;
-        })), function(x) {
+        template = com.firsteast.templates['device-preview'];
+        models = _.sortBy(this.patternList.filter(((function(_this) {
+          return function(x) {
+            return x.get('DEVICES').indexOf(_this.device) >= 0;
+          };
+        })(this))), function(x) {
           return x.get('name');
         });
-        saveModels = _.sortBy(this.savedPatternList.filter(function(x) {
-          return x.get('DEVICES').indexOf(_this.device) >= 0;
-        }), function(x) {
+        saveModels = _.sortBy(this.savedPatternList.filter((function(_this) {
+          return function(x) {
+            return x.get('DEVICES').indexOf(_this.device) >= 0;
+          };
+        })(this)), function(x) {
           return x.get('saveName');
         });
         partyWorthySaveModels = this.savedPatternList.where({
           partyWorthy: true
         });
-        console.log(partyWorthySaveModels);
         nonPartyWorthySaveModels = this.savedPatternList.where({
           partyWorthy: false
         });
-        currentPattern = (_ref1 = this.discoModel.get("" + this.device + "Pattern")) != null ? _ref1.attributes : void 0;
+        currentPattern = (_ref = this.discoModel.get("" + this.device + "Pattern")) != null ? _ref.attributes : void 0;
         parameters = this._parseParams(_.defaults({}, currentPattern != null ? currentPattern.params : void 0, currentPattern != null ? currentPattern.DEFAULT_PARAMS : void 0));
         this.$el.append(template({
           device: this.device,
@@ -154,11 +153,11 @@
       };
 
       PatternSelector.prototype._updateSelected = function() {
-        var _ref1, _ref2, _ref3;
-        if ((_ref1 = this.discoModel.get("" + this.device + "Pattern")) != null ? _ref1.get('saved') : void 0) {
-          return this.$('select').val((_ref2 = this.discoModel.get("" + this.device + "Pattern")) != null ? _ref2.get('saveName') : void 0);
+        var _ref, _ref1, _ref2;
+        if ((_ref = this.discoModel.get("" + this.device + "Pattern")) != null ? _ref.get('saved') : void 0) {
+          return this.$('select').val((_ref1 = this.discoModel.get("" + this.device + "Pattern")) != null ? _ref1.get('saveName') : void 0);
         } else {
-          return this.$('select').val((_ref3 = this.discoModel.get("" + this.device + "Pattern")) != null ? _ref3.get('name') : void 0);
+          return this.$('select').val((_ref2 = this.discoModel.get("" + this.device + "Pattern")) != null ? _ref2.get('name') : void 0);
         }
       };
 
@@ -183,11 +182,11 @@
       };
 
       PatternSelector.prototype._changeParams = function() {
-        var inp, input, params, pattern, _i, _len, _ref1;
+        var inp, input, params, pattern, _i, _len, _ref;
         params = {};
-        _ref1 = this.$('.param-input');
-        for (_i = 0, _len = _ref1.length; _i < _len; _i++) {
-          input = _ref1[_i];
+        _ref = this.$('.param-input');
+        for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+          input = _ref[_i];
           inp = $(input);
           if (inp.prop('type') === 'color') {
             params[inp.prop('name')] = {
@@ -224,26 +223,30 @@
       return PatternSelector;
 
     })(Backbone.View);
-    getRgbFromHexString = function(hex) {
-      var blue, green, red;
-      red = parseInt(hex.substring(1, 3), 16);
-      green = parseInt(hex.substring(3, 5), 16);
-      blue = parseInt(hex.substring(5, 7), 16);
-      return [red, green, blue];
-    };
-    return getHexStringFromRgb = function(RGB) {
-      var hex, total, val, _i, _len;
-      total = "#";
-      for (_i = 0, _len = RGB.length; _i < _len; _i++) {
-        val = RGB[_i];
-        hex = val.toString(16);
-        if (hex.length === 1) {
-          hex = '0' + hex;
+    getRgbFromHexString = (function(_this) {
+      return function(hex) {
+        var blue, green, red;
+        red = parseInt(hex.substring(1, 3), 16);
+        green = parseInt(hex.substring(3, 5), 16);
+        blue = parseInt(hex.substring(5, 7), 16);
+        return [red, green, blue];
+      };
+    })(this);
+    return getHexStringFromRgb = (function(_this) {
+      return function(RGB) {
+        var hex, total, val, _i, _len;
+        total = "#";
+        for (_i = 0, _len = RGB.length; _i < _len; _i++) {
+          val = RGB[_i];
+          hex = val.toString(16);
+          if (hex.length === 1) {
+            hex = '0' + hex;
+          }
+          total = total + hex;
         }
-        total = total + hex;
-      }
-      return total;
-    };
+        return total;
+      };
+    })(this);
   })();
 
 }).call(this);

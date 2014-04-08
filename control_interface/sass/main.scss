@@ -1,0 +1,30 @@
+$nav-bar-height: 50px;
+
+$lighter-color: #333;
+
+@import "navBar";
+@import "sideMenu";
+@import "devicePreview";
+@import "beatPreview";
+
+html, body {
+  width: 100%;
+  height: 100%;
+  margin: 0px;
+  padding: 0px;
+  color: white;
+  font-family: sans-serif;
+  overflow: hidden;
+}
+
+.content-area {
+  position: absolute;
+  top: $nav-bar-height;
+  left: 0px;
+  right: 0px;
+  bottom: 0px;
+
+  .previews {
+    padding: 10px;
+  }
+}

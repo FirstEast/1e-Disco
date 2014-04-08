@@ -140,6 +140,7 @@ csx
 AppPackages/
 
 # Others
+.sass-cache/
 sql/
 *.Cache
 ClientBin/
@@ -213,3 +214,5 @@ pip-log.txt
 
 #Mr Developer
 .mr.developer.cfg
+
+node_modules

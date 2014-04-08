@@ -4,29 +4,27 @@
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
   (function() {
-    var _ref;
     return com.firsteast.PreviewArea = (function(_super) {
       __extends(PreviewArea, _super);
 
       function PreviewArea() {
         this.render = __bind(this.render, this);
         this.initialize = __bind(this.initialize, this);
-        _ref = PreviewArea.__super__.constructor.apply(this, arguments);
-        return _ref;
+        return PreviewArea.__super__.constructor.apply(this, arguments);
       }
 
       PreviewArea.prototype.className = 'preview-area';
 
       PreviewArea.prototype.initialize = function(options) {
-        var device, selector, _i, _len, _ref1;
+        var device, selector, _i, _len, _ref;
         this.session = options.session;
         this.model = options.model;
         this.isMock = options.isMock;
         this.displayModel = this.session.displayModel;
         this.selectors = {};
-        _ref1 = com.firsteast.OUTPUT_DEVICES;
-        for (_i = 0, _len = _ref1.length; _i < _len; _i++) {
-          device = _ref1[_i];
+        _ref = com.firsteast.OUTPUT_DEVICES;
+        for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+          device = _ref[_i];
           selector = new com.firsteast.PatternSelector({
             discoModel: this.model,
             patternList: this.session.patternList,
@@ -46,10 +44,10 @@
       };
 
       PreviewArea.prototype.render = function() {
-        var key, view, _ref1;
-        _ref1 = this.selectors;
-        for (key in _ref1) {
-          view = _ref1[key];
+        var key, view, _ref;
+        _ref = this.selectors;
+        for (key in _ref) {
+          view = _ref[key];
           view.render();
           this.$el.append(view.$el);
         }

@@ -4,7 +4,7 @@
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
   (function() {
-    var PREVIEW_VIEWS, _ref, _ref1, _ref2, _ref3;
+    var PREVIEW_VIEWS;
     PREVIEW_VIEWS = {};
     PREVIEW_VIEWS['ddf'] = com.firsteast.DdfPreview = (function(_super) {
       __extends(DdfPreview, _super);
@@ -13,8 +13,7 @@
         this.renderCanvas = __bind(this.renderCanvas, this);
         this.render = __bind(this.render, this);
         this.initialize = __bind(this.initialize, this);
-        _ref = DdfPreview.__super__.constructor.apply(this, arguments);
-        return _ref;
+        return DdfPreview.__super__.constructor.apply(this, arguments);
       }
 
       DdfPreview.prototype.tagName = 'canvas';
@@ -37,14 +36,14 @@
       };
 
       DdfPreview.prototype.renderCanvas = function() {
-        var RGBArray, blue, green, i, j, red, _i, _ref1, _results;
+        var RGBArray, blue, green, i, j, red, _i, _ref, _results;
         RGBArray = this.model.get('frames')['ddf'];
         _results = [];
-        for (i = _i = 0, _ref1 = com.firsteast.DDF_HEIGHT; 0 <= _ref1 ? _i <= _ref1 : _i >= _ref1; i = 0 <= _ref1 ? ++_i : --_i) {
+        for (i = _i = 0, _ref = com.firsteast.DDF_HEIGHT; 0 <= _ref ? _i <= _ref : _i >= _ref; i = 0 <= _ref ? ++_i : --_i) {
           _results.push((function() {
-            var _j, _ref2, _results1;
+            var _j, _ref1, _results1;
             _results1 = [];
-            for (j = _j = 0, _ref2 = com.firsteast.DDF_WIDTH; 0 <= _ref2 ? _j <= _ref2 : _j >= _ref2; j = 0 <= _ref2 ? ++_j : --_j) {
+            for (j = _j = 0, _ref1 = com.firsteast.DDF_WIDTH; 0 <= _ref1 ? _j <= _ref1 : _j >= _ref1; j = 0 <= _ref1 ? ++_j : --_j) {
               red = RGBArray[(i * com.firsteast.DDF_WIDTH + j) * 3];
               green = RGBArray[(i * com.firsteast.DDF_WIDTH + j) * 3 + 1];
               blue = RGBArray[(i * com.firsteast.DDF_WIDTH + j) * 3 + 2];
@@ -68,8 +67,7 @@
         this.renderCanvas = __bind(this.renderCanvas, this);
         this.render = __bind(this.render, this);
         this.initialize = __bind(this.initialize, this);
-        _ref1 = GoodalePreview.__super__.constructor.apply(this, arguments);
-        return _ref1;
+        return GoodalePreview.__super__.constructor.apply(this, arguments);
       }
 
       GoodalePreview.prototype.tagName = 'canvas';
@@ -153,8 +151,7 @@
         this.renderCanvas = __bind(this.renderCanvas, this);
         this.render = __bind(this.render, this);
         this.initialize = __bind(this.initialize, this);
-        _ref2 = BemisPreview.__super__.constructor.apply(this, arguments);
-        return _ref2;
+        return BemisPreview.__super__.constructor.apply(this, arguments);
       }
 
       BemisPreview.prototype.tagName = 'canvas';
@@ -177,10 +174,10 @@
       };
 
       BemisPreview.prototype.renderCanvas = function() {
-        var RGBArray, blue, green, i, red, _i, _ref3, _results;
+        var RGBArray, blue, green, i, red, _i, _ref, _results;
         RGBArray = this.model.get('frames')['bemis'];
         _results = [];
-        for (i = _i = 0, _ref3 = com.firsteast.BEMIS_WIDTH; 0 <= _ref3 ? _i <= _ref3 : _i >= _ref3; i = 0 <= _ref3 ? ++_i : --_i) {
+        for (i = _i = 0, _ref = com.firsteast.BEMIS_WIDTH; 0 <= _ref ? _i <= _ref : _i >= _ref; i = 0 <= _ref ? ++_i : --_i) {
           red = RGBArray[i * 3];
           green = RGBArray[i * 3 + 1];
           blue = RGBArray[i * 3 + 2];
@@ -200,8 +197,7 @@
       function DevicePreview() {
         this.render = __bind(this.render, this);
         this.initialize = __bind(this.initialize, this);
-        _ref3 = DevicePreview.__super__.constructor.apply(this, arguments);
-        return _ref3;
+        return DevicePreview.__super__.constructor.apply(this, arguments);
       }
 
       DevicePreview.prototype.initialize = function(options) {

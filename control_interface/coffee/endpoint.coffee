@@ -21,6 +21,19 @@ $('document').ready ( =>
   controller = new com.firsteast.DiscoController
     session: session
 
+  # Create the nav bar
+  navbar = new com.firsteast.NavBar
+    el: $('.nav-bar')
+  navbar.render()
+
+  # Create the menu view
+  sideMenu = new com.firsteast.SideMenu
+    el: $('.side-menu')
+    model: session.displayModel
+    realDiscoModel: session.realDiscoModel
+    mockDiscoModel: session.mockDiscoModel
+  sideMenu.render()
+
   # Create our preview views
   previewArea = new com.firsteast.PreviewArea
     model: session.realDiscoModel
@@ -36,11 +49,8 @@ $('document').ready ( =>
   mockPreviewArea.render()
   $('.previews').append(mockPreviewArea.$el)
 
-  # Create the menu view
-  sideMenu = new com.firsteast.SideMenu
-    el: $('.menu')
-    model: session.displayModel
-    realDiscoModel: session.realDiscoModel
-    mockDiscoModel: session.mockDiscoModel
-  sideMenu.render()
+  beatPreview = new com.firsteast.BeatPreview
+    model: session.beatModel
+  beatPreview.render()
+  $('.content-area').append(beatPreview.$el)
 )

@@ -1,0 +1,32 @@
+.beat-preview {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1000;
+  background: black;
+
+  transform: rotate(180deg);
+  -ms-transform: rotate(180deg);
+  -webkit-transform: rotate(180deg);
+
+  -moz-transform: scaleY(-1);
+  -o-transform: scaleY(-1);
+  -webkit-transform: scaleY(-1);
+  transform: scaleY(-1);
+  filter: FlipV;
+  -ms-filter: "FlipV";
+
+  .bar-container {
+    width: 100%;
+    height: 70%;
+
+    .bar {
+      background-color: #002;
+      float: left;
+    }
+  }
+}

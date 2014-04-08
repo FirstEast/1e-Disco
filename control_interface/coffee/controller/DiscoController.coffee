@@ -17,6 +17,7 @@ do ->
     _focusReturn: =>
       @isActive = true
       @_sendMessage {type: 'render'}
+      @_sendMessage {type: 'audio'}
 
     _focusLost: =>
       @isActive = false
@@ -33,10 +34,15 @@ do ->
         @_buildGifList(data.gifList)
         @_buildImageList(data.imageList)
         @_sendMessage {type: 'render'} 
+        @_sendMessage {type: 'audio'} 
       else if data.type == 'render'
         @_handleRender(data.renderData)
         if @isActive
           @_sendMessage {type: 'render'}
+      else if data.type == 'audio'
+        @_handleAudio(data.audioData)
+        if @isActive
+          @_sendMessage {type: 'audio'}
       else if data.type == 'devices'
         @_handleDevices(data.deviceData)
       else if data.type == 'realPatternData'
@@ -65,6 +71,9 @@ do ->
         result.push
           name: image
       @session.imageList.reset(result)
+
+    _handleAudio: (audioData) =>
+      @session.beatModel.set audioData
 
     _handleRender: (renderData) =>
       @session.realDiscoModel.set('frames', renderData.real)
