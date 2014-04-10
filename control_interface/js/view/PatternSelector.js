@@ -72,11 +72,15 @@
         })(this)), function(x) {
           return x.get('saveName');
         });
-        partyWorthySaveModels = this.savedPatternList.where({
+        partyWorthySaveModels = _.sortBy(this.savedPatternList.where({
           partyWorthy: true
+        }), function(x) {
+          return x.get('name');
         });
-        nonPartyWorthySaveModels = this.savedPatternList.where({
+        nonPartyWorthySaveModels = _.sortBy(this.savedPatternList.where({
           partyWorthy: false
+        }), function(x) {
+          return x.get('name');
         });
         currentPattern = (_ref = this.discoModel.get("" + this.device + "Pattern")) != null ? _ref.attributes : void 0;
         parameters = this._parseParams(_.defaults({}, currentPattern != null ? currentPattern.params : void 0, currentPattern != null ? currentPattern.DEFAULT_PARAMS : void 0));
