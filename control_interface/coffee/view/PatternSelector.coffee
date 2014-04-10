@@ -37,8 +37,8 @@ do ->
 
       models = _.sortBy(@patternList.filter(((x) => x.get('DEVICES').indexOf(@device) >= 0)), (x) -> return x.get('name'))
       saveModels = _.sortBy(@savedPatternList.filter((x) => x.get('DEVICES').indexOf(@device) >= 0), (x) -> return x.get('saveName'))
-      partyWorthySaveModels = _.sortBy(@savedPatternList.where({partyWorthy: true}), (x) -> return x.name)
-      nonPartyWorthySaveModels = _.sortBy(@savedPatternList.where({partyWorthy: false}), (x) -> return x.name)
+      partyWorthySaveModels = _.sortBy(@savedPatternList.where({partyWorthy: true}), (x) -> console.log x.name)
+      nonPartyWorthySaveModels = _.sortBy(@savedPatternList.where({partyWorthy: false}), (x) -> console.log x.name)
       currentPattern = @discoModel.get("#{@device}Pattern")?.attributes
       parameters = @_parseParams(_.defaults({}, currentPattern?.params, currentPattern?.DEFAULT_PARAMS))
 
