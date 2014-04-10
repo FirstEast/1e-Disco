@@ -75,12 +75,12 @@
         partyWorthySaveModels = _.sortBy(this.savedPatternList.where({
           partyWorthy: true
         }), function(x) {
-          return console.log(x.name);
+          return x.get('savedName');
         });
         nonPartyWorthySaveModels = _.sortBy(this.savedPatternList.where({
           partyWorthy: false
         }), function(x) {
-          return console.log(x.name);
+          return x.get('savedName');
         });
         currentPattern = (_ref = this.discoModel.get("" + this.device + "Pattern")) != null ? _ref.attributes : void 0;
         parameters = this._parseParams(_.defaults({}, currentPattern != null ? currentPattern.params : void 0, currentPattern != null ? currentPattern.DEFAULT_PARAMS : void 0));
