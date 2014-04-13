@@ -5,6 +5,7 @@
     return com.firsteast.DiscoController = (function() {
       function DiscoController(options) {
         this._sendMessage = __bind(this._sendMessage, this);
+        this._updateMockPatternParams = __bind(this._updateMockPatternParams, this);
         this._updateRealPatternParams = __bind(this._updateRealPatternParams, this);
         this._setMockPattern = __bind(this._setMockPattern, this);
         this._setRealPattern = __bind(this._setRealPattern, this);
@@ -159,7 +160,9 @@
         for (_i = 0, _len = _ref1.length; _i < _len; _i++) {
           device = _ref1[_i];
           this.listenTo(this.session.realDiscoModel, "change:" + device + "Pattern", _.partial(this._setRealPattern, "" + device));
-          _results.push(this.listenTo(this.session.mockDiscoModel, "change:" + device + "Pattern", _.partial(this._setMockPattern, "" + device)));
+          this.listenTo(this.session.mockDiscoModel, "change:" + device + "Pattern", _.partial(this._setMockPattern, "" + device));
+          this.listenTo(this.session.realDiscoModel, "" + device + "ChangeParam", _.partial(this._updateRealPatternParams, "" + device));
+          _results.push(this.listenTo(this.session.mockDiscoModel, "" + device + "ChangeParam", _.partial(this._updateMockPatternParams, "" + device)));
         }
         return _results;
       };
@@ -193,8 +196,26 @@
         return this._sendMessage(data);
       };
 
-      DiscoController.prototype._updateRealPatternParams = function(device) {
-        return console.log(this.session.realDiscoModel.get(device + 'Pattern').attributes.params);
+      DiscoController.prototype._updateRealPatternParams = function(device, param) {
+        var data;
+        data = {
+          type: 'realParam',
+          deviceName: device,
+          paramName: param.name,
+          paramVal: param.val
+        };
+        return this._sendMessage(data);
+      };
+
+      DiscoController.prototype._updateMockPatternParams = function(device, param) {
+        var data;
+        data = {
+          type: 'mockParam',
+          deviceName: device,
+          paramName: param.name,
+          paramVal: param.val
+        };
+        return this._sendMessage(data);
       };
 
       DiscoController.prototype._sendMessage = function(data) {

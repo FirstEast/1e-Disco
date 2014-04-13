@@ -99,6 +99,8 @@ do ->
       for device in com.firsteast.OUTPUT_DEVICES
         @listenTo @session.realDiscoModel, "change:#{device}Pattern", _.partial(@_setRealPattern, "#{device}")
         @listenTo @session.mockDiscoModel, "change:#{device}Pattern", _.partial(@_setMockPattern, "#{device}")
+        @listenTo @session.realDiscoModel, "#{device}ChangeParam", _.partial(@_updateRealPatternParams, "#{device}")
+        @listenTo @session.mockDiscoModel, "#{device}ChangeParam", _.partial(@_updateMockPatternParams, "#{device}")
 
     _savePattern: (pattern) =>
       data = {
@@ -123,8 +125,23 @@ do ->
       }
       @_sendMessage(data)
 
-    _updateRealPatternParams: (device) =>
-      console.log @session.realDiscoModel.get(device + 'Pattern').attributes.params
+    _updateRealPatternParams: (device, param) =>
+      data = {
+        type: 'realParam'
+        deviceName: device
+        paramName: param.name
+        paramVal: param.val
+      }
+      @_sendMessage(data)
+
+    _updateMockPatternParams: (device, param) =>
+      data = {
+        type: 'mockParam'
+        deviceName: device
+        paramName: param.name
+        paramVal: param.val
+      }
+      @_sendMessage(data)
 
     _sendMessage: (data) =>
       msg = JSON.stringify(data)

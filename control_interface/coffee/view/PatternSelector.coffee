@@ -115,27 +115,28 @@ do ->
       pattern = $.extend(true, {}, pattern)
       @discoModel.set("#{@device}Pattern", new com.firsteast.PatternModel(pattern))
 
-    _changeParams: =>
-      params = {}
-      for input in @$('.param-input')
-        inp = $(input)
+    _changeParams: (event) =>
+      params = @discoModel.get("#{@device}Pattern").get('params')
+      inp = $(event.currentTarget)
+      val = inp.val()
+      name = inp.prop('name')
+      type = inp.prop('type')
 
-        if inp.prop('type') == 'color'
-          params[inp.prop('name')] = {RGBValues: getRgbFromHexString(inp.val())}
-        else if inp.prop('type') == 'checkbox'
-          params[inp.prop('name')] = inp.prop('checked')
-        else if inp.data('type') == 'pattern'
-          params[inp.prop('name')] = inp.val() + '.json'
-        else if inp.prop('type') == 'number'
-          params[inp.prop('name')] = parseFloat(inp.val())
-        else
-          params[inp.prop('name')] = inp.val()
+      if val.length == 0
+        return
 
-      # HACK - recreates pattern, doesn't smoothly update params
-      pattern = @discoModel.get("#{@device}Pattern").attributes
-      pattern = $.extend(true, {}, pattern)
-      pattern.params = params
-      @discoModel.set("#{@device}Pattern", new com.firsteast.PatternModel(pattern))
+      if type == 'color'
+        params[name] = {RGBValues: getRgbFromHexString(val)}
+      else if type == 'checkbox'
+        params[name] = inp.prop('checked')
+      else if inp.data('type') == 'pattern'
+        params[name] = val + '.json'
+      else if type == 'number'
+        params[name] = parseFloat(val)
+      else
+        params[name] = val
+
+      @discoModel.trigger("#{@device}ChangeParam", {name: name, val: params[name]})
 
     _savePattern: =>
       saveName = @$('.save-name-input').val()

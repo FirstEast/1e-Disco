@@ -185,31 +185,33 @@
         return this.discoModel.set("" + this.device + "Pattern", new com.firsteast.PatternModel(pattern));
       };
 
-      PatternSelector.prototype._changeParams = function() {
-        var inp, input, params, pattern, _i, _len, _ref;
-        params = {};
-        _ref = this.$('.param-input');
-        for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-          input = _ref[_i];
-          inp = $(input);
-          if (inp.prop('type') === 'color') {
-            params[inp.prop('name')] = {
-              RGBValues: getRgbFromHexString(inp.val())
-            };
-          } else if (inp.prop('type') === 'checkbox') {
-            params[inp.prop('name')] = inp.prop('checked');
-          } else if (inp.data('type') === 'pattern') {
-            params[inp.prop('name')] = inp.val() + '.json';
-          } else if (inp.prop('type') === 'number') {
-            params[inp.prop('name')] = parseFloat(inp.val());
-          } else {
-            params[inp.prop('name')] = inp.val();
-          }
+      PatternSelector.prototype._changeParams = function(event) {
+        var inp, name, params, type, val;
+        params = this.discoModel.get("" + this.device + "Pattern").get('params');
+        inp = $(event.currentTarget);
+        val = inp.val();
+        name = inp.prop('name');
+        type = inp.prop('type');
+        if (val.length === 0) {
+          return;
         }
-        pattern = this.discoModel.get("" + this.device + "Pattern").attributes;
-        pattern = $.extend(true, {}, pattern);
-        pattern.params = params;
-        return this.discoModel.set("" + this.device + "Pattern", new com.firsteast.PatternModel(pattern));
+        if (type === 'color') {
+          params[name] = {
+            RGBValues: getRgbFromHexString(val)
+          };
+        } else if (type === 'checkbox') {
+          params[name] = inp.prop('checked');
+        } else if (inp.data('type') === 'pattern') {
+          params[name] = val + '.json';
+        } else if (type === 'number') {
+          params[name] = parseFloat(val);
+        } else {
+          params[name] = val;
+        }
+        return this.discoModel.trigger("" + this.device + "ChangeParam", {
+          name: name,
+          val: params[name]
+        });
       };
 
       PatternSelector.prototype._savePattern = function() {

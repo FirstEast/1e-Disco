@@ -46,6 +46,10 @@ class DiscoControlProtocol(WebSocketServerProtocol):
       self.setRealPattern(data['deviceName'], data['patternData'])
     elif msgType == 'savePattern':
       self.savePattern(data['patternData'])
+    elif msgType == 'realParam':
+      self.setRealPatternParam(data['deviceName'], data['paramName'], data['paramVal'])
+    elif msgType == 'mockParam':
+      self.setMockPatternParam(data['deviceName'], data['paramName'], data['paramVal'])
     elif msgType == 'render':
       self.sendRenderMessage(binary)
     elif msgType == 'audio':
@@ -118,6 +122,14 @@ class DiscoControlProtocol(WebSocketServerProtocol):
         traceback.print_stack()
         print str(e)
     return frames
+
+  def setRealPatternParam(self, device, name, value):
+    param = sanitizeParams({name: value})
+    self.factory.discoSession.getPattern(device).setParam(name, param[name])
+
+  def setMockPatternParam(self, device, name, value):
+    param = sanitizeParams({name: value})
+    self.mockPatternModel[device].setParam(name, param[name])
 
   def sendInitMessage(self):
     message = {
