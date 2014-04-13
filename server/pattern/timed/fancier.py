@@ -37,33 +37,6 @@ class AdjustParam(TimedPattern):
 
   DEFAULT_PARAMS.update(TimedPattern.DEFAULT_PARAMS)
 
-class RandParamInitInt(AdjustParam):
-  DEFAULT_PARAMS = {
-    'MinValue': 8,
-    'MaxValue': 40
-  }
-
-  DEFAULT_PARAMS.update(AdjustParam.DEFAULT_PARAMS)
-
-  def paramUpdate(self, paramName):
-    AdjustParam.paramUpdate(self, paramName)
-    self.val = random.randint(self.params['MinValue'], self.params['MaxValue'])
-
-  def getVal(self):
-    return self.val
-
-class RandParamInitColor(AdjustParam):
-  DEFAULT_PARAMS = AdjustParam.DEFAULT_PARAMS
-
-  def paramUpdate(self, paramName):
-    AdjustParam.paramUpdate(self, paramName)
-    self.val = Color((random.randint(0, 255),
-                     random.randint(0, 255),
-                     random.randint(0, 255)))
-  
-  def getVal(self):
-    return self.val
-
 class RandParamCycleInt(AdjustParam):
   DEFAULT_PARAMS = {
     'MinValue': 8,
