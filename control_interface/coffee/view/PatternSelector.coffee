@@ -125,6 +125,14 @@ do ->
       if val.length == 0
         return
 
+      # Hacky fix for broken color inputs.
+      # Consider input as a color if formatted properly.
+      if type == 'text' and val.indexOf('#') == 0
+        if val.match(/^#([0-9a-f]{6})$/i)
+          type = 'color'
+        else
+          return
+
       if type == 'color'
         params[name] = {RGBValues: getRgbFromHexString(val)}
       else if type == 'checkbox'
