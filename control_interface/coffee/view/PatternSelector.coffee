@@ -36,9 +36,12 @@ do ->
       template = com.firsteast.templates['device-preview']
 
       models = _.sortBy(@patternList.filter(((x) => x.get('DEVICES').indexOf(@device) >= 0)), (x) -> return x.get('name'))
+
       saveModels = _.sortBy(@savedPatternList.filter((x) => x.get('DEVICES').indexOf(@device) >= 0), (x) -> return x.get('saveName'))
-      partyWorthySaveModels = _.sortBy(@savedPatternList.where({partyWorthy: true}), (x) -> return x.get('saveName'))
-      nonPartyWorthySaveModels = _.sortBy(@savedPatternList.where({partyWorthy: false}), (x) -> return x.get('saveName'))
+      col = new Backbone.Collection(saveModels)
+      partyWorthySaveModels = col.where({partyWorthy: true})
+      nonPartyWorthySaveModels = col.where({partyWorthy: false})
+
       currentPattern = @discoModel.get("#{@device}Pattern")?.attributes
       parameters = @_parseParams(_.defaults({}, currentPattern?.params, currentPattern?.DEFAULT_PARAMS))
 
@@ -99,9 +102,11 @@ do ->
 
     _updateSelected: =>
       if @discoModel.get("#{@device}Pattern")?.get('saved')
-        @$('select').val(@discoModel.get("#{@device}Pattern")?.get('saveName'))
+        @$('.saved-patterns').val(@discoModel.get("#{@device}Pattern")?.get('saveName'))
+        @$('.class-patterns').val(@discoModel.get("#{@device}Pattern")?.get('name'))
       else
-        @$('select').val(@discoModel.get("#{@device}Pattern")?.get('name'))
+        @$('.saved-patterns').val(null)
+        @$('.class-patterns').val(@discoModel.get("#{@device}Pattern")?.get('name'))
 
     _changeClassSelected: =>
       name = @$('.class-patterns').val()
@@ -154,6 +159,10 @@ do ->
       pattern.saveName = saveName
       pattern.partyWorthy = @$('.party-worthy-input').prop('checked')
       patternModel = new com.firsteast.PatternModel(pattern)
+
+      existingPattern = @savedPatternList.where({saveName: saveName})
+      if existingPattern.length > 0
+        @savedPatternList.remove(existingPattern[0])
       @savedPatternList.add(patternModel)
 
   getRgbFromHexString = (hex) =>

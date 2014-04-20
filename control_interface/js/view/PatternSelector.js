@@ -55,7 +55,7 @@
       };
 
       PatternSelector.prototype.render = function() {
-        var currentPattern, models, nonPartyWorthySaveModels, parameters, partyWorthySaveModels, saveModels, template, _ref;
+        var col, currentPattern, models, nonPartyWorthySaveModels, parameters, partyWorthySaveModels, saveModels, template, _ref;
         this.$el.empty();
         template = com.firsteast.templates['device-preview'];
         models = _.sortBy(this.patternList.filter(((function(_this) {
@@ -72,15 +72,12 @@
         })(this)), function(x) {
           return x.get('saveName');
         });
-        partyWorthySaveModels = _.sortBy(this.savedPatternList.where({
+        col = new Backbone.Collection(saveModels);
+        partyWorthySaveModels = col.where({
           partyWorthy: true
-        }), function(x) {
-          return x.get('saveName');
         });
-        nonPartyWorthySaveModels = _.sortBy(this.savedPatternList.where({
+        nonPartyWorthySaveModels = col.where({
           partyWorthy: false
-        }), function(x) {
-          return x.get('saveName');
         });
         currentPattern = (_ref = this.discoModel.get("" + this.device + "Pattern")) != null ? _ref.attributes : void 0;
         parameters = this._parseParams(_.defaults({}, currentPattern != null ? currentPattern.params : void 0, currentPattern != null ? currentPattern.DEFAULT_PARAMS : void 0));
@@ -157,11 +154,13 @@
       };
 
       PatternSelector.prototype._updateSelected = function() {
-        var _ref, _ref1, _ref2;
+        var _ref, _ref1, _ref2, _ref3;
         if ((_ref = this.discoModel.get("" + this.device + "Pattern")) != null ? _ref.get('saved') : void 0) {
-          return this.$('select').val((_ref1 = this.discoModel.get("" + this.device + "Pattern")) != null ? _ref1.get('saveName') : void 0);
+          this.$('.saved-patterns').val((_ref1 = this.discoModel.get("" + this.device + "Pattern")) != null ? _ref1.get('saveName') : void 0);
+          return this.$('.class-patterns').val((_ref2 = this.discoModel.get("" + this.device + "Pattern")) != null ? _ref2.get('name') : void 0);
         } else {
-          return this.$('select').val((_ref2 = this.discoModel.get("" + this.device + "Pattern")) != null ? _ref2.get('name') : void 0);
+          this.$('.saved-patterns').val(null);
+          return this.$('.class-patterns').val((_ref3 = this.discoModel.get("" + this.device + "Pattern")) != null ? _ref3.get('name') : void 0);
         }
       };
 
@@ -222,7 +221,7 @@
       };
 
       PatternSelector.prototype._savePattern = function() {
-        var pattern, patternModel, saveName;
+        var existingPattern, pattern, patternModel, saveName;
         saveName = this.$('.save-name-input').val();
         pattern = this.discoModel.get("" + this.device + "Pattern").attributes;
         pattern = $.extend(true, {}, pattern);
@@ -230,6 +229,12 @@
         pattern.saveName = saveName;
         pattern.partyWorthy = this.$('.party-worthy-input').prop('checked');
         patternModel = new com.firsteast.PatternModel(pattern);
+        existingPattern = this.savedPatternList.where({
+          saveName: saveName
+        });
+        if (existingPattern.length > 0) {
+          this.savedPatternList.remove(existingPattern[0]);
+        }
         return this.savedPatternList.add(patternModel);
       };
 

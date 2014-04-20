@@ -50,7 +50,12 @@
     transition: width 0.5s;
     padding: 8px;
     box-sizing: border-box;
-    -moz-box-sizing: border-box; }
+    -moz-box-sizing: border-box;
+    font-size: 12px; }
+    .side-menu .controls label {
+      font-size: 14px; }
+    .side-menu .controls .hotkey-patterns {
+      width: 150px; }
 
 .preview-area {
   display: flex;
@@ -83,7 +88,7 @@
   .pattern-selector .selector-area {
     width: 300px;
     max-height: 200px;
-    overflow: scroll; }
+    overflow-y: scroll; }
     .pattern-selector .selector-area select {
       width: 200px; }
 

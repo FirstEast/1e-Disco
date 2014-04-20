@@ -3,7 +3,7 @@ do ->
     defaults: =>
       attrs =
         showReal: true
-        showMock: true
+        showMock: false
       
       for device in com.firsteast.OUTPUT_DEVICES
         attrs["show#{device}"] = true

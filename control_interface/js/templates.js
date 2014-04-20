@@ -16,7 +16,7 @@ function program1(depth0,data) {
 function program3(depth0,data) {
   
   var buffer = "", stack1;
-  buffer += "\n    <b>Saved:</b> <select class=\"saved-patterns\">\n      <optgroup label=\"Party Worthy\">\n        ";
+  buffer += "\n<div class=\"selector-area\">\n    <b>Saved:</b> <select class=\"saved-patterns\">\n      <optgroup label=\"Party Worthy\">\n        ";
   stack1 = helpers.each.call(depth0, (depth0 && depth0.partyWorthySavedPatterns), {hash:{},inverse:self.noop,fn:self.program(4, program4, data),data:data});
   if(stack1 || stack1 === 0) { buffer += stack1; }
   buffer += "\n      </optgroup>\n      <optgroup label=\"Non Party Worthy\">\n        ";
@@ -28,10 +28,10 @@ function program3(depth0,data) {
   buffer += "\n    </select>\n    <div class=\"params\">\n      ";
   stack1 = helpers.each.call(depth0, (depth0 && depth0.parameters), {hash:{},inverse:self.noop,fn:self.programWithDepth(8, program8, data, depth0),data:data});
   if(stack1 || stack1 === 0) { buffer += stack1; }
-  buffer += "\n    </div>\n    <span>Party Worthy</span><input type=checkbox class=\"party-worthy-input\" ";
+  buffer += "\n    </div>\n    <br>\n    <span>Party Worthy</span><input type=checkbox class=\"party-worthy-input\" ";
   stack1 = helpers['if'].call(depth0, (depth0 && depth0.partyWorthy), {hash:{},inverse:self.noop,fn:self.program(10, program10, data),data:data});
   if(stack1 || stack1 === 0) { buffer += stack1; }
-  buffer += "></input>\n    <br>\n    <input type=text class=\"save-name-input\"></input>\n    <button class=\"save-button\">Save Pattern</button>\n  ";
+  buffer += "></input>\n    <br>\n    <input type=text class=\"save-name-input\"></input>\n    <button class=\"save-button\">Save Pattern</button>\n</div>\n";
   return buffer;
   }
 function program4(depth0,data) {
@@ -176,10 +176,10 @@ function program19(depth0,data,depth3) {
   buffer += "<div class=\"preview-view\">\n  ";
   stack1 = helpers['if'].call(depth0, (depth0 && depth0.isMock), {hash:{},inverse:self.noop,fn:self.program(1, program1, data),data:data});
   if(stack1 || stack1 === 0) { buffer += stack1; }
-  buffer += "\n  <div class=\"expander\">E</div>\n</div>\n<div class=\"selector-area\">\n  ";
+  buffer += "\n  <div class=\"expander\">E</div>\n</div>\n";
   stack1 = helpers['if'].call(depth0, (depth0 && depth0.showEdit), {hash:{},inverse:self.noop,fn:self.program(3, program3, data),data:data});
   if(stack1 || stack1 === 0) { buffer += stack1; }
-  buffer += "\n</div>";
+  buffer += "\n";
   return buffer;
   });
 
@@ -195,7 +195,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
 this["com"]["firsteast"]["templates"]["side-menu"] = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
   this.compilerInfo = [4,'>= 1.0.0'];
 helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
-  var buffer = "", stack1, self=this;
+  var buffer = "", stack1, functionType="function", escapeExpression=this.escapeExpression, self=this;
 
 function program1(depth0,data) {
   
@@ -203,12 +203,42 @@ function program1(depth0,data) {
   return "checked=\"checked\"";
   }
 
-  buffer += "<div class=\"handle\">\n  <div class=\"inner-handle\">\n    +\n  </div>\n</div>\n\n<div class=\"controls\">\n  Show Real: <input type=\"checkbox\" class=\"menu-check show-real\" ";
-  stack1 = helpers['if'].call(depth0, (depth0 && depth0.showReal), {hash:{},inverse:self.noop,fn:self.program(1, program1, data),data:data});
+function program3(depth0,data,depth1) {
+  
+  var buffer = "", stack1;
+  buffer += "\n      "
+    + escapeExpression(((stack1 = (data == null || data === false ? data : data.key)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
+    + ":\n      <select class=\"hotkey-patterns\" data-key=\""
+    + escapeExpression(((stack1 = (data == null || data === false ? data : data.key)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
+    + "\">\n        <optgroup label=\"Party Worthy\">\n          ";
+  stack1 = helpers.each.call(depth0, (depth1 && depth1.partyWorthySaveModels), {hash:{},inverse:self.noop,fn:self.program(4, program4, data),data:data});
   if(stack1 || stack1 === 0) { buffer += stack1; }
-  buffer += "></input>\n  <br/>\n  Show Mock: <input type=\"checkbox\" class=\"menu-check show-mock\" ";
-  stack1 = helpers['if'].call(depth0, (depth0 && depth0.showMock), {hash:{},inverse:self.noop,fn:self.program(1, program1, data),data:data});
+  buffer += "\n        </optgroup>\n        <optgroup label=\"Non Party Worthy\">\n          ";
+  stack1 = helpers.each.call(depth0, (depth1 && depth1.nonPartyWorthySaveModels), {hash:{},inverse:self.noop,fn:self.program(4, program4, data),data:data});
   if(stack1 || stack1 === 0) { buffer += stack1; }
-  buffer += "></input>\n  <br/>\n  <button class=\"swap-mock-real\">Copy Mock Patterns to Real</button>\n  <button class=\"swap-real-mock\">Copy Real Patterns to Mock</button>\n</div>";
+  buffer += "\n        </optgroup>\n      </select>\n    ";
+  return buffer;
+  }
+function program4(depth0,data) {
+  
+  var buffer = "", stack1;
+  buffer += "\n            <option value=\""
+    + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.attributes)),stack1 == null || stack1 === false ? stack1 : stack1.saveName)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
+    + "\">"
+    + escapeExpression(((stack1 = ((stack1 = (depth0 && depth0.attributes)),stack1 == null || stack1 === false ? stack1 : stack1.saveName)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
+    + "</option>\n          ";
+  return buffer;
+  }
+
+  buffer += "<div class=\"handle\">\n  <div class=\"inner-handle\">\n    +\n  </div>\n</div>\n\n<div class=\"controls\">\n  <label>Real/Mock Control:</label>\n  <div class=\"real-mock-controls\">\n    Show Real: <input type=\"checkbox\" class=\"menu-check show-real\" ";
+  stack1 = helpers['if'].call(depth0, ((stack1 = (depth0 && depth0.displayAttrs)),stack1 == null || stack1 === false ? stack1 : stack1.showReal), {hash:{},inverse:self.noop,fn:self.program(1, program1, data),data:data});
+  if(stack1 || stack1 === 0) { buffer += stack1; }
+  buffer += "></input>\n    <br/>\n    Show Mock: <input type=\"checkbox\" class=\"menu-check show-mock\" ";
+  stack1 = helpers['if'].call(depth0, ((stack1 = (depth0 && depth0.displayAttrs)),stack1 == null || stack1 === false ? stack1 : stack1.showMock), {hash:{},inverse:self.noop,fn:self.program(1, program1, data),data:data});
+  if(stack1 || stack1 === 0) { buffer += stack1; }
+  buffer += "></input>\n    <br/>\n    <button class=\"swap-mock-real\">Copy Mock Patterns to Real</button>\n    <button class=\"swap-real-mock\">Copy Real Patterns to Mock</button>\n  </div>\n  <br>\n  <label>Hotkeys:</label>\n  <div class=\"hotkeys\">\n    ";
+  stack1 = helpers.each.call(depth0, (depth0 && depth0.hotkeySet), {hash:{},inverse:self.noop,fn:self.programWithDepth(3, program3, data, depth0),data:data});
+  if(stack1 || stack1 === 0) { buffer += stack1; }
+  buffer += "\n  </div>\n</div>";
   return buffer;
   });

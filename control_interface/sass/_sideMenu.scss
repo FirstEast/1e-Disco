@@ -39,5 +39,14 @@
     padding: 8px;
     box-sizing: border-box;
     -moz-box-sizing: border-box;
+    font-size: 12px;
+
+    label {
+      font-size: 14px;
+    }
+
+    .hotkey-patterns {
+      width: 150px;
+    }
   }
 }

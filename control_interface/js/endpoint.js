@@ -34,7 +34,9 @@
         el: $('.side-menu'),
         model: session.displayModel,
         realDiscoModel: session.realDiscoModel,
-        mockDiscoModel: session.mockDiscoModel
+        mockDiscoModel: session.mockDiscoModel,
+        hotkeyModel: session.hotkeyModel,
+        savedPatternList: session.savedPatternList
       });
       sideMenu.render();
       previewArea = new com.firsteast.PreviewArea({

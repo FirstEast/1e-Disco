@@ -5,10 +5,32 @@
 </div>
 
 <div class="controls">
-  Show Real: <input type="checkbox" class="menu-check show-real" {{#if showReal}}checked="checked"{{/if}}></input>
-  <br/>
-  Show Mock: <input type="checkbox" class="menu-check show-mock" {{#if showMock}}checked="checked"{{/if}}></input>
-  <br/>
-  <button class="swap-mock-real">Copy Mock Patterns to Real</button>
-  <button class="swap-real-mock">Copy Real Patterns to Mock</button>
+  <label>Real/Mock Control:</label>
+  <div class="real-mock-controls">
+    Show Real: <input type="checkbox" class="menu-check show-real" {{#if displayAttrs.showReal}}checked="checked"{{/if}}></input>
+    <br/>
+    Show Mock: <input type="checkbox" class="menu-check show-mock" {{#if displayAttrs.showMock}}checked="checked"{{/if}}></input>
+    <br/>
+    <button class="swap-mock-real">Copy Mock Patterns to Real</button>
+    <button class="swap-real-mock">Copy Real Patterns to Mock</button>
+  </div>
+  <br>
+  <label>Hotkeys:</label>
+  <div class="hotkeys">
+    {{#each hotkeySet}}
+      {{@key}}:
+      <select class="hotkey-patterns" data-key="{{@key}}">
+        <optgroup label="Party Worthy">
+          {{#each ../partyWorthySaveModels}}
+            <option value="{{attributes.saveName}}">{{attributes.saveName}}</option>
+          {{/each}}
+        </optgroup>
+        <optgroup label="Non Party Worthy">
+          {{#each ../nonPartyWorthySaveModels}}
+            <option value="{{attributes.saveName}}">{{attributes.saveName}}</option>
+          {{/each}}
+        </optgroup>
+      </select>
+    {{/each}}
+  </div>
 </div>

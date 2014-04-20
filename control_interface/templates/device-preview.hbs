@@ -4,8 +4,8 @@
   {{/if}}
   <div class="expander">E</div>
 </div>
+{{#if showEdit}}
 <div class="selector-area">
-  {{#if showEdit}}
     <b>Saved:</b> <select class="saved-patterns">
       <optgroup label="Party Worthy">
         {{#each partyWorthySavedPatterns}}
@@ -55,9 +55,10 @@
         </div>
       {{/each}}
     </div>
+    <br>
     <span>Party Worthy</span><input type=checkbox class="party-worthy-input" {{#if partyWorthy}}checked="checked"{{/if}}></input>
     <br>
     <input type=text class="save-name-input"></input>
     <button class="save-button">Save Pattern</button>
-  {{/if}}
 </div>
+{{/if}}

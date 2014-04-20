@@ -16,7 +16,7 @@
         var attrs, device, _i, _len, _ref;
         attrs = {
           showReal: true,
-          showMock: true
+          showMock: false
         };
         _ref = com.firsteast.OUTPUT_DEVICES;
         for (_i = 0, _len = _ref.length; _i < _len; _i++) {

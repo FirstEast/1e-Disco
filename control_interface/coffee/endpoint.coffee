@@ -32,6 +32,8 @@ $('document').ready ( =>
     model: session.displayModel
     realDiscoModel: session.realDiscoModel
     mockDiscoModel: session.mockDiscoModel
+    hotkeyModel: session.hotkeyModel
+    savedPatternList: session.savedPatternList
   sideMenu.render()
 
   # Create our preview views

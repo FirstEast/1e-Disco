@@ -23,3 +23,28 @@ do ->
       @imageList = new Backbone.Collection()
 
       @displayModel = new com.firsteast.DisplayModel()
+      @hotkeyModel = new com.firsteast.HotkeyModel()
+
+      @_configureHotkeys()
+
+    _configureHotkeys: =>
+      for key in com.firsteast.PATTERN_KEYS
+        for device, prefix of com.firsteast.DEVICES_PREFIXES
+          if prefix == ''
+            Mousetrap.bind("#{key}", _.partial(@_setDevicePattern, key, device))
+          else
+            Mousetrap.bind("#{prefix}+#{key}", _.partial(@_setDevicePattern, key, device))
+
+      for device, prefix of com.firsteast.DEVICES_PREFIXES
+        if prefix != ''
+          Mousetrap.bind(prefix, _.partial(@_setShownDevice, device), 'keydown')
+          Mousetrap.bind(prefix, _.partial(@_setShownDevice, com.firsteast.OUTPUT_DEVICES[0]), 'keyup')
+
+    _setShownDevice: (device) =>
+      @hotkeyModel.set('shownDevice', device)
+
+    _setDevicePattern: (key, device) =>
+      name = @hotkeyModel.get('hotkeyPatterns')[device][key]
+      pattern = @savedPatternList.where({saveName: name})[0].attributes
+      pattern = $.extend(true, {}, pattern)
+      @realDiscoModel.set("#{device}Pattern", new com.firsteast.PatternModel(pattern))
