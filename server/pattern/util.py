@@ -1,5 +1,5 @@
 from pattern import *
-from model.inputs import BeatModel
+from model.inputs import BeatModel, KeyModel
 
 from PIL import Image
 
@@ -31,6 +31,7 @@ BASS = (0, 8)
 
 # Global input models
 BEAT_MODEL = BeatModel()
+KEY_MODEL = KeyModel()
 
 def unflattenGoodaleArray(frame):
   newFrame = []
@@ -102,3 +103,48 @@ def layerPatterns(top, bottom, mask = -1, flip = True, blend = False): # by defa
 def maskPatterns(mask, patternImg): # mask's light is what to keep
   mask = mask.convert('L')
   return layerPatterns(mask, patternImg, mask, False)
+
+KEY_COLOR_MAPPING_1 = {
+  'q': Color((25, 0, 0)),
+  'w': Color((50, 0, 0)),
+  'e': Color((75, 0, 0)),
+  'r': Color((100, 0, 0)),
+  't': Color((125, 0, 0)),
+  'y': Color((150, 0, 0)),
+  'u': Color((175, 0, 0)),
+  'i': Color((200, 0, 0)),
+  'o': Color((225, 0, 0)),
+  'p': Color((250, 0, 0)),
+  '[': Color((255, 0, 0)),
+  ']': Color((255, 0, 0)),
+  'a': Color((0, 25, 0)),
+  's': Color((0, 50, 0)),
+  'd': Color((0, 75, 0)),
+  'f': Color((0, 100, 0)),
+  'g': Color((0, 125, 0)),
+  'h': Color((0, 150, 0)),
+  'j': Color((0, 175, 0)),
+  'k': Color((0, 200, 0)),
+  'l': Color((0, 225, 0)),
+  ';': Color((0, 250, 0)),
+  "'": Color((0, 255, 0)),
+  'z': Color((0, 0, 25)),
+  'x': Color((0, 0, 50)),
+  'c': Color((0, 0, 75)),
+  'v': Color((0, 0, 100)),
+  'b': Color((0, 0, 125)),
+  'n': Color((0, 0, 150)),
+  'm': Color((0, 0, 175)),
+  ',': Color((0, 0, 200)),
+  '.': Color((0, 0, 225)),
+  '/': Color((0, 0, 250)),
+  'up': Color((0, 0, 0)),
+  'down': Color((0, 0, 0)),
+  'left': Color((0, 0, 0)),
+  'right': Color((0, 0, 0)),
+  'tab': Color((0, 0, 0)),
+  'enter': Color((0, 0, 0)),
+  'del': Color((0, 0, 0)),
+  'backspace': Color((0, 0, 0)),
+  'space': Color((255, 255, 255)),
+}

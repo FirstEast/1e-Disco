@@ -13,7 +13,8 @@ class DiscoSession():
 
     # Map of input devices to online status
     self.inputDeviceModel = {
-      "beat": False
+      "beat": False,
+      "key": False
     }
 
     # Get the default patterns

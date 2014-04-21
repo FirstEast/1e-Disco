@@ -3,6 +3,8 @@
 
   com.firsteast.WEBSOCKET_PORT = '9000';
 
+  com.firsteast.KEY_SOCKET_PORT = '8348';
+
   com.firsteast.OUTPUT_DEVICES = ['ddf', 'goodale', 'bemis'];
 
   com.firsteast.INPUT_DEVICES = ['beat'];
@@ -21,11 +23,12 @@
 
   $('document').ready(((function(_this) {
     return function() {
-      var beatPreview, controller, mockPreviewArea, navbar, previewArea, session, sideMenu;
+      var beatPreview, controller, keyController, mockPreviewArea, navbar, previewArea, session, sideMenu;
       session = new com.firsteast.DiscoSession();
       controller = new com.firsteast.DiscoController({
         session: session
       });
+      keyController = new com.firsteast.KeyController();
       navbar = new com.firsteast.NavBar({
         el: $('.nav-bar')
       });

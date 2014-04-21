@@ -1,0 +1,1 @@
+{"USE_BEAT": true, "__module__": "pattern.beat.ddf", "name": "VerticalVis", "render": {}, "saveName": "blueFlippedVerticalVis", "DEVICES": ["ddf"], "params": {"Vis Color": {"RGBValues": [4, 51, 255]}, "Flipped": true}, "partyWorthy": false, "DEFAULT_PARAMS": {"Vis Color": {"RGBValues": [255, 0, 0]}, "Mirrored": true, "Flipped": false}, "saved": true, "__doc__": null}

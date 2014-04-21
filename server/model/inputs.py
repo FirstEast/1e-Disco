@@ -1,7 +1,10 @@
 import numpy
+import threading
 
 BUFFER_SIZE = 4
 NUM_BANDS = 48
+
+ALL_THE_KEYS = ['q','w','e','r','t','y','u','i','o','p','[',']','a','s','d','f','g','h','j','k','l',';',"'",'z','x','c','v','b','n','m',',','.','/','up','down','left','right','tab','enter','del','backspace','space']
 
 class BeatModel():
   def __init__(self, buffer_size=BUFFER_SIZE, num_bands=NUM_BANDS):
@@ -45,3 +48,30 @@ class BeatModel():
         total += self.frequencies[j][i]
       newAvgFreq.append(total / self.buffer_size)
     self.avgFreqs = newAvgFreq
+
+class KeyModel():
+  def __init__(self):
+    self.downKeys = []
+    self.upKeys = ALL_THE_KEYS[:]
+    self.newestKey = None
+    self.lock = threading.Lock()
+
+  def downKey(self, key):
+    self.lock.acquire()
+    if key in self.upKeys:
+      self.upKeys.remove(key)
+
+    if key not in self.downKeys:
+      self.downKeys.append(key)
+
+    self.newestKey = key
+    self.lock.release()
+
+  def upKey(self, key):
+    self.lock.acquire()
+    if key in self.downKeys:
+      self.downKeys.remove(key)
+
+    if key not in self.upKeys:
+      self.upKeys.append(key)
+    self.lock.release()

@@ -1,6 +1,10 @@
 from twisted.internet.protocol import Factory
 from twisted.protocols.basic import LineReceiver
+from autobahn.twisted.websocket import WebSocketServerProtocol, \
+                                WebSocketServerFactory
+
 from pattern.util import BEAT_MODEL
+from pattern.util import KEY_MODEL
 
 import json
 
@@ -30,3 +34,26 @@ class BeatServerReceiverFactory(Factory):
 
   def buildProtocol(self, addr):
     return BeatServerReceiver(self.discoSession)
+
+class KeyInputProtocol(WebSocketServerProtocol):
+  def onOpen(self):
+    self.factory.discoSession.inputDeviceModel["key"] = True
+
+  def onMessage(self, msg, binary):
+    data = json.loads(msg.strip())
+    msgType = data['type']
+
+    if msgType == 'downKey':
+      KEY_MODEL.downKey(data["key"])
+    elif msgType == 'upKey':
+      KEY_MODEL.upKey(data["key"])
+
+  def connectionLost(self, reason):
+    WebSocketServerProtocol.connectionLost(self, reason)
+    self.factory.discoSession.inputDeviceModel["key"] = False
+
+class KeyInputSocketFactory(WebSocketServerFactory):
+  def __init__(self, url, discoSession, debug = False, debugCodePaths = False):
+    WebSocketServerFactory.__init__(self, url, debug = debug, debugCodePaths = debugCodePaths)
+    self.clients = []
+    self.discoSession = discoSession

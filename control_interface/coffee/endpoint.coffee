@@ -1,5 +1,6 @@
 com.firsteast.WEBSOCKET_URL = window.location.origin.split('//')[1].split(':')[0]
 com.firsteast.WEBSOCKET_PORT = '9000'
+com.firsteast.KEY_SOCKET_PORT = '8348'
 
 com.firsteast.OUTPUT_DEVICES = ['ddf', 'goodale', 'bemis']
 com.firsteast.INPUT_DEVICES = ['beat']
@@ -20,6 +21,9 @@ $('document').ready ( =>
   # Create the controller that starts the websocket connection
   controller = new com.firsteast.DiscoController
     session: session
+
+  # Create the key controller
+  keyController = new com.firsteast.KeyController()
 
   # Create the nav bar
   navbar = new com.firsteast.NavBar

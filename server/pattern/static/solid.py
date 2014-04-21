@@ -1,5 +1,6 @@
 from pattern.color import *
 from pattern.pattern import *
+from pattern.util import KEY_MODEL, KEY_COLOR_MAPPING_1
 from PIL import Image, ImageChops
 
 import math
@@ -120,4 +121,15 @@ class LinearRainbow(StaticPattern):
     im = Image.new('RGB', (wid, hei))
     im.putdata(colorArr * hei)
     if not self.params['Horizontal']: im = im.transpose(Image.ROTATE_270).transpose(Image.FLIP_LEFT_RIGHT)
+    return im
+
+class KeyColor(Pattern):
+  DEFAULT_PARAMS = {}
+
+  def render(self, device):
+    im = Image.new('RGB', (device.width, device.height))
+    color = Color((0,0,0))
+    for key in KEY_MODEL.downKeys:
+      color += KEY_COLOR_MAPPING_1[key]
+    im.putdata([color.getRGBValues()] * (device.width * device.height))
     return im

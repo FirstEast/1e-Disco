@@ -5,7 +5,7 @@ from autobahn.twisted.websocket import listenWS
 
 from sockets.devices import DiscoDeviceSocketFactory
 from sockets.control import DiscoControlSocketFactory, DiscoControlProtocol
-from sockets.inputs import BeatServerReceiverFactory
+from sockets.inputs import BeatServerReceiverFactory, KeyInputSocketFactory, KeyInputProtocol
 from model.session import DiscoSession
 
 from pattern import *
@@ -21,6 +21,7 @@ GOODALE_PORT = 8123
 DDF_PORT = 8124
 BEMIS_PORT = 8125
 BEAT_PORT = 8347
+KEY_PORT = 8348
 
 if __name__ == '__main__':
   # Create the disco session
@@ -29,6 +30,11 @@ if __name__ == '__main__':
   # Setup websocket protocol for disco commands
   factory = DiscoControlSocketFactory("ws://localhost:" + str(CONTROL_WS_PORT), session, debug = True)
   factory.protocol = DiscoControlProtocol
+  listenWS(factory)
+
+  # Setup websocket protocol for key input
+  factory = KeyInputSocketFactory("ws://localhost:" + str(KEY_PORT), session, debug = True)
+  factory.protocol = KeyInputProtocol
   listenWS(factory)
 
   # Setup socket registration for disco devices
