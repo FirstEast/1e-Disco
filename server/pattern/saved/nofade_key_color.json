@@ -1,0 +1,1 @@
+{"USE_BEAT": false, "__module__": "pattern.static.solid", "renderFrame": {}, "name": "KeyColor", "saveName": "nofade_key_color", "DEVICES": ["ddf", "goodale", "bemis"], "params": {"Fading": false}, "partyWorthy": false, "DEFAULT_PARAMS": {"Rate": 30, "Fading": true}, "saved": true, "__doc__": null, "__init__": {}}

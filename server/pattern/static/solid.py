@@ -123,13 +123,31 @@ class LinearRainbow(StaticPattern):
     if not self.params['Horizontal']: im = im.transpose(Image.ROTATE_270).transpose(Image.FLIP_LEFT_RIGHT)
     return im
 
-class KeyColor(Pattern):
-  DEFAULT_PARAMS = {}
+class KeyColor(TimedPattern):
+  DEFAULT_PARAMS = {
+    'Fading': True
+  }
 
-  def render(self, device):
+  DEFAULT_PARAMS.update(TimedPattern.DEFAULT_PARAMS)
+
+  def __init__(self, params):
+    TimedPattern.__init__(self, params)
+    self.lastColor = BLACK
+    self.lastFrame = 0
+
+  def renderFrame(self, device, frameCount):
     im = Image.new('RGB', (device.width, device.height))
-    color = Color((0,0,0))
+    color = BLACK
     for key in KEY_MODEL.downKeys:
       color += KEY_COLOR_MAPPING_1[key]
+
+    if self.params['Fading']:
+      if color != BLACK:
+        self.lastColor = color
+        self.lastFrame = frameCount
+      else:
+        color = self.lastColor * (1 - min(((frameCount - self.lastFrame) / 10.0), 1))
+
     im.putdata([color.getRGBValues()] * (device.width * device.height))
+
     return im

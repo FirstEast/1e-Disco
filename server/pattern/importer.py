@@ -13,9 +13,9 @@ DEFAULT_PATTERNS = {
   "ddf": "pattern.timed.basic_Interpolation"
 }
 
-SUPER_PATTERN_CLASSES = {
+SUPER_PATTERN_CLASSES = [
   'Pattern', 'StaticPattern', 'TimedPattern', 'AdjustParam', 'BeatAdjustParam'
-}
+]
 
 PATTERN_SAVE_DIR = 'pattern/saved/'
 IMAGE_DIR = 'pattern/images/'
