@@ -15,7 +15,8 @@ class VerticalVis(Pattern):
 
   DEFAULT_PARAMS = {
     'Vis Color': RED,
-    'Mirrored': True
+    'Mirrored': True,
+    'Flipped': False
   }
 
   USE_BEAT = True
@@ -42,13 +43,21 @@ class VerticalVis(Pattern):
     data = []
 
     for i in range(len(smashed)):
-      data += [BLACK.getRGBValues()] * (device.width - smashed[i])
-      data += [self.params['Vis Color'].getRGBValues()] * smashed[i]
+      if self.params['Flipped']:
+        data += [self.params['Vis Color'].getRGBValues()] * smashed[i]
+        data += [BLACK.getRGBValues()] * (device.width - smashed[i])
+      else:
+        data += [BLACK.getRGBValues()] * (device.width - smashed[i])
+        data += [self.params['Vis Color'].getRGBValues()] * smashed[i]
 
     if self.params['Mirrored']:
       for i in range(len(smashed)-1, -1, -1):
-        data += [BLACK.getRGBValues()] * (device.width - smashed[i])
-        data += [self.params['Vis Color'].getRGBValues()] * smashed[i]
+        if self.params['Flipped']:
+          data += [self.params['Vis Color'].getRGBValues()] * smashed[i]
+          data += [BLACK.getRGBValues()] * (device.width - smashed[i])
+        else:
+          data += [BLACK.getRGBValues()] * (device.width - smashed[i])
+          data += [self.params['Vis Color'].getRGBValues()] * smashed[i]
 
     frame.putdata(data)
 
@@ -58,6 +67,7 @@ class HorizontalVis(Pattern):
 
   DEFAULT_PARAMS = {
     'Vis Color': RED,
+    'Flipped': False
   }
 
   USE_BEAT = True
@@ -86,6 +96,8 @@ class HorizontalVis(Pattern):
         row.append(BLACK.getRGBValues())
       for j in range(mergedFreqs[i]):
         row.append(self.params['Vis Color'].getRGBValues())
+      if self.params['Flipped']:
+        row.reverse()
       frame += row
     im = Image.new('RGB', (device.height, len(mergedFreqs)))
     im.putdata(frame)
