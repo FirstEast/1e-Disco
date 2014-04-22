@@ -1,6 +1,6 @@
 from pattern.color import *
 from pattern.pattern import *
-from pattern.util import KEY_MODEL, KEY_COLOR_MAPPING_1
+from pattern.util import KEY_MODEL, KEY_COLOR_MAPPING_1, KEY_COLOR_MAPPING_2
 from PIL import Image, ImageChops
 
 import math
@@ -125,7 +125,8 @@ class LinearRainbow(StaticPattern):
 
 class KeyColor(TimedPattern):
   DEFAULT_PARAMS = {
-    'Fading': True
+    'Fading': True,
+    'Mapping': 1
   }
 
   DEFAULT_PARAMS.update(TimedPattern.DEFAULT_PARAMS)
@@ -137,9 +138,15 @@ class KeyColor(TimedPattern):
 
   def renderFrame(self, device, frameCount):
     im = Image.new('RGB', (device.width, device.height))
+
+    if self.params['Mapping'] == 1:
+      mapping = KEY_COLOR_MAPPING_1
+    else:
+      mapping = KEY_COLOR_MAPPING_2
+
     color = BLACK
     for key in KEY_MODEL.downKeys:
-      color += KEY_COLOR_MAPPING_1[key]
+      color += mapping[key]
 
     if self.params['Fading']:
       if color != BLACK:
