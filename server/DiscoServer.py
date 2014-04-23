@@ -1,9 +1,10 @@
+from tornado.platform.twisted import TwistedIOLoop
 from twisted.internet import reactor
 from twisted.web.server import Site
 from twisted.web.static import File
 from autobahn.twisted.websocket import listenWS
 
-from sockets.devices import DiscoDeviceSocketFactory
+from sockets.devices import DiscoDeviceSocketFactory, PixelPusherReceiver
 from sockets.control import DiscoControlSocketFactory, DiscoControlProtocol
 from sockets.inputs import BeatServerReceiverFactory, KeyInputSocketFactory, KeyInputProtocol
 from model.session import DiscoSession
@@ -18,12 +19,14 @@ CONTROL_UI_PATH = '../control_interface'
 
 # Device network config
 GOODALE_PORT = 8123
-DDF_PORT = 8124
 BEMIS_PORT = 8125
 BEAT_PORT = 8347
 KEY_PORT = 8348
 
 if __name__ == '__main__':
+  # Install the Tornado-to-Twisted bridge
+  TwistedIOLoop().install()
+  
   # Create the disco session
   session = DiscoSession()
 
@@ -39,8 +42,10 @@ if __name__ == '__main__':
 
   # Setup socket registration for disco devices
   reactor.listenTCP(GOODALE_PORT, DiscoDeviceSocketFactory(session, "goodale", GOODALE_WIDTH, GOODALE_HEIGHT, format=GOODALE_FORMAT))
-  reactor.listenTCP(DDF_PORT, DiscoDeviceSocketFactory(session, "ddf", DDF_WIDTH, DDF_HEIGHT))
   reactor.listenTCP(BEMIS_PORT, DiscoDeviceSocketFactory(session, "bemis", BEMIS_WIDTH, BEMIS_HEIGHT))
+
+  # Initialize the PixelPusherReceiver
+  ppReceiver = PixelPusherReceiver(session, "ddf", DDF_WIDTH, DDF_HEIGHT)
 
   # Setup socket registration for input devices
   reactor.listenTCP(BEAT_PORT, BeatServerReceiverFactory(session))
