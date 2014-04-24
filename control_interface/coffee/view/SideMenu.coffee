@@ -7,6 +7,7 @@ do ->
       'change .show-mock': '_toggleShowMock'
       'click .handle': '_toggleShowing'
       'change .hotkey-patterns': '_changeHotkeyPattern'
+      'click .hotkey-import': '_importHotkeys'
 
     initialize: (options) =>
       @model = options.model
@@ -19,12 +20,14 @@ do ->
 
       @listenTo @savedPatternList, 'add remove reset', @render
       @listenTo @hotkeyModel, 'change:shownDevice', @render
+      @listenTo @hotkeyModel, 'hotkeyChange', @_updateString
 
     render: =>
       @$el.empty()
       template = com.firsteast.templates['side-menu']
 
-      saveModels = _.sortBy(@savedPatternList.filter((x) => x.get('DEVICES').indexOf(@hotkeyModel.get('shownDevice')) >= 0), (x) -> return x.get('saveName'))
+      # saveModels = _.sortBy(@savedPatternList.filter((x) => x.get('DEVICES').indexOf(@hotkeyModel.get('shownDevice')) >= 0), (x) -> return x.get('saveName'))
+      saveModels = _.sortBy(@savedPatternList.filter((x) => x.get('DEVICES').indexOf('ddf') >= 0), (x) -> return x.get('saveName'))
       col = new Backbone.Collection(saveModels)
       partyWorthySaveModels = col.where({partyWorthy: true})
       nonPartyWorthySaveModels = col.where({partyWorthy: false})
@@ -36,9 +39,17 @@ do ->
         partyWorthySaveModels: partyWorthySaveModels
         nonPartyWorthySaveModels: nonPartyWorthySaveModels
         hotkeySet: @hotkeySet
+        hotkeyString: JSON.stringify(@hotkeyModel.get('hotkeyPatterns'))
       }))
 
       @_updateSelectedHotkeyPatterns()
+
+    _updateString: =>
+      @$('.hotkey-export').val(JSON.stringify(@hotkeyModel.get('hotkeyPatterns')))
+
+    _importHotkeys: =>
+      @hotkeyModel.set 'hotkeyPatterns', JSON.parse(@$('.hotkey-export').val())
+      @render()
 
     _updateSelectedHotkeyPatterns: =>
       for el in @$('.hotkey-patterns')
@@ -51,6 +62,7 @@ do ->
       fullSet = @hotkeyModel.get('hotkeyPatterns')
       fullSet[@hotkeyModel.get('shownDevice')] = @hotkeySet
       @hotkeyModel.set('hotkeyPatterns', fullSet)
+      @hotkeyModel.trigger 'hotkeyChange'
 
     _triggerMockToRealSwap: =>
       for device in com.firsteast.OUTPUT_DEVICES

@@ -47,4 +47,5 @@ do ->
       name = @hotkeyModel.get('hotkeyPatterns')[device][key]
       pattern = @savedPatternList.where({saveName: name})[0].attributes
       pattern = $.extend(true, {}, pattern)
-      @realDiscoModel.set("#{device}Pattern", new com.firsteast.PatternModel(pattern))
+      # @realDiscoModel.set("#{device}Pattern", new com.firsteast.PatternModel(pattern))
+      @realDiscoModel.set("ddfPattern", new com.firsteast.PatternModel(pattern))

@@ -15,6 +15,8 @@
         this._triggerMockToRealSwap = __bind(this._triggerMockToRealSwap, this);
         this._changeHotkeyPattern = __bind(this._changeHotkeyPattern, this);
         this._updateSelectedHotkeyPatterns = __bind(this._updateSelectedHotkeyPatterns, this);
+        this._importHotkeys = __bind(this._importHotkeys, this);
+        this._updateString = __bind(this._updateString, this);
         this.render = __bind(this.render, this);
         this.initialize = __bind(this.initialize, this);
         return SideMenu.__super__.constructor.apply(this, arguments);
@@ -26,7 +28,8 @@
         'change .show-real': '_toggleShowReal',
         'change .show-mock': '_toggleShowMock',
         'click .handle': '_toggleShowing',
-        'change .hotkey-patterns': '_changeHotkeyPattern'
+        'change .hotkey-patterns': '_changeHotkeyPattern',
+        'click .hotkey-import': '_importHotkeys'
       };
 
       SideMenu.prototype.initialize = function(options) {
@@ -37,7 +40,8 @@
         this.hotkeyModel = options.hotkeyModel;
         this.showing = true;
         this.listenTo(this.savedPatternList, 'add remove reset', this.render);
-        return this.listenTo(this.hotkeyModel, 'change:shownDevice', this.render);
+        this.listenTo(this.hotkeyModel, 'change:shownDevice', this.render);
+        return this.listenTo(this.hotkeyModel, 'hotkeyChange', this._updateString);
       };
 
       SideMenu.prototype.render = function() {
@@ -46,7 +50,7 @@
         template = com.firsteast.templates['side-menu'];
         saveModels = _.sortBy(this.savedPatternList.filter((function(_this) {
           return function(x) {
-            return x.get('DEVICES').indexOf(_this.hotkeyModel.get('shownDevice')) >= 0;
+            return x.get('DEVICES').indexOf('ddf') >= 0;
           };
         })(this)), function(x) {
           return x.get('saveName');
@@ -63,9 +67,19 @@
           displayAttrs: this.model.attributes,
           partyWorthySaveModels: partyWorthySaveModels,
           nonPartyWorthySaveModels: nonPartyWorthySaveModels,
-          hotkeySet: this.hotkeySet
+          hotkeySet: this.hotkeySet,
+          hotkeyString: JSON.stringify(this.hotkeyModel.get('hotkeyPatterns'))
         }));
         return this._updateSelectedHotkeyPatterns();
+      };
+
+      SideMenu.prototype._updateString = function() {
+        return this.$('.hotkey-export').val(JSON.stringify(this.hotkeyModel.get('hotkeyPatterns')));
+      };
+
+      SideMenu.prototype._importHotkeys = function() {
+        this.hotkeyModel.set('hotkeyPatterns', JSON.parse(this.$('.hotkey-export').val()));
+        return this.render();
       };
 
       SideMenu.prototype._updateSelectedHotkeyPatterns = function() {
@@ -86,7 +100,8 @@
         this.hotkeySet[key] = this.$(event.target).val();
         fullSet = this.hotkeyModel.get('hotkeyPatterns');
         fullSet[this.hotkeyModel.get('shownDevice')] = this.hotkeySet;
-        return this.hotkeyModel.set('hotkeyPatterns', fullSet);
+        this.hotkeyModel.set('hotkeyPatterns', fullSet);
+        return this.hotkeyModel.trigger('hotkeyChange');
       };
 
       SideMenu.prototype._triggerMockToRealSwap = function() {

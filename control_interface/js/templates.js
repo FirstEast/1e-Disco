@@ -195,7 +195,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
 this["com"]["firsteast"]["templates"]["side-menu"] = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
   this.compilerInfo = [4,'>= 1.0.0'];
 helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
-  var buffer = "", stack1, functionType="function", escapeExpression=this.escapeExpression, self=this;
+  var buffer = "", stack1, helper, functionType="function", escapeExpression=this.escapeExpression, self=this;
 
 function program1(depth0,data) {
   
@@ -239,6 +239,10 @@ function program4(depth0,data) {
   buffer += "></input>\n    <br/>\n    <button class=\"swap-mock-real\">Copy Mock Patterns to Real</button>\n    <button class=\"swap-real-mock\">Copy Real Patterns to Mock</button>\n  </div>\n  <br>\n  <label>Hotkeys:</label>\n  <div class=\"hotkeys\">\n    ";
   stack1 = helpers.each.call(depth0, (depth0 && depth0.hotkeySet), {hash:{},inverse:self.noop,fn:self.programWithDepth(3, program3, data, depth0),data:data});
   if(stack1 || stack1 === 0) { buffer += stack1; }
-  buffer += "\n  </div>\n</div>";
+  buffer += "\n  </div>\n  <br>\n  <br>\n  <label>Be Gentle Here:</label>\n  <textarea class=\"hotkey-export\">";
+  if (helper = helpers.hotkeyString) { stack1 = helper.call(depth0, {hash:{},data:data}); }
+  else { helper = (depth0 && depth0.hotkeyString); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
+  buffer += escapeExpression(stack1)
+    + "</textarea>\n  <button class=\"hotkey-import\">Import Hotkeys</button>\n</div>";
   return buffer;
   });

@@ -74,7 +74,7 @@
           saveName: name
         })[0].attributes;
         pattern = $.extend(true, {}, pattern);
-        return this.realDiscoModel.set("" + device + "Pattern", new com.firsteast.PatternModel(pattern));
+        return this.realDiscoModel.set("ddfPattern", new com.firsteast.PatternModel(pattern));
       };
 
       return DiscoSession;
