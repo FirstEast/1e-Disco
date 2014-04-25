@@ -41,7 +41,7 @@ class DiscoDeviceReceiver(LineReceiver):
     else:
       frame = self.discoSession.getPattern(self.name).render(self).getdata()
 
-    if self.foramt == 'BGR':
+    if self.format == 'BGR':
       newFrame = []
       for color in frame:
         newFrame.append((color[2], color[1], color[0]))
