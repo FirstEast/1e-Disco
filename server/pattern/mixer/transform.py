@@ -44,6 +44,28 @@ class HSVFilter(Pattern):
     fr.putdata(map(change, fr.getdata()))
     return fr
 
+class HSVKeyFilter(Pattern):
+  DEFAULT_PARAMS = {
+    'Pattern': 'sliding_rainbow.json'
+  }
+
+  def paramUpdate(self, paramName):
+    if paramName == 'Pattern' or paramName == 'ALL':
+      self.pattern = loadSavedPatternFromFilename(self.params['Pattern'])
+
+  def render(self, device):
+    shift = (0, 0, 0)
+    if KEY_MODEL.newestKey != None:
+      shift = KEY_HSV_SHIFT_MAPPING[KEY_MODEL.newestKey]
+    def change(x):
+      return HSV_shift(x,
+        shift[0] / 100.0,
+        shift[1] / 100.0,
+        shift[2] / 100.0)
+    fr = self.pattern.render(device)
+    fr.putdata(map(change, fr.getdata()))
+    return fr
+
 class RingsMaker(Pattern):
   DEFAULT_PARAMS = {
     'Pattern': 'sliding_rainbow.json',
