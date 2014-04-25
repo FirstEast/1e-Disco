@@ -38,11 +38,11 @@ do ->
       else if data.type == 'render'
         @_handleRender(data.renderData)
         if @isActive
-          @_sendMessage {type: 'render'}
+          setTimeout(_.partial(@_sendMessage, {type: 'render'}), 200)
       else if data.type == 'audio'
         @_handleAudio(data.audioData)
         if @isActive
-          @_sendMessage {type: 'audio'}
+          setTimeout(_.partial(@_sendMessage, {type: 'audio'}), 200)
       else if data.type == 'devices'
         @_handleDevices(data.deviceData)
       else if data.type == 'realPatternData'

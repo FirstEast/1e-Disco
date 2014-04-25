@@ -67,16 +67,16 @@
         } else if (data.type === 'render') {
           this._handleRender(data.renderData);
           if (this.isActive) {
-            return this._sendMessage({
+            return setTimeout(_.partial(this._sendMessage, {
               type: 'render'
-            });
+            }), 200);
           }
         } else if (data.type === 'audio') {
           this._handleAudio(data.audioData);
           if (this.isActive) {
-            return this._sendMessage({
+            return setTimeout(_.partial(this._sendMessage, {
               type: 'audio'
-            });
+            }), 200);
           }
         } else if (data.type === 'devices') {
           return this._handleDevices(data.deviceData);
