@@ -26,6 +26,17 @@ The Raspberry Pi code requires only Twisted, but you will need to use a SPI libr
 
 **NOTE: the beat code currently only runs properly on Mac.  On other operating systems, you must pass a 16bit 44100Hz wav file as a command line argument.**
 
+Make it Run
+======================================
+To get everything started, here's what you'll need to do:
+* Get a computer with a static IP and run the DiscoServer on it.
+* Get the DJ's computer (or a computer that will playback the same music into headphones) and run the BeatServer on it, using the proper command line args to point at the DiscoServer host (port should be fine).  Choose the proper input device to receive the sound input.
+* Edit the `config.txt` files on the Raspi USB sticks to point at the DiscoServer host.  Port and number of lights should be fine.
+* Turn on the Raspi's and wait about 30-45 seconds.
+* Turn on the PixelPusher and potentially wait 20-30 seconds.
+
+Once all of this is done, you should have a DJ connected to the central server and all the devices connected as well.  Head to the Web UI to check that everything is working and enjoy.
+
 Using the Server Utilities
 ======================================
 Each server is either the main server or some peripheral that will attempt to connect to the main server.
