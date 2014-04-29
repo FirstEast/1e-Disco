@@ -1,7 +1,7 @@
 1e-Disco
 ========
 
-1E synchronized disco light code.
+This repository contains all the code for running and controlling the First East Disco Lighting System.
 
 Installing Required Libraries
 =============================
@@ -13,7 +13,7 @@ Before you get started installing the libraries, make sure to do these first ste
 Next, you will need to install various Python modules that our source needs to run properly.  Typically `easy_install` or `pip` can install the modules we need.  If at any time, either gets upset and throws errors, they'll typically inform you as to what to do next.
 
 For running the server code from source, install the following modules:
-* Tornade (networking library)
+* Tornado (networking library)
 * Twisted (networking library)
 * Autobahn (websocket library)
 * Numpy
@@ -21,6 +21,8 @@ For running the server code from source, install the following modules:
 
 To run the beat code from source, you will also need to install the following:
 * PyAudio (Google for it and you'll find installers for Windows/Mac/Linux)
+
+The Raspberry Pi code requires only Twisted, but you will need to use a SPI library that's provided on the Adafruit Raspberry Pi OS called "Occidentalis".  We (Erin and I) have saved an image of a working disco Raspi that can be copied onto an 8gb SD card and used.
 
 **NOTE: the beat code currently only runs properly on Mac.  On other operating systems, you must pass a 16bit 44100Hz wav file as a command line argument.**
 
@@ -73,3 +75,5 @@ Unfortunately, if your pattern throws an error, it's really really hard to detec
 Modifying the Web Interface
 ====================================
 The web UI is built using Coffeescript, Backbone, SASS, and Handlebars.  All of these are pretty easy to get a handle on.  The code is built using Grunt, which you should also read up on before diving in.  Finally, the Grunt commands rely on some node modules, so before you begin, go into the `contrl_interface` directory and type `npm install`.  If you don't have node, install it.  You may also need the `grunt-cli` package globally installed from npm (`npm install -g grunt-cli`).
+
+Before you begin working, the `grunt watch` command will make Grunt recompile your stuff as it changes, which is very useful even though it occasionally fails with Coffeescript.
