@@ -20,7 +20,7 @@ For running the server code from source, install the following modules:
 To run the beat code from source, you will also need to install the following:
 * PyAudio (Google for it and you'll find installers for Windows/Mac/Linux)
 
-The Raspberry Pi code requires only Twisted, but you will need to use a SPI library that's provided on the Adafruit Raspberry Pi OS called "Occidentalis".  We (Erin and I) have saved an image of a working disco Raspi that can be copied onto an 8gb SD card and used.
+The Raspberry Pi code requires only Twisted, but you will need to use a SPI library that's provided on the Adafruit Raspberry Pi OS called "Occidentalis".  We (Erin and Joey) have saved an image of a working disco Raspi that can be copied onto an 8gb SD card and used.
 
 **NOTE: the beat code currently only runs properly on Mac.  On other operating systems, you must pass a 16bit 44100Hz wav file as a command line argument.**
 
@@ -36,7 +36,7 @@ Once all of this is done, you should have a DJ connected to the central server a
 
 ## Using the Server Utilities
 Each server is either the main server or some peripheral that will attempt to connect to the main server.
-* Main server (run from server directory): `python DiscoServer.py`
+* Main server (must be run from inside server directory): `sudo python DiscoServer.py`
 * Beat server: `python beat/BeatServer.py`
 
 The DiscoServer network configurations are in the Python file (Goodale port, Bemis port, etc).  Run the BeatServer with the runtime argument `-h` to see a list of the arguments you can use with the BeatServer.
@@ -44,6 +44,10 @@ The DiscoServer network configurations are in the Python file (Goodale port, Bem
 To view the state of the Disco System and control it, open a browser head to port 90 on the DiscoServer machine.  The port number may change back to 80 at some point.
 
 **NOTE: the BeatServer MUST be run after the DiscoServer is up.**
+
+We have found that the dancefloor appears to have lower latency in response to music when the DiscoServer and BeatServer are running on the same machine. If the DJ computer has the necessary libraries installed, it may be easiest to run both on localhost. We have also found that it is not necessary to use a static IP address if the joint server+beat machine happens to be plugged into ethernet in the same room as the Dancefloor (Goodale Lounge). Other configurations have not been tested.
+
+Also, things will get ugly if you try running the DiscoServer on two machines at once. The dancefloor may receive packets from both of them and look very spastic.
 
 ## Running Code on the PixelPusher
 **NOTE: I don't actually know how this works.**
