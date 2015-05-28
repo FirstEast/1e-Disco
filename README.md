@@ -17,6 +17,8 @@ For running the server code from source, install the following modules:
 * Numpy
 * Pillow or PIL
 
+You can install these from pip by running `pip install -r requirements.txt`.
+
 To run the beat code from source, you will also need to install the following:
 * PyAudio (Google for it and you'll find installers for Windows/Mac/Linux)
 
@@ -82,4 +84,8 @@ Unfortunately, if your pattern throws an error, it's really really hard to detec
 ## Modifying the Web Interface
 The web UI is built using Coffeescript, Backbone, SASS, and Handlebars.  All of these are pretty easy to get a handle on.  The code is built using Grunt, which you should also read up on before diving in.  Finally, the Grunt commands rely on some node modules, so before you begin, go into the `contrl_interface` directory and type `npm install`.  If you don't have node, install it.  You may also need the `grunt-cli` package globally installed from npm (`npm install -g grunt-cli`).
 
+To compile for the first time, use `grunt coffee handlebars sass`.
+
 Before you begin working, the `grunt watch` command will make Grunt recompile your stuff as it changes, which is very useful even though it occasionally fails with Coffeescript.
+
+By default, the UI runs locally on port 90 at http://localhost:90/

@@ -6,7 +6,7 @@
     "grunt": "~0.4.1",
     "grunt-contrib-watch": "~0.4.0",
     "grunt-contrib-coffee": "latest",
-    "grunt-contrib-handlebars": "latest",
+    "grunt-contrib-handlebars": "0.8.0",
     "grunt-contrib-sass": "latest",
     "matchdep": "~0.1.1"
   },
