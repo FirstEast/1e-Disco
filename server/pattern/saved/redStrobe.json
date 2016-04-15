@@ -1,0 +1,1 @@
+{"USE_BEAT": false, "__module__": "pattern.timed.basic", "renderFrame": {}, "name": "Strobe", "saveName": "redStrobe", "DEVICES": ["ddf", "goodale", "bemis"], "params": {"Color": {"RGBValues": [255, 54, 0]}, "Rate": 2}, "partyWorthy": false, "DEFAULT_PARAMS": {"Color": {"RGBValues": [255, 255, 255]}, "Rate": 30}, "saved": true, "__doc__": null}

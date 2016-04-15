@@ -114,7 +114,7 @@ class PixelPusherReceiver():
       module, index = self.unSnake(i)
       self.ddf_data[module][index] = output_data[i]
 
-  def unSnake(self, i): 
+  def unSnake(self, i):
     #i is the index of the normal array
     # returns (module id, index within module)
     mod_index = i%MOD_WIDTH

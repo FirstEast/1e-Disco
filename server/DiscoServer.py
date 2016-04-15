@@ -26,7 +26,7 @@ KEY_PORT = 8348
 if __name__ == '__main__':
   # Install the Tornado-to-Twisted bridge
   TwistedIOLoop().install()
-  
+
   # Create the disco session
   session = DiscoSession()
 

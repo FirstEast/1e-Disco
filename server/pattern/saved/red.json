@@ -1,0 +1,1 @@
+{"USE_BEAT": false, "__module__": "pattern.static.solid", "renderFrame": {}, "name": "RGBColor", "saveName": "red", "DEVICES": ["ddf", "goodale", "bemis"], "params": {"B": 0, "R": 255}, "partyWorthy": false, "DEFAULT_PARAMS": {"R": 0, "B": 255, "G": 0}, "saved": true, "__doc__": null}
