@@ -27,6 +27,12 @@ MOD_HEIGHT = 12   # Height of 1 module
 MOD_SIZE = MOD_WIDTH * MOD_HEIGHT
 HALF_DDF_SIZE = MOD_SIZE * MODS_ACROSS
 
+COLOR_TRANSLATION = {
+  'R': 0,
+  'G': 1,
+  'B': 2
+}
+
 class DiscoDeviceReceiver(LineReceiver):
   def __init__(self, discoSession, name, width, height, format):
     self.discoSession = discoSession
@@ -34,6 +40,7 @@ class DiscoDeviceReceiver(LineReceiver):
     self.width = width
     self.height = height
     self.format = format
+    self.formatIndices = [COLOR_TRANSLATION[formatChar] for formatChar in format]
 
   def sendNextFrame(self):
     if self.name == 'goodale' and self.discoSession.getPattern(self.name).__class__.__name__ == 'MimicPattern':
@@ -41,11 +48,8 @@ class DiscoDeviceReceiver(LineReceiver):
     else:
       frame = self.discoSession.getPattern(self.name).render(self).getdata()
 
-    if self.format == 'BGR':
-      newFrame = []
-      for color in frame:
-        newFrame.append((color[2], color[1], color[0]))
-      frame = newFrame
+    if self.format:
+      frame = [tuple([color[index] for index in self.formatIndices]) for color in frame]
 
     output = [value for color in frame for value in color]
     self.sendMessage(struct.pack('B' * len(output), *output))

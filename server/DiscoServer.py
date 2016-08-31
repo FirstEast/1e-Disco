@@ -14,7 +14,7 @@ from pattern.util import *
 
 # Web UI config
 CONTROL_WS_PORT = 9000
-CONTROL_UI_PORT = 90
+CONTROL_UI_PORT = 9090
 CONTROL_UI_PATH = '../control_interface'
 
 # Device network config
@@ -43,7 +43,7 @@ if __name__ == '__main__':
   # Setup socket registration for disco devices
   # TODO: Move this light reversing format stuff to the Raspis
   reactor.listenTCP(GOODALE_PORT, DiscoDeviceSocketFactory(session, "goodale", GOODALE_WIDTH, GOODALE_HEIGHT, format=GOODALE_FORMAT))
-  reactor.listenTCP(BEMIS_PORT, DiscoDeviceSocketFactory(session, "bemis", BEMIS_WIDTH, BEMIS_HEIGHT, format=GOODALE_FORMAT))
+  reactor.listenTCP(BEMIS_PORT, DiscoDeviceSocketFactory(session, "bemis", BEMIS_WIDTH, BEMIS_HEIGHT, format=BEMIS_FORMAT))
 
   # Initialize the PixelPusherReceiver
   ppReceiver = PixelPusherReceiver(session, "ddf", DDF_WIDTH, DDF_HEIGHT)
