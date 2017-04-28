@@ -46,7 +46,7 @@ if __name__ == '__main__':
   reactor.listenTCP(BEMIS_PORT, DiscoDeviceSocketFactory(session, "bemis", BEMIS_WIDTH, BEMIS_HEIGHT, format=BEMIS_FORMAT))
 
   # Initialize the PixelPusherReceiver
-  ppReceiver = PixelPusherReceiver(session, "ddf", DDF_WIDTH, DDF_HEIGHT)
+  # ppReceiver = PixelPusherReceiver(session, "ddf", DDF_WIDTH, DDF_HEIGHT)
 
   # Setup socket registration for input devices
   reactor.listenTCP(BEAT_PORT, BeatServerReceiverFactory(session))
